@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Sengoku Warforge - 256³ Samurai Tabletop Edition</title>
+<title>Sengoku Warforge V2.0 - 14 Unit Types Edition</title>
 <style>
   :root {
     --bg-base: #090808;
@@ -138,7 +138,7 @@
 
 <header>
   <div class="header-top">
-    <div class="brand-title">SENGOKU WARFORGE <span>// 256³ SAMURAI TABLETOP</span></div>
+    <div class="brand-title">SENGOKU WARFORGE <span>// 14 UNIT DIVISIONS</span></div>
     <div style="display:flex; gap:4px;">
       <button class="btn" style="padding:3px 6px; font-size:8px;" onclick="saveGame()">SAVE</button>
       <button class="btn" style="padding:3px 6px; font-size:8px;" onclick="loadGame()">LOAD</button>
@@ -181,10 +181,10 @@
   <div id="tab-market" class="view-tab active">
     <div class="panel">
       <div class="panel-header">
-        <span>Provincial Levy & Samurai Miniature Drops (9,600)</span>
+        <span>Provincial Levy & 14-Division Samurai Drops</span>
         <span style="font-size:10px; color:var(--silver-dim);">NEW MUSTER: <span id="market-timer" style="font-size:12px; font-weight:bold; color:var(--status-amber);">10.0</span>s</span>
       </div>
-      <p style="font-size:10px; color:var(--silver-dim);">5 procedural Samurai regiments, Ashigaru phalanxes, Takeda cavalry, Generals & Shiro keeps drop every 10 seconds. Recruit a unit to unveil its 256³ 3D Voxel miniature in your Samurai Racks.</p>
+      <p style="font-size:10px; color:var(--silver-dim);">5 procedural Samurai units across all 14 battlefield divisions (Spearmen, Samurai, Cavalry, Generals, Teppo, Forts, Shinobi, Sohei Monks, Ozutsu Cannons, Onna-Musha, Ronin Kengo, Yabusame, Atakebune Ships & Taiko Warbands) drop every 10 seconds.</p>
       <div id="market-grid" class="fleet-grid"></div>
     </div>
   </div>
@@ -195,7 +195,7 @@
       <div class="panel-header">Clan Muster & Miniature Warboxes</div>
       <div style="display:flex; flex-direction:column; gap:6px;">
         <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
-          <div style="font-size:10px; font-weight:bold; margin-bottom:6px;">PROVINCIAL ASHIGARUGARRISON BOX [T1-T4] ($20 / Box)</div>
+          <div style="font-size:10px; font-weight:bold; margin-bottom:6px;">PROVINCIAL ASHIGARU GARRISON BOX [T1-T4] ($20 / Box)</div>
           <div class="pack-row">
             <button class="btn" onclick="buySeeds(0, 1)">Muster 1x</button>
             <button class="btn" onclick="buySeeds(0, 5)">Muster 5x</button>
@@ -203,7 +203,7 @@
           </div>
         </div>
         <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
-          <div style="font-size:10px; color:var(--status-blue); font-weight:bold; margin-bottom:6px;">CLAN SAMURAI & KIBA-MUSHA BOX [T3-T6] ($200 / Box)</div>
+          <div style="font-size:10px; color:var(--status-blue); font-weight:bold; margin-bottom:6px;">CLAN SAMURAI, SHINOBI & SOHEI BOX [T3-T6] ($200 / Box)</div>
           <div class="pack-row">
             <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buySeeds(1, 1)">Muster 1x</button>
             <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buySeeds(1, 5)">Muster 5x</button>
@@ -211,7 +211,7 @@
           </div>
         </div>
         <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
-          <div style="font-size:10px; color:var(--status-purple); font-weight:bold; margin-bottom:6px;">DAIMYO HATAMOTO GUARD DIVISION [T5-T8] ($2,000 / Division)</div>
+          <div style="font-size:10px; color:var(--status-purple); font-weight:bold; margin-bottom:6px;">DAIMYO HATAMOTO, CANNON & SHIP DIVISION [T5-T8] ($2,000 / Division)</div>
           <div class="pack-row">
             <button class="btn btn-purple" onclick="buySeeds(2, 1)">Muster 1x</button>
             <button class="btn btn-purple" onclick="buySeeds(2, 5)">Muster 5x</button>
@@ -285,7 +285,7 @@
   <div id="tab-fleet" class="view-tab">
     <div class="panel">
       <div class="panel-header">
-        <span>Samurai Army Display Cabinets</span>
+        <span>Samurai Army Display Cabinets (14 Divisions)</span>
         <div style="display:flex; gap:4px;">
           <button class="btn btn-green" onclick="autoAssignPilots()">Auto-Sensei</button>
           <button class="btn btn-green" onclick="autoAssignRoutes()">Auto-March</button>
@@ -304,13 +304,21 @@
         <div class="control-group">
           <span class="control-label">Division:</span>
           <select id="fleet-role-filter" onchange="filterHangarRole(this.value)" style="padding:3px; font-size:9px; width:auto;">
-            <option value="ALL">All Divisions</option>
-            <option value="YARI_SPEARMEN">Yari Spearmen Phalanx</option>
-            <option value="SAMURAI_UNIT">Heavy Samurai Retainers</option>
-            <option value="CAVALRY_CHARGE">Kiba-Musha Cavalry</option>
-            <option value="SHOGUN_GENERAL">Daimyo & Generals</option>
-            <option value="TEPPO_YUMI">Teppo & Yumi Brigades</option>
-            <option value="GARRISON_FORT">Shiro Castle Garrisons</option>
+            <option value="ALL">All 14 Divisions</option>
+            <option value="YARI_SPEARMEN">1. Yari Spearmen Phalanx</option>
+            <option value="SAMURAI_UNIT">2. Heavy Samurai Retainers</option>
+            <option value="CAVALRY_CHARGE">3. Kiba-Musha Cavalry</option>
+            <option value="SHOGUN_GENERAL">4. Daimyo & Generals</option>
+            <option value="TEPPO_YUMI">5. Teppo & Yumi Brigades</option>
+            <option value="GARRISON_FORT">6. Shiro Castle Garrisons</option>
+            <option value="SHINOBI_NINJA">7. Iga & Koga Shinobi Ninja</option>
+            <option value="SOHEI_MONKS">8. Sohei Warrior Monks</option>
+            <option value="SIEGE_ARTILLERY">9. Ozutsu Siege Artillery</option>
+            <option value="ONNA_MUSHA">10. Onna-Musha Shieldmaidens</option>
+            <option value="RONIN_KENGO">11. Ronin Kengo Sword-Saints</option>
+            <option value="YABUSAME_HORSE">12. Yabusame Bow-Cavalry</option>
+            <option value="ATAKEBUNE_SHIP">13. Atakebune War-Barges</option>
+            <option value="HORA_WARBAND">14. O-Daiko War-Drum Cadre</option>
           </select>
         </div>
         <div class="control-group">
@@ -339,7 +347,7 @@
   <div id="tab-battle" class="view-tab">
     <div class="panel">
       <div class="panel-header">
-        <span>⚔️ Sengoku Tabletop Wargame Arena</span>
+        <span>⚔️ Sengoku Tabletop Wargame Arena (14 Divisions)</span>
         <div style="display:flex; gap:4px;">
           <button id="btn-mode-3" class="btn btn-amber active" onclick="setBattleSize(3)">3v3 Skirmish</button>
           <button id="btn-mode-5" class="btn btn-amber" onclick="setBattleSize(5)">5v5 Sekigahara</button>
@@ -348,7 +356,7 @@
 
       <div class="control-bar" style="justify-content:space-between;">
         <div style="font-size:9.5px; color:var(--silver-main);">
-          <strong>Counter Triangle:</strong> 🎋Yari/Fort &gt; 🐎Cavalry/Shogun &gt; 🔫Teppo/Samurai &gt; 🎋Yari/Fort (+40% DMG)
+          <strong>Counter Triangle:</strong> 🎋Pikes/Forts/Monks &gt; 🐎Cavalry/Shogun/Kengo &gt; 🔫Teppo/Cannons/Ninja/Ships &gt; 🎋Pikes/Forts (+45% DMG)
         </div>
         <div style="display:flex; gap:4px;">
           <button class="btn btn-green" onclick="startNewTabletopBattle()">🎲 Auto-Draft & New Battle</button>
@@ -374,9 +382,9 @@
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:4px;">
             <button class="btn btn-danger" onclick="executeTabletopOrder('charge')">🗡️ Banzai Charge</button>
-            <button class="btn btn-amber" onclick="executeTabletopOrder('volley')">🔫 Teppo/Yumi Volley</button>
+            <button class="btn btn-amber" onclick="executeTabletopOrder('volley')">🔫 Teppo/Cannon Volley</button>
             <button class="btn btn-green" onclick="executeTabletopOrder('wall')">🎋 Yari Spear-Wall</button>
-            <button class="btn btn-purple" onclick="executeTabletopOrder('rally')">🚩 Rally Sashimono</button>
+            <button class="btn btn-purple" onclick="executeTabletopOrder('rally')">🚩 Rally Hora-Drum</button>
           </div>
         </div>
 
@@ -397,7 +405,7 @@
   <div id="tab-gallery" class="view-tab">
     <div class="panel">
       <div class="panel-header"><span>Nikko Toshogu Shrine Vault ⛩️</span></div>
-      <p style="font-size:10px; color:var(--silver-dim);">Lock your finest 256³ Ultra-Scale Samurai Divisions, Cavalry, Generals & Castles forever. Tap any miniature to rotate in 3D.</p>
+      <p style="font-size:10px; color:var(--silver-dim);">Lock your finest 256³ Ultra-Scale Samurai Divisions, Shinobi, Monks, Cannons, War-Ships & Castles forever. Tap any miniature to rotate in 3D.</p>
       <div id="gallery-grid" class="fleet-grid"></div>
     </div>
   </div>
@@ -441,13 +449,21 @@
       <div class="panel-header">
         <span>Sengoku Provincial Campaigns & Sieges (400)</span>
         <select id="route-cat-filter" onchange="filterRouteCategory(this.value)" style="padding:3px; font-size:9px; width:auto;">
-          <option value="ALL">All Provinces</option>
+          <option value="ALL">All 14 Divisions</option>
           <option value="YARI_SPEARMEN">Yari Phalanx Front</option>
           <option value="SAMURAI_UNIT">Samurai Retainer Front</option>
           <option value="CAVALRY_CHARGE">Cavalry Plains Front</option>
           <option value="SHOGUN_GENERAL">Daimyo Honjin Front</option>
           <option value="TEPPO_YUMI">Nagashino Volley Front</option>
           <option value="GARRISON_FORT">Castle Siege Front</option>
+          <option value="SHINOBI_NINJA">Shinobi Night-Raid Front</option>
+          <option value="SOHEI_MONKS">Ikko-Ikki Temple Front</option>
+          <option value="SIEGE_ARTILLERY">Ozutsu Bombardment Front</option>
+          <option value="ONNA_MUSHA">Onna-Musha Defense Front</option>
+          <option value="RONIN_KENGO">Sword-Saint Duel Front</option>
+          <option value="YABUSAME_HORSE">Yabusame Skirmish Front</option>
+          <option value="ATAKEBUNE_SHIP">Seto Inland Naval Front</option>
+          <option value="HORA_WARBAND">Taiko War-Council Front</option>
         </select>
       </div>
       <div id="routes-list" style="display:flex; flex-direction:column; gap:6px;"></div>
@@ -550,7 +566,7 @@
 <div id="toast-rack"></div>
 
 <script>
-  /* ================= 9,600 SAMURAI MINIATURE COMBINATIONS ================= */
+  /* ================= 14 SAMURAI DIVISIONS & 28 SCULPTS ================= */
   // 10 Traditional Urushi Lacquer & Armor Finishes (10)
   const TREE_PREFIXES = [
     "Shu-Urushi-Red",    // 0: Vermilion Takeda red lacquer & gold lacing
@@ -559,13 +575,13 @@
     "Ai-Indigo-Laced",   // 3: Deep samurai indigo silk *odoshi* lacing & iron
     "Byakudan-Bronze",   // 4: Weathered bronze-patina *tosei-gusoku* plates
     "Shiro-White-Silk",  // 5: Uesugi pure white & cobalt monastic lacing
-    "aka-Oni-Crimson",   // 6: Ii Naomasa "Red Demon" scarlet armor & horns
+    "Aka-Oni-Crimson",   // 6: Ii Naomasa "Red Demon" scarlet armor & horns
     "Tamahagane-Steel",  // 7: Polished folded steel & silver *kuwagata* crests
     "Sakura-Damask",     // 8: Ceremonial plum-blossom purple & gold brocade
     "Tenka-Holotype"     // 9: Shogunate museum masterpiece finish
   ]; // 10
 
-  // 8 Great Sengoku Clans & Provincial Hosts (8) -> 10 x 8 x 20 x 6 = 9,600 Combinations!
+  // 8 Great Sengoku Clans & Provincial Hosts (8)
   const TREE_ORIGINS = [
     "Takeda-Kai",        // 0: Kai Province Cavalry & Red Devils
     "Oda-Owari",         // 1: Owari Province Teppo & Pike Innovators
@@ -577,38 +593,69 @@
     "Sanada-Shinano"     // 7: Six-Coin Crimson Braves
   ]; // 8
 
-  // 20 Strictly Feudal Samurai Sculpts across Spearmen, Samurai, Cavalry, Generals, Teppo/Yumi & Garrisons
+  // 14 Tactical Battlefield Divisions (6 Original + 8 Brand-New Unit Types!)
+  const TREE_STYLES = [
+    "YARI_SPEARMEN",     // 0: 9-Man & 16-Man Ashigaru Pike Phalanxes
+    "SAMURAI_UNIT",      // 1: 5-Man Heavy Katana/Nodachi Samurai Retainers
+    "CAVALRY_CHARGE",    // 2: 3-Model Mounted Takeda Kiba-Musha Cavalry
+    "SHOGUN_GENERAL",    // 3: Daimyo Honjin Command Tent Diorama
+    "TEPPO_YUMI",        // 4: 6-Man Matchlock Arquebus & Yumi Bow Battery
+    "GARRISON_FORT",     // 5: Samurai Shiro Keep & Ishigaki Gatehouse
+    "SHINOBI_NINJA",     // 6: NEW! 5-Model Iga/Koga Rooftop Shinobi Infiltrators
+    "SOHEI_MONKS",       // 7: NEW! 7-Man Ikko-Ikki Warrior Monks + Portable Mikoshi Shrine
+    "SIEGE_ARTILLERY",   // 8: NEW! Ozutsu Bronze Siege Cannon + Gabions + Crew
+    "ONNA_MUSHA",        // 9: NEW! 5-Model Elite Onna-Musha Naginata Shieldmaidens + Torii Gate
+    "RONIN_KENGO",       // 10: NEW! 3 Heroic Sword-Saints on Arched Taiko Bridge
+    "YABUSAME_HORSE",    // 11: NEW! 3-Model Mounted Yabusame Horse-Archers
+    "ATAKEBUNE_SHIP",    // 12: NEW! Suigun Armored Atakebune War-Barge on Ocean Waves
+    "HORA_WARBAND"       // 13: NEW! O-Daiko Giant War-Drum Tower & Conch Trumpeters
+  ]; // 14
+
+  // 28 Historical Sengoku Sculpts (2 per Division = 28 Sculpts)
   const TREE_SPECIES = [
-    // YARI_SPEARMEN (0..3): Ashigaru & Samurai Pike Phalanxes
+    // 0: YARI_SPEARMEN (0..1)
     "Nagayari Ashigaru Pike Phalanx (16-Man)",
     "Provincial Yari Spearmen Company (9-Man)",
-    "Oda Long-Pike Nagayari Battalion (16-Man)",
-    "Satsuma Yari-Gumi Garrison Unit (9-Man)",
-    // SAMURAI_UNIT (4..7): Heavy Armored Samurai Retainers
+    // 1: SAMURAI_UNIT (2..3)
     "Hatamoto Heavy Katana Samurai (5-Man)",
-    "Naginata Polearm Samurai Retainers (5-Man)",
     "Nodachi Great-Sword Shock Samurai (5-Man)",
-    "Sohei Warrior-Monk Naginata Squad (5-Man)",
-    // CAVALRY_CHARGE (8..10): Mounted Kiba-Musha Cavalry
+    // 2: CAVALRY_CHARGE (4..5)
     "Takeda Kiba-Musha Cavalry Lance (3-Mount)",
-    "Horo-Cloaked Tsukai-Ban Messengers (3-Mount)",
-    "Shogunate Heavy Barded Yari-Cavalry (3-Mount)",
-    // SHOGUN_GENERAL (11..13): Daimyo & Shogun Command Dioramas
+    "Horo-Cloaked Tsukai-Ban Dragoons (3-Mount)",
+    // 3: SHOGUN_GENERAL (6..7)
     "Taisho Daimyo Honjin Command Tent",
-    "Shogun Mounted War-Horse Standard",
-    "Gunbai Strategist & Taiko War-Drum",
-    // TEPPO_YUMI (14..16): Matchlock Arquebus & Yumi Bow Brigades
+    "Shogun War-Council & Uma-Jirushi Standard",
+    // 4: TEPPO_YUMI (8..9)
     "Tanegashima Teppo Matchlock Battery (6-Man)",
     "Tate-Shielded Yumi Longbowmen (6-Man)",
-    "Nagashino Palisade Arquebus Line (6-Man)",
-    // GARRISON_FORT (17..19): Feudal Samurai Castles & Fortifications
+    // 5: GARRISON_FORT (10..11)
     "Tenshu White-Plastered Castle Keep",
-    "Yagura Watchtower & Ishigaki Wall",
-    "Otemon Fortified Castle Gatehouse"
-  ]; // 20
-
-  // 6 Tactical Battlefield Divisions
-  const TREE_STYLES = ["YARI_SPEARMEN", "SAMURAI_UNIT", "CAVALRY_CHARGE", "SHOGUN_GENERAL", "TEPPO_YUMI", "GARRISON_FORT"]; // 6
+    "Yagura Watchtower & Ishigaki Gatehouse",
+    // 6: SHINOBI_NINJA (12..13)
+    "Iga Rooftop Shinobi Kisho-Gumi (5-Man)",
+    "Koga Kusarigama & Smoke-Bomb Ninja (5-Man)",
+    // 7: SOHEI_MONKS (14..15)
+    "Enryaku-ji Naginata Warrior Monks (7-Man)",
+    "Ikko-Ikki Sacred Mikoshi Brotherhood (7-Man)",
+    // 8: SIEGE_ARTILLERY (16..17)
+    "Ozutsu Heavy Bronze Siege Cannon Battery",
+    "Kuni-Kuzushi Culverin & Gabion Emplacement",
+    // 9: ONNA_MUSHA (18..19)
+    "Torii-Gate Onna-Musha Naginata Guard (5-Man)",
+    "Tsuruhime Shrine Shieldmaiden Retainers (5-Man)",
+    // 10: RONIN_KENGO (20..21)
+    "Taiko-Bridge Niten Dual-Katana Kengo (3-Hero)",
+    "Komuso Straw-Hat Odachi Ronin Masters (3-Hero)",
+    // 11: YABUSAME_HORSE (22..23)
+    "Yabusame Mounted Daikyu Bow-Cavalry (3-Mount)",
+    "Kanto Steppe Horse-Archer Outriders (3-Mount)",
+    // 12: ATAKEBUNE_SHIP (24..25)
+    "Kuki Suigun Tekkosen Ironclad War-Barge",
+    "Murakami Pirate Atakebune Floating Fortress",
+    // 13: HORA_WARBAND (26..27)
+    "Twin-Dragon O-Daiko War-Drum Scaffold",
+    "Yamabushi Horagai Conch & Banner Cadre"
+  ]; // 28
 
   const P_FIRST = ["Myochin", "Masamune", "Muramasa", "Nobuie", "Saotome", "Iwai", "Haruta", "Unkei", "Kano", "Eitoku", "Tosa", "Hon'ami", "Koetsu", "Sen", "Rikyu", "Musashi", "Yagyu", "Hattori", "Honda", "Sakakibara"];
   const P_LAST = ["Munechika", "Yoshimichi", "Kunihiro", "Tadayoshi", "Kotetsu", "Sukehiro", "Tadakuni", "Yasutsugu", "Nobunaga", "Shingen", "Kenshin", "Ieyasu", "Hideyoshi", "Masamune", "Yukimura", "Tadakatsu", "Naomasa", "Kiyomasa", "Motonari", "Yoshihiro"];
@@ -631,11 +678,19 @@
 
   const ZONE_CAT = {
     YARI_SPEARMEN: ["Sekigahara Valley","Kawanakajima Plains","Shizugatake Ridge","Mikatagahara Field"],
-    SAMURAI_UNIT: ["Kyoto Imperial Approach","Osaka Castle Outer Moat","Okehazama Gorge","yama-zaki Crossroads"],
+    SAMURAI_UNIT: ["Kyoto Imperial Approach","Osaka Castle Outer Moat","Okehazama Gorge","Yamazaki Crossroads"],
     CAVALRY_CHARGE: ["Kai Takeda Staging Grounds","Shinano Steppe","Musashi Open Plains","Azuchi Parade Grounds"],
     SHOGUN_GENERAL: ["Edo Castle Audience Hall","Gifu Mountain Citadel","Odawara Siege HQ","Fushimi War Council"],
     TEPPO_YUMI: ["Nagashino Palisade Line","Tanegashima Port","Ishiyama Hongan-ji","Nagashima River Fort"],
-    GARRISON_FORT: ["Himeji White-Heron Keep","Kumamoto Stone Bastion","Matsumoto Crow Castle","Inuyama Cliff Keep"]
+    GARRISON_FORT: ["Himeji White-Heron Keep","Kumamoto Stone Bastion","Matsumoto Crow Castle","Inuyama Cliff Keep"],
+    SHINOBI_NINJA: ["Iga Ueno Mountain Pass","Koga Shadow Valley","Fushimi Moonlit Roofs","Kasugayama Infiltration"],
+    SOHEI_MONKS: ["Mount Hiei Enryaku-ji","Kaga Ikko-Ikki Citadel","Negoro-ji Temple Complex","Mount Koya Sanctuary"],
+    SIEGE_ARTILLERY: ["Osaka Winter Siege Trenches","Odawara Bombardment Line","Inabayama Battery Ridge","Tottori Starvation Siege"],
+    ONNA_MUSHA: ["Oyamada Shrine Defense","Tsuneyama Castle Stand","Tachibana Mountain Gate","Oshi Floating Castle"],
+    RONIN_KENGO: ["Ganryu-jima Duel Island","Ichijo-ji Pine Crossing","Kofuku-ji Temple Courtyard","Gojo Bridge Kyoto"],
+    YABUSAME_HORSE: ["Kamakura Tsurugaoka Run","Nasuwara Archery Plain","Fuji Hunting Grounds","Kasama Gallop Track"],
+    ATAKEBUNE_SHIP: ["Kizugawa-guchi Naval Blockade","Dan-no-ura Strait","Miyajima Sacred Bay","Seto Inland Sea"],
+    HORA_WARBAND: ["Komaki-Nagakute Signal Hill","Sekigahara Mt. Sasao","Yashima War-Camp","Tennoji Final Drum"]
   };
 
   const MILESTONES = [
@@ -643,7 +698,7 @@
     { id: "m2", title: "First Victory", desc: "Win a 3v3 or 5v5 Tabletop Battle.", reward: 500, req: s => (s.statBattlesWon || 0) >= 1 },
     { id: "m3", title: "Provincial Banner", desc: "Muster 5 or more samurai units in your racks.", reward: 500, req: s => s.fleet.length >= 5 },
     { id: "m4", title: "Artisan Guild", desc: "Hire 5 or more armorers & strategists.", reward: 400, req: s => s.pilots.length >= 5 },
-    { id: "m5", title: "Takeda Charge", desc: "Acquire a CAVALRY_CHARGE or SHOGUN_GENERAL unit.", reward: 1200, req: s => s.fleet.some(p => p.role === 'CAVALRY_CHARGE' || p.role === 'SHOGUN_GENERAL') },
+    { id: "m5", title: "Shadow & Shrine", desc: "Acquire a SHINOBI_NINJA, SOHEI_MONKS, or ATAKEBUNE_SHIP unit.", reward: 1200, req: s => s.fleet.some(p => ['SHINOBI_NINJA','SOHEI_MONKS','ATAKEBUNE_SHIP'].includes(p.role)) },
     { id: "m6", title: "Hatamoto Status", desc: "Acquire a Tier V or higher samurai unit.", reward: 3000, req: s => s.fleet.some(p => p.tierIndex >= 4) },
     { id: "m7", title: "Warlord of 5 Battles", desc: "Win 5 Tabletop 3v3 or 5v5 Battles.", reward: 2500, req: s => (s.statBattlesWon || 0) >= 5 },
     { id: "m8", title: "Urushi Vault", desc: "Stock over 25,000 Pots of Lacquer.", reward: 1500, req: s => s.fuelReserve >= 25000 },
@@ -660,14 +715,7 @@
 
   /* ============================================================================
      256x256x256 ULTRA-SCALE HOLLOW-SHELL 3D SAMURAI MINIATURE ENGINE
-     - Full 256^3 Resolution with 3-Voxel Watertight Shells (~7ms generation)
-     - Builds 6 Authentic Feudal Japanese Tabletop Archetypes on Scenic Bases:
-       1. YARI_SPEARMEN: Ranked 9-man or 16-man Ashigaru Pike Phalanx + Sashimono Banners
-       2. SAMURAI_UNIT: 5-Man Heavy Katana/Naginata Samurai + Horned Kabuto + Clan Nobori
-       3. CAVALRY_CHARGE: 3-Model Mounted Takeda Cavalry + Couched Lances + Horo Cloaks
-       4. SHOGUN_GENERAL: Daimyo Command Diorama + Jinmaku Curtains + Uma-Jirushi + Taiko Drum
-       5. TEPPO_YUMI: 6-Man Matchlock Arquebus & Yumi Bow Line behind Wooden Tate Shields
-       6. GARRISON_FORT: Samurai Shiro Keep / Yagura Gatehouse on Sloped Ishigaki Stone Walls
+     - Supports all 14 Feudal Japanese Battlefield Divisions with bespoke 3D sculpts
      ============================================================================ */
   class VoxelSamuraiEngine {
     constructor(canvas) {
@@ -700,7 +748,7 @@
       this.pixels = new Uint32Array(this.imgData.data.buffer);
 
       this.paletteRGB = new Uint32Array(256);
-      this.materialPriority = new Uint32Array(256);
+      this.materialPriority = new Uint8Array(256);
       this.isEmissive = new Uint8Array(256);
 
       this.yaw = 0.50;
@@ -731,70 +779,62 @@
       this.originIdx = originIdx;
       this.isEmissive.fill(0);
 
-      // 10..15: Primary Do-Maru / O-Yoroi Armor Lacquer
-      // 20..25: Secondary Odoshi Silk Lacing / Sashimono Banners / Kuwagata Crests
-      // 30..35: Folded Steel / Yari Shafts / Castle Stone / Warhorse Barding
       let armor  = ['#4a0b0e', '#731217', '#9e1b22', '#c92830', '#eb424b', '#ff757d']; // Vermilion Takeda Red
       let lacing = ['#4d3808', '#78580e', '#a67b16', '#d49f22', '#f5c438', '#ffe678']; // Kinpaku Gold Trim
       let steel  = ['#1c2026', '#2c323b', '#404854', '#576273', '#738196', '#99abbd']; // Tamahagane Steel
 
       if (prefixIdx === 1) {
-        // KINPAKU GOLD LEAF & CRIMSON SILK
         armor  = ['#4d3808', '#78580e', '#a67b16', '#d49f22', '#f5c438', '#ffe678'];
         lacing = ['#4a0b0e', '#731217', '#9e1b22', '#c92830', '#eb424b', '#ff757d'];
-      } else if (prefixIdx === 2 || originIdx === 2 || originIdx === 5) {
-        // KURO-URUSHI BLACK LACQUER & GOLD CRESCENT
+      } else if (prefixIdx === 2 || originIdx === 2 || originIdx === 5 || role === 'SHINOBI_NINJA') {
         armor  = ['#0d0f14', '#181c24', '#252b38', '#353e4f', '#485369', '#606e87'];
         lacing = ['#543d08', '#825f0e', '#b28416', '#e0a922', '#ffd03b', '#fff08c'];
       } else if (prefixIdx === 3 || originIdx === 1) {
-        // AI-INDIGO SILK LACING & IRON
         armor  = ['#0a1933', '#122c57', '#1d4482', '#2b5fb0', '#4280db', '#6ea8ff'];
         lacing = ['#4d3808', '#78580e', '#a67b16', '#d49f22', '#f5c438', '#ffe678'];
-      } else if (prefixIdx === 4) {
-        // BYAKUDAN WEATHERED BRONZE & JADE
+      } else if (prefixIdx === 4 || role === 'SIEGE_ARTILLERY') {
         armor  = ['#2e2212', '#4a371d', '#694e2a', '#8c6938', '#b0864a', '#d6a862'];
         lacing = ['#0d3326', '#165741', '#228060', '#32ab82', '#4bd4a6', '#80ffcf'];
-      } else if (prefixIdx === 5 || originIdx === 3) {
-        // SHIRO WHITE MONASTIC SILK & COBALT
-        armor  = ['#787c82', '#969bA1', '#b4bac2', '#d0d6de', '#e8edf2', '#ffffff'];
+      } else if (prefixIdx === 5 || originIdx === 3 || role === 'SOHEI_MONKS') {
+        armor  = ['#787c82', '#969ba1', '#b4bac2', '#d0d6de', '#e8edf2', '#ffffff'];
         lacing = ['#0c224a', '#163b7a', '#2258ad', '#3478db', '#5499f5', '#8cc0ff'];
       } else if (prefixIdx === 6 || originIdx === 7) {
-        // AKA-ONI SCARLET DEMON ARMOR
         armor  = ['#590707', '#870d0d', '#b81616', '#e62424', '#ff4747', '#ff8080'];
         lacing = ['#141619', '#22262b', '#333840', '#474e59', '#5e6775', '#7a8596'];
       } else if (prefixIdx === 8) {
-        // SAKURA DAMASK ROYAL VIOLET & GOLD
         armor  = ['#290a38', '#45125e', '#661c8a', '#8c29ba', '#b547e8', '#df85ff'];
         lacing = ['#4d3808', '#78580e', '#a67b16', '#d49f22', '#f5c438', '#ffe678'];
       }
 
-      // 1..9: Scenic Wargaming Base (Black Beveled Rim, Earth, Slate Rock, Bamboo, Sakura Petals & Brass Plaque)
+      // 1..9: Scenic Wargaming Base (Rim, Earth, Ishigaki Stone, Bamboo, Sakura Petals, plaque & Water)
       this.registerColor(1, '#0c0e12', 7, 0);
       this.registerColor(2, '#181c24', 7, 0);
-      this.registerColor(3, '#332419', 7, 0); // Battlefield earth
-      this.registerColor(4, '#4d3726', 7, 0); // Drybrushed soil
-      this.registerColor(5, '#424952', 7, 0); // Ishigaki stone shadow
-      this.registerColor(6, '#6e7885', 7, 0); // Ishigaki stone highlight
-      this.registerColor(7, '#2d591e', 7, 0); // Bamboo / grass green
-      this.registerColor(8, '#ff9ebb', 7, 0); // Fallen Sakura blossom petals on base!
-      this.registerColor(9, '#d4a838', 7, 0); // Brass clan nameplate
+      this.registerColor(3, '#332419', 7, 0);
+      this.registerColor(4, '#4d3726', 7, 0);
+      this.registerColor(5, '#424952', 7, 0);
+      this.registerColor(6, '#6e7885', 7, 0);
+      this.registerColor(7, '#2d591e', 7, 0);
+      this.registerColor(8, '#ff9ebb', 7, 0);
+      this.registerColor(9, '#d4a838', 7, 0);
 
-      // 10..15: Primary Samurai Armor / Shiro Plaster (Priority 5)
+      // 10..15: Primary Samurai Armor / Hull / Robes (Priority 5)
       armor.forEach((c, i) => this.registerColor(10 + i, c, 5, 0));
-      // 20..25: Secondary Silk Lacing / Sashimono Banners / Gold Horns (Priority 5)
+      // 20..25: Secondary Silk Lacing / Gold Crests / Shrine Gold (Priority 5)
       lacing.forEach((c, i) => this.registerColor(20 + i, c, 5, 0));
-      // 30..35: Folded Steel Blades / Yari Shafts / Tiled Roofs (Priority 5)
+      // 30..35: Folded Steel Blades / Roof Tiles / Cannon Bronze (Priority 5)
       steel.forEach((c, i) => this.registerColor(30 + i, c, 5, 0));
 
-      // 40..47: White Banner Cloth, katana Hamon Edge, Matchlock Fire & Paper Lanterns (Priority 6)
-      this.registerColor(40, '#f5efe2', 6, 0); // Unbleached Sashimono banner cloth / Castle plaster
-      this.registerColor(41, '#ffffff', 6, 1); // Gleaming Katana edge / Muzzle flash core
-      this.registerColor(42, '#ff6619', 6, 1); // Teppo matchlock muzzle flame / Torchlight
-      this.registerColor(43, '#dc2626', 6, 0); // Red sun-disc / Clan Mon emblem on banners
-      this.registerColor(44, '#5c3a21', 6, 0); // Polished Yari hardwood shaft / Warhorse coat
-      this.registerColor(45, '#d4bc94', 6, 0); // Ashigaru straw sandals / Taiko drumhead
-      this.registerColor(46, '#9ca3af', 6, 0); // Gunpowder smoke puff
-      this.registerColor(47, '#111317', 6, 0); // Black Mempo war-mask
+      // 40..49: Banner Cloth, Katana Edge, Cannon Blast, Torii Vermilion & Sea Waves (Priority 6)
+      this.registerColor(40, '#f5efe2', 6, 0); // Unbleached Sashimono cloth / Monk Tokin cowl
+      this.registerColor(41, '#ffffff', 6, 1); // Gleaming Katana edge / Muzzle flash core / Sea foam
+      this.registerColor(42, '#ff6619', 6, 1); // Cannon / Teppo muzzle flame
+      this.registerColor(43, '#dc2626', 6, 0); // Vermilion Torii Gate / Red Sun Clan Mon
+      this.registerColor(44, '#5c3a21', 6, 0); // Polished Yari shaft / Timber carriage / Ship hull
+      this.registerColor(45, '#d4bc94', 6, 0); // Taiko drumhead / Straw Komuso basket
+      this.registerColor(46, '#9ca3af', 6, 0); // Smoke bomb / Gunpowder smoke cloud
+      this.registerColor(47, '#111317', 6, 0); // Black Mempo mask / Ninja cowl
+      this.registerColor(48, '#0d3b66', 6, 0); // Deep Seto Inland Sea wave base
+      this.registerColor(49, '#1d639e', 6, 0); // Sea wave crest
     }
 
     setVoxel(x, y, z, colorIdx) {
@@ -881,10 +921,7 @@
       }
     }
 
-    /**
-     * Builds the 256^3 Scenic Sengoku Tabletop Base (with Bamboo stalks, Stone Flagstones & fallen Sakura Petals)
-     */
-    buildSengokuBase(isRegimentTray = false) {
+    buildSengokuBase(isRegimentTray = false, isWaterBase = false) {
       const cx = 128, cz = 128;
       const baseTopY = 28;
       const rx = isRegimentTray ? 98 : 94;
@@ -902,8 +939,13 @@
             const isPlaque = (z > cz + rz * 0.85 && Math.abs(x - cx) < 30);
             this.setVoxel(x, baseTopY - 1, z, isPlaque ? 9 : 2);
             this.setVoxel(x, baseTopY, z, isPlaque ? 9 : 2);
+          } else if (isWaterBase) {
+            // Rolling Seto Inland Sea Waves & Whitecaps!
+            const waveH = Math.round(Math.sin(x * 0.12 + z * 0.08) * 2.5);
+            const col = waveH >= 2 ? 41 : (waveH >= 0 ? 49 : 48);
+            this.setVoxel(x, baseTopY + waveH, z, col);
+            this.setVoxel(x, baseTopY + waveH - 1, z, 48);
           } else {
-            // Battlefield Earth + Stone Flagstone Path + Fallen Pink Sakura Blossoms!
             const isPath = Math.abs(x - cx) < 22;
             const isSakura = ((x * 37 + z * 19 + this.seed) % 97 === 0);
             const col = isSakura ? 8 : (isPath ? (5 + ((x ^ z) & 1)) : (3 + ((x + z) & 1)));
@@ -913,10 +955,11 @@
         }
       }
 
-      // 4 Green Bamboo Stalks & Grass Tufts on the Rear Corners of the Base
-      for (const bx of [cx - rx + 16, cx + rx - 16]) {
-        for (const bz of [cz - rz + 18, cz - rz + 28]) {
-          this.fillShellCylinder(bx, baseTopY + 1, bz, 2.2, 34, 7, 1);
+      if (!isWaterBase) {
+        for (const bx of [cx - rx + 16, cx + rx - 16]) {
+          for (const bz of [cz - rz + 18, cz - rz + 28]) {
+            this.fillShellCylinder(bx, baseTopY + 1, bz, 2.2, 34, 7, 1);
+          }
         }
       }
 
@@ -924,55 +967,63 @@
     }
 
     /**
-     * Sculpts a 256^3 Detailed Samurai or Ashigaru Miniature at (sx, sy, sz) with Scale `sc`
-     * Includes Suneate Greaves, Kusazuri Tassets, Do Cuirass, Sode Shoulder Shields,
-     * Kabuto Helmet with Kuwagata Horns (or Jingasa War-Hat), Sashimono Back-Banner, and Weapon!
+     * Sculpts a 256^3 Samurai, Ashigaru, Shinobi, Sohei Monk, Onna-Musha, or Kengo Miniature
+     * `headgear`: 'kabuto' | 'jingasa' | 'shinobi' | 'tokin' | 'hachimaki' | 'komuso'
+     * `weapon`: 'katana' | 'yari' | 'teppo' | 'naginata' | 'dual_katana' | 'yumi' | 'shuriken'
      */
-    sculptBushi(sx, sy, sz, sc, isAshigaru = false, weapon = 'katana', hasSashimono = true) {
+    sculptBushi(sx, sy, sz, sc, headgear = 'kabuto', weapon = 'katana', hasSashimono = true) {
       const legH = Math.round(16 * sc);
       const torsoH = Math.round(18 * sc);
       const legSpread = Math.max(3, Math.round(6.0 * sc));
       const limbR = Math.max(2.2, 3.8 * sc);
 
-      // 1. Suneate Armored Shin Greaves & Straw Waraji Sandals
       this.fillShellCylinder(sx - legSpread, sy, sz, limbR, legH, 10, 6);
       this.fillShellCylinder(sx + legSpread, sy, sz, limbR, legH, 10, 6);
 
-      // 2. Kusazuri Laced Tasset Skirt & Do Cuirass
       const hipY = sy + legH;
       const w = Math.max(5, Math.round(9.5 * sc));
       const d = Math.max(4, Math.round(6.5 * sc));
       this.fillShellBox(sx - w - 1, hipY - 4, sz - d - 1, sx + w + 1, hipY + 4, sz + d + 1, 20, 6);
       this.fillShellBox(sx - w, hipY + 4, sz - d, sx + w, hipY + torsoH, sz + d, 10, 6);
 
-      // 3. Sode Rectangular Laced Shoulder Armor Plates (Samurai)
       const shY = hipY + torsoH - Math.round(4 * sc);
-      if (!isAshigaru) {
+      if (headgear === 'kabuto' || headgear === 'hachimaki') {
         this.fillShellBox(sx - w - 5, shY - 6, sz - d, sx - w - 1, shY + 4, sz + d, 20, 6);
         this.fillShellBox(sx + w + 1, shY - 6, sz - d, sx + w + 5, shY + 4, sz + d, 20, 6);
       }
 
-      // 4. Head, Mempo War-Mask & Either Conical Jingasa (Ashigaru) or Horned Kabuto Helmet (Samurai)!
       const headY = hipY + torsoH + Math.round(4 * sc);
       const headR = Math.max(3.0, 5.5 * sc);
-      this.fillShellCylinder(sx, hipY + torsoH, sz, headR * 0.85, Math.round(6 * sc), 47, 1);
+      this.fillShellCylinder(sx, hipY + torsoH, sz, headR * 0.85, Math.round(6 * sc), headgear === 'shinobi' ? 47 : 45, 1);
 
-      if (isAshigaru) {
-        // Conical Lacquered Jingasa War-Hat with Clan Stripe
+      if (headgear === 'jingasa') {
         for (let r = 0; r <= Math.round(7 * sc); r++) {
           const rad = (headR * 1.85) * (1 - r / Math.max(1, 7 * sc));
           this.fillShellCylinder(sx, headY + 2 + r, sz, rad, 1, r < 2 ? 20 : 10, 6);
         }
+      } else if (headgear === 'tokin') {
+        // Sohei Warrior Monk White Cowl Hood (Tokin) wrapping head & chin!
+        this.fillShellCylinder(sx, headY, sz, headR * 1.2, Math.round(9 * sc), 40, 1);
+      } else if (headgear === 'komuso') {
+        // Woven Straw Tengai Basket Hat of a wandering Ronin Sword-Saint!
+        this.fillShellCylinder(sx, headY - 2, sz, headR * 1.35, Math.round(12 * sc), 45, 1);
+      } else if (headgear === 'hachimaki') {
+        // Onna-Musha flowing black hair pony-tail + Crimson/White Hachimaki headband!
+        this.fillShellCylinder(sx, headY, sz, headR * 1.05, Math.round(6 * sc), 47, 1);
+        this.fillShellCylinder(sx, headY + 2, sz, headR * 1.15, 2, 43, 1);
+        this.drawRod(sx, headY + 4, sz - headR, sx, headY - 8, sz - headR - 8, 3.0 * sc, 47);
+      } else if (headgear === 'shinobi') {
+        // Masked Shinobi Cowl + Ninjato back-scabbard
+        this.fillShellCylinder(sx, headY, sz, headR * 1.05, Math.round(6 * sc), 47, 1);
+        this.drawRod(sx - 4, hipY + 4, sz - d - 2, sx + 8, headY + 10, sz - d - 2, 1.8 * sc, 32);
       } else {
-        // Samurai Kabuto Bowl + Shikoro Neck Guard + Sweeping Gold Kuwagata Antler Crests!
+        // Horned Samurai Kabuto Helmet
         this.fillShellCylinder(sx, headY, sz, headR * 1.15, Math.round(6 * sc), 10, 6);
-        // Sweeping Golden Kuwagata Horns on Forehead
         const hornH = Math.round(14 * sc);
         this.drawRod(sx - 2, headY + 4, sz + headR, sx - Math.round(9 * sc), headY + hornH, sz + headR + 2, 1.5 * sc, 24);
         this.drawRod(sx + 2, headY + 4, sz + headR, sx + Math.round(9 * sc), headY + hornH, sz + headR + 2, 1.5 * sc, 24);
       }
 
-      // 5. Iconic Sashimono Back-Banner Flag on Bamboo Pole!
       if (hasSashimono) {
         const poleTopY = headY + Math.round(28 * sc);
         this.drawRod(sx, hipY + 6, sz - d - 2, sx, poleTopY, sz - d - 2, 1.2, 44);
@@ -986,29 +1037,46 @@
         }
       }
 
-      // 6. Weapons (Long Yari Pike, Curved Katana/Nodachi, or Tanegashima Matchlock)
+      // Weapons
       if (weapon === 'yari') {
-        // Long Angled Yari Spear Pike
         this.drawRod(sx + w + 2, sy + 6, sz - 6, sx + w + 2, sy + Math.round(52 * sc), sz + Math.round(38 * sc), 1.5, 44);
         this.drawRod(sx + w + 2, sy + Math.round(52 * sc), sz + Math.round(38 * sc), sx + w + 2, sy + Math.round(62 * sc), sz + Math.round(45 * sc), 2.0, 41);
+      } else if (weapon === 'naginata') {
+        // Long shaft + sweeping curved Naginata glaive blade!
+        const tipY = sy + Math.round(44 * sc), tipZ = sz + Math.round(26 * sc);
+        this.drawRod(sx + w + 2, sy + 4, sz - 4, sx + w + 2, tipY, tipZ, 1.6, 44);
+        for (let b = 0; b <= Math.round(18 * sc); b++) {
+          this.drawRod(sx + w + 2, tipY + b, tipZ + b * 0.4, sx + w + 2, tipY + b + 1, tipZ + b * 0.4 + 2, 2.2 * sc, 41);
+        }
+      } else if (weapon === 'dual_katana') {
+        // Miyamoto Musashi Niten Ichi-Ryu Dual Blades (Katana in right hand, Wakizashi in left!)
+        for (let b = 0; b <= Math.round(28 * sc); b++) {
+          this.setVoxel(sx + w + 3, shY + b, sz + 8 + b * 0.45, 41);
+          if (b <= Math.round(18 * sc)) {
+            this.setVoxel(sx - w - 3, shY + b * 0.6, sz + 8 + b * 0.65, 41);
+          }
+        }
+      } else if (weapon === 'yumi') {
+        // Asymmetrical Japanese Daikyu Longbow + Nocked Arrow!
+        for (let by = -18; by <= 26; by++) {
+          const arcZ = sz + 14 - (by * by) * 0.015;
+          this.setVoxel(sx + w + 2, shY + Math.round(by * sc), arcZ, 43);
+        }
+        this.drawRod(sx + w + 2, shY + 2, sz + 4, sx + w + 2, shY + 2, sz + 22, 1.2, 41);
       } else if (weapon === 'teppo') {
-        // Tanegashima Matchlock Arquebus + Muzzle Flame & Smoke!
         this.drawRod(sx + w, shY - 2, sz + 2, sx + w - 2, shY - 1, sz + Math.round(24 * sc), 2.0 * sc, 32);
         this.drawRod(sx + w - 2, shY - 1, sz + Math.round(24 * sc), sx + w - 2, shY - 1, sz + Math.round(30 * sc), 3.2 * sc, 42);
       } else {
-        // Curved Folded-Steel Katana / Naginata Raised Overhead
         for (let b = 0; b <= Math.round(28 * sc); b++) {
           const curveZ = sz + 8 + b * 0.45;
           const curveY = shY + b + (b * b) * 0.015;
           this.setVoxel(sx + w + 3, curveY, curveZ, 34);
-          this.setVoxel(sx + w + 3, curveY, curveZ + 1, 41); // Gleaming Hamon edge
+          this.setVoxel(sx + w + 3, curveY, curveZ + 1, 41);
         }
       }
     }
 
-    /**
-     * 1. YARI_SPEARMEN (9-Man Provincial Company OR 16-Man Nagayari Pike Phalanx!)
-     */
+    // 1. YARI_SPEARMEN
     buildYariPhalanx(sp) {
       const baseTopY = this.buildSengokuBase(true);
       const is16Man = sp.includes("16-Man");
@@ -1021,20 +1089,16 @@
         for (let col = 0; col < gridN; col++) {
           const sx = 128 + (col - (gridN - 1) * 0.5) * spacingX;
           const sz = 128 + (row - (gridN - 1) * 0.5) * spacingZ;
-          const isFrontCommander = (row === gridN - 1 && col === 1);
-          this.sculptBushi(sx, baseTopY + 1, sz, sc, !isFrontCommander, 'yari', true);
+          const isCmd = (row === gridN - 1 && col === 1);
+          this.sculptBushi(sx, baseTopY + 1, sz, sc, isCmd ? 'kabuto' : 'jingasa', 'yari', true);
         }
       }
     }
 
-    /**
-     * 2. SAMURAI_UNIT (5-Man Heroic Hatamoto / Naginata / Nodachi Heavy Samurai Squad)
-     */
+    // 2. SAMURAI_UNIT
     buildSamuraiRetainers(sp) {
       const baseTopY = this.buildSengokuBase(false);
-      // Center Tactical Ishigaki Stone Outcrop for the Samurai Commander
       this.fillShellBox(100, baseTopY + 1, 102, 156, baseTopY + 18, 150, 5, 2);
-
       const positions = [
         { x: 128, y: baseTopY + 18, z: 126, sc: 1.48 },
         { x: 74,  y: baseTopY + 1,  z: 148, sc: 1.25 },
@@ -1042,59 +1106,36 @@
         { x: 82,  y: baseTopY + 1,  z: 84,  sc: 1.25 },
         { x: 174, y: baseTopY + 1,  z: 84,  sc: 1.25 }
       ];
-      for (const p of positions) {
-        this.sculptBushi(p.x, p.y, p.z, p.sc, false, 'katana', true);
-      }
+      for (const p of positions) this.sculptBushi(p.x, p.y, p.z, p.sc, 'kabuto', 'katana', true);
     }
 
-    /**
-     * 3. CAVALRY_CHARGE (3-Model Mounted Takeda Kiba-Musha Cavalry Wedge with Horo Cloaks & Lances)
-     */
-    buildCavalryLance(sp) {
+    // 3. CAVALRY_CHARGE & 12. YABUSAME_HORSE
+    buildCavalryLance(sp, isYabusame = false) {
       const baseTopY = this.buildSengokuBase(true);
       const hasHoro = sp.includes("Horo");
-
-      const mounts = [
-        { x: 128, z: 152 },
-        { x: 68,  z: 96 },
-        { x: 188, z: 96 }
-      ];
+      const mounts = [{ x: 128, z: 152 }, { x: 68, z: 96 }, { x: 188, z: 96 }];
 
       for (const m of mounts) {
-        // Warhorse Barrel, Barding Armor & 4 Galloping Legs
         this.fillShellBox(m.x - 12, baseTopY + 20, m.z - 24, m.x + 12, baseTopY + 42, m.z + 24, 20, 6);
         this.fillShellCylinder(m.x - 8, baseTopY + 1, m.z + 18, 3.5, 20, 44, 1);
         this.fillShellCylinder(m.x + 8, baseTopY + 1, m.z + 18, 3.5, 20, 44, 1);
         this.fillShellCylinder(m.x - 8, baseTopY + 1, m.z - 18, 3.5, 20, 44, 1);
         this.fillShellCylinder(m.x + 8, baseTopY + 1, m.z - 18, 3.5, 20, 44, 1);
-
-        // Armored Warhorse Neck & Shaffron Horned Head
         this.drawRod(m.x, baseTopY + 36, m.z + 20, m.x, baseTopY + 60, m.z + 36, 8.5, 12);
         this.drawRod(m.x, baseTopY + 60, m.z + 36, m.x, baseTopY + 54, m.z + 48, 6.5, 24);
 
-        // Mounted Samurai Rider in the Saddle
-        this.sculptBushi(m.x, baseTopY + 30, m.z - 4, 1.05, false, 'yari', !hasHoro);
-
-        // Billowing Balloon-Like Horo Arrow-Catcher Cloak on Back!
-        if (hasHoro) {
-          this.fillShellCylinder(m.x, baseTopY + 52, m.z - 22, 15.0, 24, 20, 6);
-        }
+        this.sculptBushi(m.x, baseTopY + 30, m.z - 4, 1.05, 'kabuto', isYabusame ? 'yumi' : 'yari', !hasHoro);
+        if (hasHoro) this.fillShellCylinder(m.x, baseTopY + 52, m.z - 22, 15.0, 24, 20, 6);
       }
     }
 
-    /**
-     * 4. SHOGUN_GENERAL (Daimyo Honjin Command Tent Diorama with Jinmaku Curtains, Uma-Jirushi Standard & Taiko Drum)
-     */
+    // 4. SHOGUN_GENERAL
     buildShogunCommand(sp) {
       const baseTopY = this.buildSengokuBase(false);
       const cx = 128, cz = 128;
-
-      // 1. Stepped Stone Honjin Command Dais
       this.fillShellBox(cx - 56, baseTopY + 1, cz - 48, cx + 56, baseTopY + 18, cz + 44, 5, 2);
-      // Red Tatami Command Mat on top of Dais
       this.fillShellBox(cx - 42, baseTopY + 18, cz - 34, cx + 42, baseTopY + 21, cz + 32, 43, 1);
 
-      // 2. Striped Jinmaku War-Camp Enclosure Curtains around the Rear & Sides!
       for (let x = cx - 68; x <= cx + 68; x++) {
         const isPost = (Math.abs(x - cx) % 34 === 0);
         const stripe = (Math.floor((x + 100) / 12) & 1) ? 40 : 11;
@@ -1103,82 +1144,53 @@
           this.setVoxel(x, y, cz - 55, isPost ? 44 : stripe);
         }
       }
-
-      // 3. Towering Golden Uma-Jirushi Personal Daimyo Battle Standard & Taiko War-Drum!
       this.drawRod(cx - 44, baseTopY + 18, cz - 20, cx - 44, baseTopY + 178, cz - 20, 3.0, 24);
-      // Giant Golden Fan / Sun-Burst Uma-Jirushi Crest at Top of Pole
       this.fillShellCylinder(cx - 44, baseTopY + 152, cz - 20, 18.0, 6, 24, 2);
-
-      // Taiko War-Drum on Wooden Stand (Right flank)
       this.fillShellCylinder(cx + 44, baseTopY + 26, cz - 10, 14.0, 18, 45, 1);
-      this.fillShellBox(cx + 34, baseTopY + 18, cz - 20, cx + 54, baseTopY + 28, cz, 44, 1);
 
-      // 4. Heroic Scale Shogun / Daimyo in Full O-Yoroi Armor Center Stage + 2 Bodyguards!
-      this.sculptBushi(cx, baseTopY + 21, cz + 4, 1.85, false, 'katana', false);
-      this.sculptBushi(cx - 32, baseTopY + 21, cz + 18, 1.15, false, 'yari', true);
-      this.sculptBushi(cx + 32, baseTopY + 21, cz + 18, 1.15, false, 'yari', true);
+      this.sculptBushi(cx, baseTopY + 21, cz + 4, 1.85, 'kabuto', 'katana', false);
+      this.sculptBushi(cx - 32, baseTopY + 21, cz + 18, 1.15, 'kabuto', 'yari', true);
+      this.sculptBushi(cx + 32, baseTopY + 21, cz + 18, 1.15, 'kabuto', 'yari', true);
     }
 
-    /**
-     * 5. TEPPO_YUMI (6-Man Tanegashima Matchlock & Yumi Bow Line behind Wooden Tate Shields & Bamboo Palisades)
-     */
+    // 5. TEPPO_YUMI
     buildTeppoBattery(sp) {
       const baseTopY = this.buildSengokuBase(true);
-
-      // Front Line of 4 Wooden Tate Pavise Shields & Crossed Bamboo Sakamogi Stakes!
+      const isBow = sp.includes("Yumi");
       for (let i = 0; i < 4; i++) {
-        const tx = 68 + i * 40;
-        const tz = 166;
-        // Sloped Wooden Tate Shield with Clan Mon
+        const tx = 68 + i * 40, tz = 166;
         for (let h = 0; h <= 34; h++) {
           this.fillShellBox(tx - 11, baseTopY + 1 + h, tz - Math.floor(h * 0.2), tx + 11, baseTopY + 2 + h, tz + 2 - Math.floor(h * 0.2), (h > 12 && h < 22) ? 43 : 44, 1);
         }
-        // Angled Anti-Cavalry Bamboo Stakes in front
         this.drawRod(tx - 8, baseTopY + 1, tz + 6, tx - 8, baseTopY + 24, tz + 22, 1.6, 45);
         this.drawRod(tx + 8, baseTopY + 1, tz + 6, tx + 8, baseTopY + 24, tz + 22, 1.6, 45);
       }
-
-      // 6 Teppo / Yumi Gunners in 2 Ranks firing over the shields!
       for (let row = 0; row < 2; row++) {
         for (let col = 0; col < 3; col++) {
-          const sx = 76 + col * 52;
-          const sz = 136 - row * 48;
-          this.sculptBushi(sx, baseTopY + 1, sz, 1.08, row === 0, 'teppo', true);
+          const sx = 76 + col * 52, sz = 136 - row * 48;
+          this.sculptBushi(sx, baseTopY + 1, sz, 1.08, row === 0 ? 'jingasa' : 'kabuto', isBow ? 'yumi' : 'teppo', true);
         }
       }
     }
 
-    /**
-     * 6. GARRISON_FORT (Samurai Shiro Keep, Sloped Ishigaki Stone Walls & Upturned Irimoya Tiled Roofs)
-     */
+    // 6. GARRISON_FORT
     buildShiroGarrison(sp) {
       const baseTopY = this.buildSengokuBase(true);
       const cx = 128, cz = 128;
-
-      // 1. Sloped Batter-Walled Ishigaki Stone Fortress Base (Y = baseTopY..baseTopY + 54)
       for (let y = 0; y <= 52; y += 2) {
-        const t = y / 52;
-        const w = Math.round(76 - Math.pow(t, 1.35) * 22);
+        const t = y / 52, w = Math.round(76 - Math.pow(t, 1.35) * 22);
         this.fillShellBox(cx - w, baseTopY + 1 + y, cz - w, cx + w, baseTopY + 3 + y, cz + w, 5, 2);
       }
-      // Fortified Otemon Gate Portal carved into front Ishigaki stone wall
       this.fillShellBox(cx - 22, baseTopY + 1, cz + 54, cx + 22, baseTopY + 38, cz + 78, 44, 1);
       this.fillShellBox(cx - 14, baseTopY + 1, cz + 60, cx + 14, baseTopY + 28, cz + 79, 47, 1);
 
-      // 2. 4-Story White-Plastered Tenshu Keep with Sweeping Upturned Tiled Eaves!
       let curY = baseTopY + 53;
       for (let tier = 0; tier < 4; tier++) {
-        const t = tier / 3;
-        const wallW = Math.round(48 * (1 - t * 0.45));
-        const storyH = 24;
-
-        // White Shikkui Plaster Walls + Dark Timber Lattice Windows
+        const t = tier / 3, wallW = Math.round(48 * (1 - t * 0.45)), storyH = 24;
         this.fillShellBox(cx - wallW, curY, cz - wallW, cx + wallW, curY + storyH, cz + wallW, 40, 1);
         this.fillShellBox(cx - wallW - 2, curY, cz - wallW - 2, cx + wallW + 2, curY + 4, cz + wallW + 2, 30, 6);
 
-        // Sweeping Upturned Irimoya Tiled Roofs
-        const eaveW = wallW + 18;
-        const roofBaseY = curY + storyH;
+        const eaveW = wallW + 18, roofBaseY = curY + storyH;
         for (let dz = -eaveW; dz <= eaveW; dz++) {
           for (let dx = -eaveW; dx <= eaveW; dx++) {
             const maxD = Math.max(Math.abs(dx), Math.abs(dz));
@@ -1187,17 +1199,214 @@
             const slopeY = Math.max(0, (eaveW - maxD) * 0.55);
             const cornerLift = cornerDist > 0.70 ? Math.pow((cornerDist - 0.70) / 0.30, 2) * 10.5 : 0;
             const ry = Math.round(roofBaseY + slopeY + cornerLift);
-
             this.setVoxel(cx + dx, ry, cz + dz, maxD >= eaveW - 2 ? 24 : 32);
             this.setVoxel(cx + dx, ry + 1, cz + dz, 34);
           }
         }
         curY += storyH + 8;
       }
-
-      // Golden Shachihoko Roof-Carp Finials crowning the top ridge!
       this.fillShellBox(cx - 16, curY + 4, cz - 3, cx - 10, curY + 16, cz + 3, 24, 2);
       this.fillShellBox(cx + 10, curY + 4, cz - 3, cx + 16, curY + 16, cz + 3, 24, 2);
+    }
+
+    // 7. NEW! SHINOBI_NINJA (5-Model Iga/Koga Rooftop Shinobi Infiltrators + Castle Roof Ridge & Smoke Bombs)
+    buildShinobiSquad(sp) {
+      const baseTopY = this.buildSengokuBase(false);
+      const cx = 128, cz = 128;
+
+      // Curved Castle Wall & Tiled Roof Ridge Perch across center of base!
+      this.fillShellBox(cx - 56, baseTopY + 1, cz - 22, cx + 56, baseTopY + 26, cz + 18, 40, 1);
+      for (let dz = -32; dz <= 28; dz++) {
+        for (let dx = -68; dx <= 68; dx++) {
+          const slopeY = Math.max(0, (30 - Math.abs(dz)) * 0.65);
+          this.setVoxel(cx + dx, baseTopY + 26 + slopeY, cz + dz, 32);
+          this.setVoxel(cx + dx, baseTopY + 27 + slopeY, cz + dz, 34);
+        }
+      }
+
+      // Billowing 3D Smoke-Bomb Cloud at front of roof!
+      this.fillShellCylinder(cx, baseTopY + 6, cz + 42, 16.0, 14, 46, 1);
+
+      const ninjas = [
+        { x: cx,      y: baseTopY + 46, z: cz - 2,  sc: 1.38 }, // Master Jonin on roof ridge
+        { x: cx - 44, y: baseTopY + 34, z: cz + 10, sc: 1.18 },
+        { x: cx + 44, y: baseTopY + 34, z: cz + 10, sc: 1.18 },
+        { x: cx - 52, y: baseTopY + 1,  z: cz + 48, sc: 1.18 },
+        { x: cx + 52, y: baseTopY + 1,  z: cz + 48, sc: 1.18 }
+      ];
+      for (const n of ninjas) {
+        this.sculptBushi(n.x, n.y, n.z, n.sc, 'shinobi', 'dual_katana', false);
+      }
+    }
+
+    // 8. NEW! SOHEI_MONKS (7-Man Ikko-Ikki Warrior Monks + Portable Golden Mikoshi Shrine)
+    buildSoheiMonks(sp) {
+      const baseTopY = this.buildSengokuBase(true);
+      const cx = 128, cz = 128;
+
+      // Portable Golden Mikoshi War-Shrine on Carrying Poles in Center!
+      this.drawRod(cx - 24, baseTopY + 26, cz - 38, cx - 24, baseTopY + 26, cz + 38, 2.5, 43);
+      this.drawRod(cx + 24, baseTopY + 26, cz - 38, cx + 24, baseTopY + 26, cz + 38, 2.5, 43);
+      this.fillShellBox(cx - 20, baseTopY + 28, cz - 20, cx + 20, baseTopY + 62, cz + 20, 20, 6);
+      for (let r = 0; r <= 18; r++) {
+        const w = 26 * (1 - r / 18);
+        this.fillShellBox(cx - w, baseTopY + 62 + r, cz - w, cx + w, baseTopY + 64 + r, cz + w, 24, 2);
+      }
+
+      // 7 Fanatical Sohei Warrior Monks in White Tokin Cowls wielding Naginata Glaives!
+      const monks = [
+        { x: cx,      z: cz + 56, sc: 1.25 },
+        { x: cx - 54, z: cz + 42, sc: 1.08 },
+        { x: cx + 54, z: cz + 42, sc: 1.08 },
+        { x: cx - 62, z: cz,      sc: 1.08 },
+        { x: cx + 62, z: cz,      sc: 1.08 },
+        { x: cx - 48, z: cz - 46, sc: 1.08 },
+        { x: cx + 48, z: cz - 46, sc: 1.08 }
+      ];
+      for (const m of monks) {
+        this.sculptBushi(m.x, baseTopY + 1, m.z, m.sc, 'tokin', 'naginata', true);
+      }
+    }
+
+    // 9. NEW! SIEGE_ARTILLERY (Ozutsu Heavy Bronze Siege Cannon, Timber Carriage, Bamboo Gabions & Crew)
+    buildSiegeArtillery(sp) {
+      const baseTopY = this.buildSengokuBase(false);
+      const cx = 128, cz = 128;
+
+      // 1. Wicker Take-Taba Bamboo Gabion Baskets on Left & Right Flanks
+      for (const gx of [cx - 56, cx - 36, cx + 36, cx + 56]) {
+        this.fillShellCylinder(gx, baseTopY + 1, cz + 38, 9.5, 34, 45, 1);
+      }
+
+      // 2. Heavy Timber Siege Gun Carriage & Spoked Wheels
+      this.fillShellBox(cx - 22, baseTopY + 8, cz - 36, cx + 22, baseTopY + 26, cz + 28, 44, 1);
+      this.fillShellCylinder(cx - 24, baseTopY + 14, cz + 12, 13.0, 4, 44, 1);
+      this.fillShellCylinder(cx + 24, baseTopY + 14, cz + 12, 13.0, 4, 44, 1);
+
+      // 3. Massive Bronze Ozutsu / Kuni-Kuzushi Cannon Barrel + Fiery Muzzle Blast!
+      this.drawRod(cx, baseTopY + 28, cz - 28, cx, baseTopY + 42, cz + 56, 11.5, 22);
+      this.drawRod(cx, baseTopY + 42, cz + 56, cx, baseTopY + 45, cz + 72, 14.0, 42); // Blazing cannonball blast!
+      this.drawRod(cx, baseTopY + 45, cz + 72, cx, baseTopY + 46, cz + 80, 9.0, 41);
+
+      // 4. 3 Siege Artillery Crewmen
+      this.sculptBushi(cx - 48, baseTopY + 1, cz - 14, 1.15, 'kabuto', 'katana', true);
+      this.sculptBushi(cx + 48, baseTopY + 1, cz - 14, 1.15, 'jingasa', 'yari', true);
+      this.sculptBushi(cx,      baseTopY + 1, cz - 54, 1.15, 'jingasa', 'teppo', false);
+    }
+
+    // 10. NEW! ONNA_MUSHA (5-Model Elite Shieldmaidens in front of a Vermilion Shinto Torii Gate)
+    buildOnnaMusha(sp) {
+      const baseTopY = this.buildSengokuBase(false);
+      const cx = 128, cz = 128;
+
+      // Towering Vermilion Shinto Torii Gate on the Rear of the Base!
+      this.fillShellCylinder(cx - 44, baseTopY + 1, cz - 36, 6.0, 118, 43, 1);
+      this.fillShellCylinder(cx + 44, baseTopY + 1, cz - 36, 6.0, 118, 43, 1);
+      // Lower Nuki crossbar & Upper Kasagi curved lintel
+      this.fillShellBox(cx - 58, baseTopY + 88, cz - 40, cx + 58, baseTopY + 96, cz - 32, 43, 1);
+      this.fillShellBox(cx - 68, baseTopY + 114, cz - 42, cx + 68, baseTopY + 124, cz - 30, 43, 1);
+      this.fillShellBox(cx - 70, baseTopY + 122, cz - 43, cx + 70, baseTopY + 127, cz - 29, 47, 1);
+
+      const maidens = [
+        { x: cx,      z: cz + 42, sc: 1.42, w: 'naginata' },
+        { x: cx - 48, z: cz + 24, sc: 1.22, w: 'naginata' },
+        { x: cx + 48, z: cz + 24, sc: 1.22, w: 'naginata' },
+        { x: cx - 28, z: cz - 10, sc: 1.20, w: 'yumi' },
+        { x: cx + 28, z: cz - 10, sc: 1.20, w: 'yumi' }
+      ];
+      for (const m of maidens) {
+        this.sculptBushi(m.x, baseTopY + 1, m.z, m.sc, 'hachimaki', m.w, false);
+      }
+    }
+
+    // 11. NEW! RONIN_KENGO (3 Heroic Sword-Saints on a Red Arched Taiko-Bashi Bridge over Water)
+    buildRoninKengo(sp) {
+      const baseTopY = this.buildSengokuBase(false, true);
+      const cx = 128, cz = 128;
+      const isKomuso = sp.includes("Komuso");
+
+      // Red Lacquered Arched Wooden Taiko-Bashi Bridge spanning across the water base!
+      for (let x = cx - 78; x <= cx + 78; x++) {
+        const nx = (x - cx) / 78;
+        const archY = Math.round(baseTopY + 4 + Math.cos(nx * Math.PI * 0.5) * 28);
+        this.fillShellBox(x, archY, cz - 26, x + 1, archY + 4, cz + 26, 44, 1);
+        // Red bridge railings & golden giboshi posts
+        this.fillShellBox(x, archY + 14, cz + 24, x + 1, archY + 17, cz + 27, 43, 1);
+        this.fillShellBox(x, archY + 14, cz - 27, x + 1, archY + 17, cz - 24, 43, 1);
+        if (Math.abs(x - cx) % 26 === 0) {
+          this.fillShellBox(x - 2, archY + 4, cz + 24, x + 2, archY + 22, cz + 28, 24, 2);
+          this.fillShellBox(x - 2, archY + 4, cz - 28, x + 2, archY + 22, cz - 24, 24, 2);
+        }
+      }
+
+      // 3 Heroic-Scale Kengo Sword-Saints dueling atop the bridge!
+      this.sculptBushi(cx,      baseTopY + 34, cz, 1.65, isKomuso ? 'komuso' : 'hachimaki', 'dual_katana', false);
+      this.sculptBushi(cx - 48, baseTopY + 22, cz, 1.45, 'komuso', 'katana', false);
+      this.sculptBushi(cx + 48, baseTopY + 22, cz, 1.45, 'kabuto', 'katana', false);
+    }
+
+    // 13. NEW! ATAKEBUNE_SHIP (Suigun Tekkosen / Atakebune Armored Floating Fortress War-Barge on Waves)
+    buildAtakebuneShip(sp) {
+      const baseTopY = this.buildSengokuBase(true, true);
+      const cx = 128, cz = 128;
+
+      // 1. Wide Armored Timber & Ironclad Atakebune Hull on the Waves
+      for (let y = 0; y <= 28; y++) {
+        const t = y / 28;
+        const w = Math.round(36 + t * 14);
+        const l = Math.round(68 + t * 18);
+        this.fillShellBox(cx - w, baseTopY + y, cz - l, cx + w, baseTopY + y + 1, cz + l, y > 18 ? 30 : 44, 6);
+      }
+
+      // Banks of 12 Wooden Oars extending into the sea on both sides!
+      for (let oz = cz - 52; oz <= cz + 52; oz += 18) {
+        this.drawRod(cx - 46, baseTopY + 20, oz, cx - 76, baseTopY + 2, oz, 1.8, 45);
+        this.drawRod(cx + 46, baseTopY + 20, oz, cx + 76, baseTopY + 2, oz, 1.8, 45);
+      }
+
+      // 2. 2-Story Castle-Like Yagura Deck-Citadel + Gunports + Upturned Roof!
+      const deckY = baseTopY + 29;
+      this.fillShellBox(cx - 34, deckY, cz - 48, cx + 34, deckY + 36, cz + 48, 10, 6);
+      this.fillShellBox(cx - 24, deckY + 36, cz - 32, cx + 24, deckY + 66, cz + 32, 40, 1);
+
+      // Sweeping Irimoya Tiled Ship-Castle Roof
+      for (let r = 0; r <= 18; r++) {
+        const w = 30 * (1 - r / 18);
+        this.fillShellBox(cx - w, deckY + 66 + r, cz - 36, cx + w, deckY + 68 + r, cz + 36, 20, 6);
+      }
+
+      // Main Mast & Billowing Clan Mon Sail
+      this.drawRod(cx, deckY + 66, cz, cx, deckY + 148, cz, 3.0, 44);
+      for (let sy = deckY + 82; sy <= deckY + 140; sy++) {
+        for (let sx = cx - 32; sx <= cx + 32; sx++) {
+          const curveZ = cz + 6 + Math.cos(((sx - cx) / 32) * Math.PI * 0.5) * 10;
+          const inMon = Math.hypot(sx - cx, sy - (deckY + 111)) < 14;
+          this.setVoxel(sx, sy, curveZ, inMon ? 43 : 40);
+        }
+      }
+    }
+
+    // 14. NEW! HORA_WARBAND (Colossal Twin-Dragon O-Daiko War-Drum Scaffold & Yamabushi Conch Cadre)
+    buildHoraWarband(sp) {
+      const baseTopY = this.buildSengokuBase(false);
+      const cx = 128, cz = 128;
+
+      // 1. Timber War-Drum Tower Scaffold
+      this.fillShellBox(cx - 32, baseTopY + 1, cz - 24, cx + 32, baseTopY + 42, cz + 20, 44, 1);
+
+      // 2. Colossal O-Daiko War-Drum Barrel & Golden Twin-Dragon Crest on Top!
+      for (let dz = -20; dz <= 20; dz++) {
+        const barrelR = 28 - (dz * dz) * 0.015;
+        this.fillShellCylinder(cx, baseTopY + 64, cz + dz, barrelR, 2, Math.abs(dz) >= 18 ? 45 : 43, 1);
+      }
+      // Golden Flame / Dragon Finial crowning the O-Daiko Drum
+      this.fillShellCylinder(cx, baseTopY + 94, cz, 14.0, 26, 24, 2);
+
+      // 3. 4 Drum-Beaters & Yamabushi Horagai Conch Trumpeters around the Scaffold!
+      this.sculptBushi(cx - 48, baseTopY + 1, cz + 28, 1.25, 'tokin', 'katana', true);
+      this.sculptBushi(cx + 48, baseTopY + 1, cz + 28, 1.25, 'tokin', 'katana', true);
+      this.sculptBushi(cx - 52, baseTopY + 1, cz - 28, 1.20, 'kabuto', 'yari', true);
+      this.sculptBushi(cx + 52, baseTopY + 1, cz - 28, 1.20, 'kabuto', 'yari', true);
     }
 
     generate(seedInt, role, tierIdx, sp, prefixIdx = 0, originIdx = 0) {
@@ -1213,10 +1422,18 @@
       this.setupSamuraiPalette(sp, role, tierIdx, prefixIdx, originIdx);
 
       if (role === 'SAMURAI_UNIT') this.buildSamuraiRetainers(sp);
-      else if (role === 'CAVALRY_CHARGE') this.buildCavalryLance(sp);
+      else if (role === 'CAVALRY_CHARGE') this.buildCavalryLance(sp, false);
+      else if (role === 'YABUSAME_HORSE') this.buildCavalryLance(sp, true);
       else if (role === 'SHOGUN_GENERAL') this.buildShogunCommand(sp);
       else if (role === 'TEPPO_YUMI') this.buildTeppoBattery(sp);
       else if (role === 'GARRISON_FORT') this.buildShiroGarrison(sp);
+      else if (role === 'SHINOBI_NINJA') this.buildShinobiSquad(sp);
+      else if (role === 'SOHEI_MONKS') this.buildSoheiMonks(sp);
+      else if (role === 'SIEGE_ARTILLERY') this.buildSiegeArtillery(sp);
+      else if (role === 'ONNA_MUSHA') this.buildOnnaMusha(sp);
+      else if (role === 'RONIN_KENGO') this.buildRoninKengo(sp);
+      else if (role === 'ATAKEBUNE_SHIP') this.buildAtakebuneShip(sp);
+      else if (role === 'HORA_WARBAND') this.buildHoraWarband(sp);
       else this.buildYariPhalanx(sp);
 
       this.bakeSurfaceVoxels();
@@ -1464,7 +1681,7 @@
   let globalInterval = null;
   let needsFleetRender = false;
 
-  /* ================= 3v3 & 5v5 TABLETOP BATTLE ENGINE ================= */
+  /* ================= 3v3 & 5v5 TABLETOP BATTLE ENGINE (ALL 14 DIVISIONS) ================= */
   const RIVAL_CLANS = [
     "Takeda Kai Red Devils",
     "Oda Nobunaga Tenka-Fubu Host",
@@ -1473,11 +1690,11 @@
     "Date Masamune One-Eyed Dragon Host",
     "Tokugawa Mikawa Shogunate Guard",
     "Hojo Odawara Fortress Garrison",
-    "Sanada Crimson Six-Coin Division"
+    "Iga & Koga Shadow Confederacy"
   ];
 
   let BattleState = {
-    size: 3, // 3 for 3v3 Skirmish, 5 for 5v5 Sekigahara
+    size: 3,
     active: false,
     clanName: "Takeda Kai Red Devils",
     playerUnits: [],
@@ -1497,9 +1714,11 @@
   function makeCombatUnit(src, isEnemy = false) {
     ensureTreeImage(src);
     const t = src.tierIndex ?? 0;
-    const maxHp = Math.floor(120 + t * 95 + (src.role === 'GARRISON_FORT' ? 80 : 0));
-    const atk = Math.floor(28 + t * 22 + (src.role === 'CAVALRY_CHARGE' || src.role === 'TEPPO_YUMI' ? 12 : 0));
-    const saveRoll = Math.max(2, 6 - Math.floor(t / 3)); // 6+ down to 3+ armor save on D6
+    const isFortOrShip = (src.role === 'GARRISON_FORT' || src.role === 'ATAKEBUNE_SHIP' || src.role === 'HORA_WARBAND');
+    const isHighBurst = ['SIEGE_ARTILLERY','SHINOBI_NINJA','RONIN_KENGO','CAVALRY_CHARGE'].includes(src.role);
+    const maxHp = Math.floor(120 + t * 95 + (isFortOrShip ? 85 : 0));
+    const atk = Math.floor(28 + t * 22 + (isHighBurst ? 16 : 0));
+    const saveRoll = Math.max(2, 6 - Math.floor(t / 3));
     return {
       uid: src.uid,
       name: src.name,
@@ -1526,7 +1745,6 @@
     BattleState.clanName = RIVAL_CLANS[Math.floor(Math.random() * RIVAL_CLANS.length)];
     $('enemy-clan-title').innerText = `RIVAL CLAN: ${BattleState.clanName}`;
 
-    // Draft best N units from Player's fleet (or loan Provincial Ashigaru if player has fewer than N units!)
     let sortedFleet = [...State.fleet].sort((a, b) => b.value - a.value);
     BattleState.playerUnits = [];
     for (let i = 0; i < n; i++) {
@@ -1534,12 +1752,11 @@
         BattleState.playerUnits.push(makeCombatUnit(sortedFleet[i], false));
       } else {
         const loaner = harvestStrain(0, false);
-        loaner.name = `Loaned Provincial ${TREE_SPECIES[loaner.mIdx]}`;
+        loaner.name = `Loaned ${TREE_SPECIES[loaner.mIdx]}`;
         BattleState.playerUnits.push(makeCombatUnit(loaner, false));
       }
     }
 
-    // Generate Rival Clan Army matched around player's average tier
     const avgTier = Math.max(0, Math.min(9, Math.round(
       BattleState.playerUnits.reduce((acc, u) => acc + u.tierIndex, 0) / n
     )));
@@ -1554,18 +1771,21 @@
     BattleState.turnIdx = 0;
     BattleState.targetIdx = 0;
     BattleState.active = true;
-    BattleState.logs = [`🎌 Horns sound across the battlefield! ${n}v${n} clash against ${BattleState.clanName} begins!`];
+    BattleState.logs = [`🎌 Conch horns sound! ${n}v${n} battle against ${BattleState.clanName} begins!`];
     renderBattlefield();
   }
 
   function getTacticalBonus(attackerRole, defenderRole) {
-    const groupA = (r) => (r === 'YARI_SPEARMEN' || r === 'GARRISON_FORT');
-    const groupB = (r) => (r === 'CAVALRY_CHARGE' || r === 'SHOGUN_GENERAL');
-    const groupC = (r) => (r === 'TEPPO_YUMI' || r === 'SAMURAI_UNIT');
+    // Group A: Pikes, Fortifications, Monks & Warbands
+    const groupA = (r) => ['YARI_SPEARMEN','GARRISON_FORT','SOHEI_MONKS','HORA_WARBAND'].includes(r);
+    // Group B: Cavalry, Horse-Archers, Shogun Generals & Sword-Saints
+    const groupB = (r) => ['CAVALRY_CHARGE','YABUSAME_HORSE','SHOGUN_GENERAL','RONIN_KENGO'].includes(r);
+    // Group C: Teppo, Siege Cannons, Shinobi Ninja, War-Barges, Samurai & Onna-Musha
+    const groupC = (r) => ['TEPPO_YUMI','SIEGE_ARTILLERY','SHINOBI_NINJA','ATAKEBUNE_SHIP','SAMURAI_UNIT','ONNA_MUSHA'].includes(r);
 
-    if (groupA(attackerRole) && groupB(defenderRole)) return { mult: 1.45, tag: "[ANTI-CAVALRY PIKE BONUS!]" };
-    if (groupB(attackerRole) && groupC(defenderRole)) return { mult: 1.45, tag: "[FLANKING SHOCK CHARGE!]" };
-    if (groupC(attackerRole) && groupA(defenderRole)) return { mult: 1.45, tag: "[ARMOR-PIERCING BREACH!]" };
+    if (groupA(attackerRole) && groupB(defenderRole)) return { mult: 1.45, tag: "[PIKE WALL / FORT COUNTER!]" };
+    if (groupB(attackerRole) && groupC(defenderRole)) return { mult: 1.45, tag: "[CAVALRY / KENGOOVERRUN!]" };
+    if (groupC(attackerRole) && groupA(defenderRole)) return { mult: 1.45, tag: "[SIEGE / SHINOBI BREACH!]" };
     return { mult: 1.0, tag: "" };
   }
 
@@ -1578,7 +1798,6 @@
   function executeTabletopOrder(orderType) {
     if (!BattleState.active) { startNewTabletopBattle(); return; }
 
-    // Find current active player unit
     let pUnit = BattleState.playerUnits[BattleState.turnIdx];
     if (!pUnit || pUnit.hp <= 0) {
       BattleState.turnIdx = BattleState.playerUnits.findIndex(u => u.hp > 0);
@@ -1586,7 +1805,6 @@
     }
     if (!pUnit) return;
 
-    // Ensure valid living target
     let eUnit = BattleState.enemyUnits[BattleState.targetIdx];
     if (!eUnit || eUnit.hp <= 0) {
       BattleState.targetIdx = BattleState.enemyUnits.findIndex(u => u.hp > 0);
@@ -1594,7 +1812,6 @@
     }
     if (!eUnit) return;
 
-    // Roll 2D6 Tabletop Dice!
     const d1 = 1 + Math.floor(Math.random() * 6);
     const d2 = 1 + Math.floor(Math.random() * 6);
     const rollSum = d1 + d2;
@@ -1604,18 +1821,17 @@
     pUnit.stance = 'normal';
 
     if (orderType === 'rally') {
-      const heal = Math.floor(pUnit.maxHp * 0.32 + rollSum * 4);
+      const heal = Math.floor(pUnit.maxHp * 0.34 + rollSum * 4);
       pUnit.hp = Math.min(pUnit.maxHp, pUnit.hp + heal);
       pUnit.stance = 'wall';
       $('dice-verdict').innerText = `RALLY ${d1}+${d2}=${rollSum} (+${heal} HP)`;
-      BattleState.logs.unshift(`<span style="color:var(--status-green);">🚩 [RALLY] ${pUnit.name} blows the Hora conch (Roll ${rollSum}) and restores +${heal} HP!</span>`);
+      BattleState.logs.unshift(`<span style="color:var(--status-green);">🚩 [RALLY] ${pUnit.name} sounds the O-Daiko drum (Roll ${rollSum}) and restores +${heal} HP!</span>`);
     } else {
       const tac = getTacticalBonus(pUnit.role, eUnit.role);
       let dmgMult = (rollSum / 7) * tac.mult;
       if (orderType === 'charge') dmgMult *= 1.30;
       if (orderType === 'wall') { dmgMult *= 0.85; pUnit.stance = 'wall'; }
 
-      // Enemy rolls Armor Save unless order is Teppo Volley!
       const saveDie = 1 + Math.floor(Math.random() * 6);
       const saved = (orderType !== 'volley') && (saveDie >= eUnit.saveRoll + (eUnit.stance === 'wall' ? -1 : 0));
       if (saved) dmgMult *= 0.55;
@@ -1633,13 +1849,11 @@
       }
     }
 
-    // Check if all enemies are routed!
     if (BattleState.enemyUnits.every(u => u.hp <= 0)) {
       handleBattleVictory();
       return;
     }
 
-    // Enemy Counter-Attack Phase!
     const livingEnemies = BattleState.enemyUnits.filter(u => u.hp > 0);
     const livingPlayers = BattleState.playerUnits.filter(u => u.hp > 0);
     if (livingEnemies.length > 0 && livingPlayers.length > 0) {
@@ -1657,7 +1871,6 @@
       );
     }
 
-    // Check if player army is routed
     if (BattleState.playerUnits.every(u => u.hp <= 0)) {
       BattleState.active = false;
       const consolation = 45 * BattleState.size;
@@ -1668,7 +1881,6 @@
       return;
     }
 
-    // Advance turn to next living player unit
     for (let step = 1; step <= BattleState.size; step++) {
       const nextIdx = (BattleState.turnIdx + step) % BattleState.size;
       if (BattleState.playerUnits[nextIdx] && BattleState.playerUnits[nextIdx].hp > 0) {
@@ -1688,7 +1900,7 @@
     const pUnit = BattleState.playerUnits[BattleState.turnIdx];
     if (pUnit && pUnit.hp < pUnit.maxHp * 0.35) {
       executeTabletopOrder('rally');
-    } else if (pUnit && pUnit.role === 'TEPPO_YUMI') {
+    } else if (pUnit && ['TEPPO_YUMI','SIEGE_ARTILLERY','ATAKEBUNE_SHIP','YABUSAME_HORSE'].includes(pUnit.role)) {
       executeTabletopOrder('volley');
     } else {
       executeTabletopOrder('charge');
@@ -1704,7 +1916,6 @@
     const kokuPrize = Math.max(150, Math.floor(totalEnemyVal * 0.55 * yieldMult));
     State.funds += kokuPrize;
 
-    // 45% Chance to Capture a Prized Enemy Samurai Miniature into your Army Racks!
     let captureMsg = "";
     if (Math.random() < 0.45) {
       const prizeEnemy = BattleState.enemyUnits[Math.floor(Math.random() * BattleState.enemyUnits.length)];
@@ -1762,7 +1973,7 @@
     }
   }
 
-  /* ================= UTILITY & BASE36 (9,600 COMBINATIONS) ================= */
+  /* ================= UTILITY & BASE36 (14 DIVISIONS / 28 SCULPTS) ================= */
   function fmt(n) {
     if (n >= 1e12) return (n / 1e12).toFixed(2) + "T";
     if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
@@ -1789,12 +2000,12 @@
     s.marketCars.forEach(p => delete p.imgData);
     s.gallery.forEach(g => delete g.imgData);
     s.auctions.forEach(a => { if(a.item.imgData) delete a.item.imgData; });
-    localStorage.setItem('sengokuWarforgeV1', JSON.stringify(s)); 
+    localStorage.setItem('sengokuWarforgeV2', JSON.stringify(s)); 
     toast("Shogunate Saved."); 
   }
   
   function loadGame() {
-    let s = localStorage.getItem('sengokuWarforgeV1');
+    let s = localStorage.getItem('sengokuWarforgeV2') || localStorage.getItem('sengokuWarforgeV1');
     if (s) {
       State = JSON.parse(s);
       if(!State.gallery) State.gallery = [];
@@ -1812,6 +2023,10 @@
       ['buy-1','buy-0.25','buy-0.5','buy-1.0'].forEach(id => { if($(id)) $(id).classList.remove('active'); });
       let sel = val===1?'buy-1':val===0.25?'buy-0.25':val===0.5?'buy-0.5':'buy-1.0';
       if($(sel)) $(sel).classList.add('active');
+  }
+
+  function getDivisionForSpecies(mIdx) {
+    return Math.min(13, Math.floor(mIdx / 2)); // 28 Sculpts mapped 2-per-Division across all 14 Divisions (0..13)
   }
 
   /* BASE36 FOR ARTISANS */
@@ -1833,31 +2048,31 @@
     updateHUD(); renderPilots(); toast("Artisan hired via Trade Code!");
   }
 
-  /* BASE36 FOR 9,600 SAMURAI UNITS */
+  /* BASE36 FOR SAMURAI UNITS (10 Finishes x 8 Clans x 28 Sculpts x 10 Tiers) */
   function exportStrain(uid) {
     let p = State.fleet.find(x => x.uid===uid); if(!p) return;
-    let codeInt = p.pIdx * 960 + p.bIdx * 120 + p.mIdx * 6 + p.rIdx;
-    prompt("Copy Samurai Unit Scroll Code (1 of 9,600):", "SW-" + codeInt.toString(36).toUpperCase());
+    let codeInt = ((p.pIdx * 8 + p.bIdx) * 28 + p.mIdx) * 10 + p.tierIndex;
+    prompt("Copy Samurai Unit Scroll Code:", "SW-" + codeInt.toString(36).toUpperCase());
   }
   function importStrain() {
     let str = prompt("Enter Samurai Unit Scroll Code (SW-XXX):"); if(!str) return;
     str = str.replace('SW-', '').trim();
     let codeInt = parseInt(str, 36); if(isNaN(codeInt) || codeInt < 0) { toast("Invalid code."); return; }
-    let rIdx = codeInt % 6; codeInt = Math.floor(codeInt / 6);
-    let mIdx = codeInt % 20; codeInt = Math.floor(codeInt / 20);
-    let bIdx = codeInt % 8; codeInt = Math.floor(codeInt / 8);
+    let tIdx = codeInt % 10; codeInt = Math.floor(codeInt / 10);
+    let mIdx = codeInt % 28; codeInt = Math.floor(codeInt / 28);
+    let bIdx = codeInt % 8;  codeInt = Math.floor(codeInt / 8);
     let pIdx = codeInt % 10;
-    let tIdx = Math.floor(Math.random() * 10);
+    let rIdx = getDivisionForSpecies(mIdx);
     
     let tD = TIERS[tIdx];
     let val = Math.floor(tD.baseVal * 1.0); 
     let cost = Math.max(10, Math.floor(val * 0.8)); 
-    let cap = Math.floor(50 + (tIdx * 150)); // Koku Stipend
+    let cap = Math.floor(50 + (tIdx * 150));
     let rnge = Math.floor(1000 + (tIdx * 900));
     let burn = Math.floor(4 + (tIdx * 3));
-    let seedInt = (pIdx * 960 + bIdx * 120 + mIdx * 6 + rIdx) * 31 + tIdx;
+    let seedInt = ((pIdx * 8 + bIdx) * 28 + mIdx) * 31 + tIdx + 1600;
     let sp = TREE_SPECIES[mIdx];
-    let role = TREE_STYLES[rIdx % TREE_STYLES.length];
+    let role = TREE_STYLES[rIdx];
 
     let importedSamurai = {
       uid: 'S' + Math.floor(100+Math.random()*899) + 'SW',
@@ -1880,18 +2095,18 @@
     let used = new Set();
     let idCounter = 0;
 
-    roles.forEach(role => {
+    roles.forEach((role, idx) => {
       let pool = ZONE_CAT[role] || ZONE_CAT["YARI_SPEARMEN"];
-      let count = role === "YARI_SPEARMEN" || role === "SAMURAI_UNIT" ? 80 : 60; // 400 total
+      let count = idx < 8 ? 29 : 28; // 400 total campaigns across all 14 Divisions!
       for(let i=0; i<count; i++) {
         let a1, a2, pair;
         let attempts = 0;
         do {
           a1 = pool[Math.floor(Math.random() * pool.length)];
           a2 = pool[Math.floor(Math.random() * pool.length)];
-          pair = `${a1}-${a2}-${role}`;
+          pair = `${a1}-${a2}-${role}-${i}`;
           attempts++;
-        } while((a1 === a2 || used.has(pair)) && attempts < 50);
+        } while(a1 === a2 && attempts < 20);
         
         used.add(pair);
         let dist = role === 'SHOGUN_GENERAL' ? Math.floor(1200 + Math.random() * 7500) : Math.floor(350 + Math.random() * 8500);
@@ -1909,15 +2124,6 @@
     rts.sort((a,b) => a.dist - b.dist);
     rts[0].unlocked = true;
     return rts;
-  }
-
-  function getDivisionForSpecies(mIdx) {
-    if (mIdx <= 3) return 0;  // YARI_SPEARMEN
-    if (mIdx <= 7) return 1;  // SAMURAI_UNIT
-    if (mIdx <= 10) return 2; // CAVALRY_CHARGE
-    if (mIdx <= 13) return 3; // SHOGUN_GENERAL
-    if (mIdx <= 16) return 4; // TEPPO_YUMI
-    return 5;                 // GARRISON_FORT
   }
 
   function harvestStrain(tIdx, skipImage = false) {
@@ -1940,9 +2146,9 @@
       name: `${TREE_PREFIXES[pIdx]} ${TREE_ORIGINS[bIdx]} ${sp}`,
       role: role, tierName: tD.name, tierColor: tD.color,
       value: val, cost: Math.max(6, Math.floor(val * 0.78)), 
-      capacity: Math.floor(50 + (tIdx * 150) * fluct), // Koku Rating
+      capacity: Math.floor(50 + (tIdx * 150) * fluct),
       range: Math.floor(1000 + (tIdx * 900) * fluct), 
-      fuelBurn: Math.floor(3 + (tIdx * 2)), // Lacquer Pots
+      fuelBurn: Math.floor(3 + (tIdx * 2)),
       condition: 100, status: 'READY', assignedRoute: null, assignedPilot: null
     };
   }
@@ -1968,10 +2174,21 @@
     renderMarket();
   }
 
+  function getRoleBadgeColor(role) {
+    const map = {
+      YARI_SPEARMEN: '#38bdf8', SAMURAI_UNIT: '#ef4444', CAVALRY_CHARGE: '#f59e0b',
+      SHOGUN_GENERAL: '#a855f7', TEPPO_YUMI: '#22c55e', GARRISON_FORT: '#fbbf24',
+      SHINOBI_NINJA: '#c084fc', SOHEI_MONKS: '#facc15', SIEGE_ARTILLERY: '#fb923c',
+      ONNA_MUSHA: '#f472b6', RONIN_KENGO: '#2dd4bf', YABUSAME_HORSE: '#a3e635',
+      ATAKEBUNE_SHIP: '#60a5fa', HORA_WARBAND: '#f87171'
+    };
+    return map[role] || '#f59e0b';
+  }
+
   function renderMarket() {
     const grid = $('market-grid'); if(!grid) return; grid.innerHTML = '';
     State.marketCars.forEach((c, idx) => {
-      let rCol = c.role === 'YARI_SPEARMEN' ? '#38bdf8' : c.role === 'SAMURAI_UNIT' ? '#ef4444' : c.role === 'CAVALRY_CHARGE' ? '#f59e0b' : c.role === 'SHOGUN_GENERAL' ? '#a855f7' : c.role === 'TEPPO_YUMI' ? '#22c55e' : '#fbbf24';
+      let rCol = getRoleBadgeColor(c.role);
       const clanTag = `${TREE_PREFIXES[c.pIdx ?? 0]} • ${TREE_ORIGINS[c.bIdx ?? 0]}`;
       grid.innerHTML += `
         <div class="strain-card" style="border-color:${c.tierColor};">
@@ -2132,9 +2349,9 @@
 
     filtered.forEach(p => {
       ensureTreeImage(p);
-      let rCol = p.role === 'YARI_SPEARMEN' ? '#38bdf8' : p.role === 'SAMURAI_UNIT' ? '#ef4444' : p.role === 'CAVALRY_CHARGE' ? '#f59e0b' : p.role === 'SHOGUN_GENERAL' ? '#a855f7' : p.role === 'TEPPO_YUMI' ? '#22c55e' : '#fbbf24';
+      let rCol = getRoleBadgeColor(p.role);
       
-      let pOpts = routeOptionsCache[p.role];
+      let pOpts = routeOptionsCache[p.role] || routeOptionsCache["YARI_SPEARMEN"];
       if(p.assignedRoute) pOpts = pOpts.replace(`value="${p.assignedRoute}"`, `value="${p.assignedRoute}" selected`);
       let rtSel = `<select ${p.status==='IN_FLIGHT'?'disabled':''} onchange="assignRoute('${p.uid}', this.value)">${pOpts}</select>`;
 
@@ -2253,7 +2470,7 @@
 
     State.gallery.forEach(g => {
       ensureTreeImage(g);
-      let rCol = g.role === 'YARI_SPEARMEN' ? '#38bdf8' : g.role === 'SAMURAI_UNIT' ? '#ef4444' : g.role === 'CAVALRY_CHARGE' ? '#f59e0b' : g.role === 'SHOGUN_GENERAL' ? '#a855f7' : g.role === 'TEPPO_YUMI' ? '#22c55e' : '#fbbf24';
+      let rCol = getRoleBadgeColor(g.role);
       const safeName = g.name.replace(/'/g, "\\'");
       
       list.innerHTML += `
@@ -2332,7 +2549,7 @@
     let filtered = State.filterRouteCat === 'ALL' ? State.routes : State.routes.filter(r => r.role === State.filterRouteCat);
 
     filtered.forEach(r => {
-      let rCol = r.role === 'YARI_SPEARMEN' ? '#38bdf8' : r.role === 'SAMURAI_UNIT' ? '#ef4444' : r.role === 'CAVALRY_CHARGE' ? '#f59e0b' : r.role === 'SHOGUN_GENERAL' ? '#a855f7' : r.role === 'TEPPO_YUMI' ? '#22c55e' : '#fbbf24';
+      let rCol = getRoleBadgeColor(r.role);
       let yieldM = 1.0 + (State.upgrades.mkt*0.05);
       let baseYield = Math.floor(r.dist * 0.16 * yieldM);
       let fuelCost = ((r.dist * 0.025) * (1 - Math.min(0.7, State.upgrades.eng*0.02))) * State.fuelSpotPrice;
