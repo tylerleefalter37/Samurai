@@ -1,0 +1,2727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Sengoku Warforge - 256³ Samurai Tabletop Edition</title>
+<style>
+  :root {
+    --bg-base: #090808;
+    --panel-bg: #131010;
+    --panel-border: #2c2020;
+    --silver-bright: #f2ece4;
+    --silver-main: #b8aba0;
+    --silver-dim: #7d6e65;
+    --silver-dark: #382a24;
+    
+    --status-green: #4ade80;
+    --status-red: #ef4444;
+    --status-amber: #f59e0b;
+    --status-blue: #38bdf8;
+    --status-purple: #d946ef;
+    --status-exotic: #0ea5e9;
+    
+    --t0-col: #78716c; --t1-col: #4ade80; --t2-col: #38bdf8; --t3-col: #3b82f6; --t4-col: #a855f7; 
+    --t5-col: #d946ef; --t6-col: #f59e0b; --t7-col: #ea580c; --t8-col: #ef4444; --t9-col: #10b981;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+  html, body { width: 100%; height: 100%; background: var(--bg-base); color: var(--silver-bright); display: flex; flex-direction: column; overflow: hidden; }
+
+  body::before {
+    content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.06) 0%, transparent 65%);
+    pointer-events: none; z-index: 1;
+  }
+
+  header { flex-shrink: 0; background: #050404; border-bottom: 1px solid var(--status-red); padding: 6px 10px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
+  .header-top { display: flex; justify-content: space-between; align-items: center; }
+  .brand-title { font-size: 13px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; }
+  .brand-title span { color: var(--status-red); text-shadow: 0 0 6px rgba(239,68,68,0.5); }
+
+  .hud-stats { display: flex; gap: 4px; overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
+  .hud-stats::-webkit-scrollbar { display: none; }
+  .hud-pill { background: #000; border: 1px solid var(--panel-border); padding: 3px 6px; border-radius: 3px; font-size: 10px; font-family: monospace; font-weight: bold; }
+
+  nav { flex-shrink: 0; display: grid; grid-template-columns: repeat(5, 1fr); background: var(--panel-bg); border-bottom: 1px solid var(--panel-border); z-index: 9; }
+  .nav-btn { padding: 9px 2px; background: transparent; border: none; border-right: 1px solid var(--panel-border); border-bottom: 1px solid var(--panel-border); color: var(--silver-dim); font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; cursor: pointer; transition: 0.15s; text-align: center; }
+  .nav-btn:nth-child(5n) { border-right: none; }
+  .nav-btn:nth-child(n+6) { border-bottom: none; }
+  .nav-btn.active { background: rgba(239, 68, 68, 0.12); color: var(--status-amber); box-shadow: inset 0 -2px 0 var(--status-red); }
+
+  main { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 70px; z-index: 2; }
+  .view-tab { display: none; flex-direction: column; gap: 10px; }
+  .view-tab.active { display: flex; }
+
+  .panel { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 5px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .panel-header { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #fff; padding-bottom: 6px; border-bottom: 1px solid var(--panel-border); display: flex; justify-content: space-between; align-items: center; }
+
+  .control-bar { display: flex; flex-wrap: wrap; gap: 6px; background: #070505; padding: 6px 8px; border-radius: 4px; border: 1px solid var(--panel-border); align-items: center; }
+  .control-group { display: flex; gap: 4px; align-items: center; border-right: 1px solid var(--panel-border); padding-right: 6px; }
+  .control-group:last-child { border-right: none; padding-right: 0; }
+  .control-label { font-size: 8.5px; font-weight: bold; color: var(--silver-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  button.btn { background: #000; border: 1px solid var(--silver-dim); color: var(--silver-bright); padding: 5px 9px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 3px; cursor: pointer; transition: 0.1s; }
+  button.btn:active { background: var(--silver-bright); color: #000; border-color: var(--silver-bright); }
+  button.btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: var(--silver-dark); }
+  button.btn-green { background: #071510; border-color: var(--status-green); color: var(--status-green); }
+  button.btn-green:active { background: var(--status-green); color: #000; }
+  button.btn-danger { border-color: var(--status-red); color: var(--status-red); }
+  button.btn-danger:active { background: var(--status-red); color: #fff; }
+  button.btn-amber { background: #1c1104; border-color: var(--status-amber); color: var(--status-amber); }
+  button.btn-amber:active { background: var(--status-amber); color: #000; }
+  button.btn-purple { border-color: var(--status-purple); color: var(--status-purple); }
+  button.btn-purple:active { background: var(--status-purple); color: #fff; }
+
+  .fleet-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  @media(min-width: 600px) { .fleet-grid { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); } }
+
+  .strain-card { background: #070505; border: 1px solid var(--panel-border); border-radius: 4px; padding: 10px; display: flex; flex-direction: column; gap: 6px; position: relative; }
+  .strain-card.in-flight { border-left: 3px solid var(--status-amber); }
+  .strain-card.damaged { border-left: 3px solid var(--status-red); }
+  
+  .bud-art-container { display: flex; gap: 10px; align-items: center; background: #0b0808; border: 1px solid var(--panel-border); padding: 6px; border-radius: 3px; }
+  .bud-pixel-canvas { width: 64px; height: 64px; image-rendering: pixelated; border-radius: 2px; background: #000; flex-shrink: 0; border: 1px solid #2e1d1d; cursor: zoom-in; }
+
+  .spec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; background: #0b0808; padding: 6px; border-radius: 3px; font-size: 9px; font-family: monospace; border: 1px solid var(--panel-border); }
+  .spec-grid span { color: var(--silver-dim); }
+
+  .badge { padding: 2px 4px; border-radius: 2px; font-size: 8px; font-weight: 900; font-family: monospace; background: #140808; color: var(--status-amber); border: 1px solid var(--status-amber); }
+  
+  .route-row { background: #070505; border: 1px solid var(--panel-border); border-radius: 3px; padding: 8px 10px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; }
+
+  .flight-bar-bg { width: 100%; height: 6px; background: #111; border: 1px solid #282214; border-radius: 2px; overflow: hidden; margin-top: 2px; }
+  .flight-bar-fill { height: 100%; background: var(--status-amber); width: 0%; box-shadow: 0 0 6px var(--status-amber);}
+
+  .auction-slot { background: #070505; border: 1px solid var(--panel-border); padding: 10px; border-radius: 4px; display: flex; flex-direction: column; gap: 6px; }
+  .auction-timer-bg { width: 100%; height: 5px; background: #111; border: 1px solid var(--status-green); border-radius: 2px; overflow: hidden; }
+  .auction-timer-bar { height: 100%; background: var(--status-green); width: 100%; transition: width 0.1s linear;}
+  .auction-log { height: 44px; background: #0b0808; border: 1px solid var(--panel-border); padding: 4px; font-size: 8.5px; font-family: monospace; overflow: hidden; border-radius: 3px; color: var(--silver-main); }
+
+  .fraction-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+  .pack-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+
+  select { background: #0b0808; color: #fff; border: 1px solid var(--silver-dark); padding: 5px; font-size: 10px; border-radius: 3px; outline: none; font-weight: bold; cursor: pointer; }
+  
+  .check-item { display: flex; justify-content: space-between; align-items: center; background: #070505; padding: 8px 10px; border: 1px solid var(--panel-border); border-radius: 3px; font-size: 10px; }
+  .check-item.done { border-color: var(--status-green); background: rgba(74, 222, 128, 0.08); }
+
+  /* ================= TABLETOP 3v3 & 5v5 WARGAME ARENA CSS ================= */
+  .battle-board { background: radial-gradient(circle at 50% 50%, #1c1612 0%, #090706 100%); border: 2px solid #4a3525; border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+  .army-lineup { display: grid; grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); gap: 6px; }
+  .unit-token { background: #0d0a09; border: 1px solid var(--panel-border); border-radius: 4px; padding: 6px; display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative; transition: 0.15s; cursor: pointer; }
+  .unit-token.active-turn { border: 2px solid var(--status-amber); box-shadow: 0 0 12px rgba(245, 158, 11, 0.35); }
+  .unit-token.targeted { border: 2px solid var(--status-red); box-shadow: 0 0 12px rgba(239, 68, 68, 0.45); }
+  .unit-token.routed { opacity: 0.28; filter: grayscale(1); pointer-events: none; }
+  .token-img { width: 58px; height: 58px; image-rendering: pixelated; background: #040303; border-radius: 3px; border: 1px solid #2b201b; }
+  .hp-bar-bg { width: 100%; height: 6px; background: #1a0d0d; border: 1px solid #382020; border-radius: 2px; overflow: hidden; }
+  .hp-bar-fill { height: 100%; background: var(--status-green); transition: width 0.2s; }
+  .dice-tray { background: #060404; border: 1px solid #382820; border-radius: 4px; padding: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .die-box { width: 28px; height: 28px; background: #b91c1c; border: 1px solid #fca5a5; color: #fff; font-weight: 900; font-family: monospace; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.7); }
+  .battle-log { height: 95px; background: #050404; border: 1px solid var(--panel-border); padding: 6px; font-size: 9.5px; font-family: monospace; overflow-y: auto; border-radius: 3px; display: flex; flex-direction: column; gap: 3px; }
+
+  /* 3D Voxel Samurai Inspector Modal */
+  #voxel-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 2000; align-items: center; justify-content: center; padding: 16px; }
+  #voxel-modal.open { display: flex; }
+  .modal-box { background: var(--panel-bg); border: 1px solid var(--status-amber); border-radius: 8px; padding: 12px; max-width: 440px; width: 100%; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.95); }
+  #inspect-canvas { width: 100%; height: auto; aspect-ratio: 1/1; background: #060505; border-radius: 4px; cursor: grab; image-rendering: pixelated; border: 1px solid var(--panel-border); }
+
+  #toast-rack { position: fixed; bottom: 16px; left: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 1000; pointer-events: none; }
+  .toast { background: #000; border: 1px solid var(--silver-dark); border-left: 3px solid var(--status-red); color: #fff; padding: 8px 12px; font-size: 11px; font-weight: bold; font-family: monospace; border-radius: 3px; box-shadow: 0 4px 15px rgba(0,0,0,0.9); animation: slideUp 0.2s, fadeOut 0.4s 2.6s forwards; pointer-events: auto;}
+  
+  @keyframes slideUp { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes fadeOut { to { opacity: 0; transform: translateY(-5px); } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand-title">SENGOKU WARFORGE <span>// 256³ SAMURAI TABLETOP</span></div>
+    <div style="display:flex; gap:4px;">
+      <button class="btn" style="padding:3px 6px; font-size:8px;" onclick="saveGame()">SAVE</button>
+      <button class="btn" style="padding:3px 6px; font-size:8px;" onclick="loadGame()">LOAD</button>
+      <button class="btn btn-danger" style="padding:3px 6px; font-size:8px;" onclick="godMode()">SHOGUN</button>
+    </div>
+  </div>
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="hud-stats">
+        <div class="hud-pill">KOKU: <span id="hud-funds" style="color:var(--status-green);">$0</span></div>
+        <div class="hud-pill">UNITS: <span id="hud-fleet-count">0</span></div>
+        <div class="hud-pill">SENSEI: <span id="hud-pilot-count">0</span></div>
+        <div class="hud-pill">LACQUER: <span id="hud-fuel" style="color:var(--status-amber);">0</span></div>
+        <div class="hud-pill">HONOR: <span id="hud-wins" style="color:var(--status-red);">0W</span></div>
+      </div>
+      <div class="control-bar" style="padding:2px 4px; margin-left:4px;">
+        <button class="btn btn-green active" id="buy-1" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(1)">1x</button>
+        <button class="btn" id="buy-0.25" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(0.25)">25%</button>
+        <button class="btn" id="buy-0.5" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(0.5)">50%</button>
+        <button class="btn" id="buy-1.0" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(1.0)">MAX</button>
+      </div>
+  </div>
+</header>
+
+<nav>
+  <button class="nav-btn active" onclick="setTab('market')">Koku Market</button>
+  <button class="nav-btn" onclick="setTab('gacha')">Clan Forge</button>
+  <button class="nav-btn" onclick="setTab('fleet')">Samurai Racks</button>
+  <button class="nav-btn" onclick="setTab('battle')" style="color:var(--status-amber);">⚔️ 3v3 / 5v5</button>
+  <button class="nav-btn" onclick="setTab('pilots')">Artisans</button>
+  <button class="nav-btn" onclick="setTab('routes')">Campaigns</button>
+  <button class="nav-btn" onclick="setTab('auction')">War Auctions</button>
+  <button class="nav-btn" onclick="setTab('checklist')">Shogunate</button>
+  <button class="nav-btn" onclick="setTab('upgrades')">Armory Tech</button>
+  <button class="nav-btn" onclick="setTab('gallery')">Shrine Vault ⛩️</button>
+</nav>
+
+<main>
+
+  <!-- TAB 1: REVOLVING KOKU MARKET (TEXT-ONLY FOR ZERO LAG) -->
+  <div id="tab-market" class="view-tab active">
+    <div class="panel">
+      <div class="panel-header">
+        <span>Provincial Levy & Samurai Miniature Drops (9,600)</span>
+        <span style="font-size:10px; color:var(--silver-dim);">NEW MUSTER: <span id="market-timer" style="font-size:12px; font-weight:bold; color:var(--status-amber);">10.0</span>s</span>
+      </div>
+      <p style="font-size:10px; color:var(--silver-dim);">5 procedural Samurai regiments, Ashigaru phalanxes, Takeda cavalry, Generals & Shiro keeps drop every 10 seconds. Recruit a unit to unveil its 256³ 3D Voxel miniature in your Samurai Racks.</p>
+      <div id="market-grid" class="fleet-grid"></div>
+    </div>
+  </div>
+
+  <!-- TAB 2: CLAN FORGE (BOX SETS) -->
+  <div id="tab-gacha" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">Clan Muster & Miniature Warboxes</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; font-weight:bold; margin-bottom:6px;">PROVINCIAL ASHIGARUGARRISON BOX [T1-T4] ($20 / Box)</div>
+          <div class="pack-row">
+            <button class="btn" onclick="buySeeds(0, 1)">Muster 1x</button>
+            <button class="btn" onclick="buySeeds(0, 5)">Muster 5x</button>
+            <button class="btn btn-green" onclick="buySeeds(0, 10)">Muster 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-blue); font-weight:bold; margin-bottom:6px;">CLAN SAMURAI & KIBA-MUSHA BOX [T3-T6] ($200 / Box)</div>
+          <div class="pack-row">
+            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buySeeds(1, 1)">Muster 1x</button>
+            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buySeeds(1, 5)">Muster 5x</button>
+            <button class="btn btn-green" onclick="buySeeds(1, 10)">Muster 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-purple); font-weight:bold; margin-bottom:6px;">DAIMYO HATAMOTO GUARD DIVISION [T5-T8] ($2,000 / Division)</div>
+          <div class="pack-row">
+            <button class="btn btn-purple" onclick="buySeeds(2, 1)">Muster 1x</button>
+            <button class="btn btn-purple" onclick="buySeeds(2, 5)">Muster 5x</button>
+            <button class="btn btn-green" onclick="buySeeds(2, 10)">Muster 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-amber); font-weight:bold; margin-bottom:6px;">SHOGUNATE NATIONAL GRAND HOST [T7-T10] ($15,000 / Host)</div>
+          <div class="pack-row">
+            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buySeeds(3, 1)">Muster 1x</button>
+            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buySeeds(3, 5)">Muster 5x</button>
+            <button class="btn btn-green" onclick="buySeeds(3, 10)">Muster 10x</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">Urushi Lacquerers & Strategist Recruitment</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; font-weight:bold; margin-bottom:6px;">APPRENTICE ARMORERS [T1-T4] ($25 / Hire)</div>
+          <div class="pack-row">
+            <button class="btn" onclick="buyResumes(0, 1)">Hire 1x</button>
+            <button class="btn" onclick="buyResumes(0, 5)">Hire 5x</button>
+            <button class="btn btn-green" onclick="buyResumes(0, 10)">Hire 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-blue); font-weight:bold; margin-bottom:6px;">SASHIMONO BANNER PAINTERS [T3-T6] ($150 / Hire)</div>
+          <div class="pack-row">
+            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buyResumes(1, 1)">Hire 1x</button>
+            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buyResumes(1, 5)">Hire 5x</button>
+            <button class="btn btn-green" onclick="buyResumes(1, 10)">Hire 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-purple); font-weight:bold; margin-bottom:6px;">URUSHI GOLD-LEAF MASTERS [T5-T8] ($800 / Hire)</div>
+          <div class="pack-row">
+            <button class="btn btn-purple" onclick="buyResumes(2, 1)">Hire 1x</button>
+            <button class="btn btn-purple" onclick="buyResumes(2, 5)">Hire 5x</button>
+            <button class="btn btn-green" onclick="buyResumes(2, 10)">Hire 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-amber); font-weight:bold; margin-bottom:6px;">LEGENDARY GUNBAI TACTICIANS [T7-T10] ($4,000 / Hire)</div>
+          <div class="pack-row">
+            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buyResumes(3, 1)">Hire 1x</button>
+            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buyResumes(3, 5)">Hire 5x</button>
+            <button class="btn btn-green" onclick="buyResumes(3, 10)">Hire 10x</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span>Armory Supply (Urushi Lacquer, Silk Cord & Gold Leaf)</span>
+        <span style="font-size:11px; font-weight:bold; color:var(--status-amber);">$<span id="fuel-price">0.25</span> / POT</span>
+      </div>
+      <div class="fraction-row">
+        <button class="btn" onclick="buyFuelFixed(500)">500 Pots</button>
+        <button class="btn" onclick="buyFuelFixed(2500)">2.5K Pots</button>
+        <button class="btn" onclick="buyFuelFixed(10000)">10K Pots</button>
+        <button class="btn btn-green" onclick="buyFuelFixed('MAX')">Max Armory</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: SAMURAI RACKS (INVENTORY) -->
+  <div id="tab-fleet" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">
+        <span>Samurai Army Display Cabinets</span>
+        <div style="display:flex; gap:4px;">
+          <button class="btn btn-green" onclick="autoAssignPilots()">Auto-Sensei</button>
+          <button class="btn btn-green" onclick="autoAssignRoutes()">Auto-March</button>
+          <button class="btn btn-green" onclick="dispatchAll()">March All</button>
+          <button class="btn" onclick="maintainAll()">Re-Lacquer All</button>
+        </div>
+      </div>
+      
+      <div class="control-bar">
+        <div class="control-group">
+          <span class="control-label">Sort:</span>
+          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortHangar('val')">VAL</button>
+          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortHangar('tier')">TIER</button>
+          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortHangar('range')">KOKU</button>
+        </div>
+        <div class="control-group">
+          <span class="control-label">Division:</span>
+          <select id="fleet-role-filter" onchange="filterHangarRole(this.value)" style="padding:3px; font-size:9px; width:auto;">
+            <option value="ALL">All Divisions</option>
+            <option value="YARI_SPEARMEN">Yari Spearmen Phalanx</option>
+            <option value="SAMURAI_UNIT">Heavy Samurai Retainers</option>
+            <option value="CAVALRY_CHARGE">Kiba-Musha Cavalry</option>
+            <option value="SHOGUN_GENERAL">Daimyo & Generals</option>
+            <option value="TEPPO_YUMI">Teppo & Yumi Brigades</option>
+            <option value="GARRISON_FORT">Shiro Castle Garrisons</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <span class="control-label">Tier:</span>
+          <select id="fleet-tier-filter" onchange="filterHangarTier(this.value)" style="padding:3px; font-size:9px; width:auto;">
+            <option value="ALL">All Tiers</option>
+            <option value="0">T1</option><option value="1">T2</option><option value="2">T3</option><option value="3">T4</option><option value="4">T5</option>
+            <option value="5">T6</option><option value="6">T7</option><option value="7">T8</option><option value="8">T9</option><option value="9">T10</option>
+          </select>
+        </div>
+        <button class="btn btn-green" style="padding:4px 6px; font-size:8px;" onclick="importStrain()">Import Base36</button>
+      </div>
+
+      <div class="fraction-row">
+        <button class="btn btn-danger" onclick="quickSellStrains(0)">Disband T1</button>
+        <button class="btn btn-danger" onclick="quickSellStrains(1)">Disband T2&lt;</button>
+        <button class="btn btn-danger" onclick="quickSellStrains(2)">Disband T3&lt;</button>
+        <button class="btn btn-danger" onclick="quickSellStrains(3)">Disband T4&lt;</button>
+      </div>
+
+      <div id="fleet-list" class="fleet-grid"></div>
+    </div>
+  </div>
+
+  <!-- TAB 4: 3v3 & 5v5 TABLETOP WARGAME ARENA -->
+  <div id="tab-battle" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">
+        <span>⚔️ Sengoku Tabletop Wargame Arena</span>
+        <div style="display:flex; gap:4px;">
+          <button id="btn-mode-3" class="btn btn-amber active" onclick="setBattleSize(3)">3v3 Skirmish</button>
+          <button id="btn-mode-5" class="btn btn-amber" onclick="setBattleSize(5)">5v5 Sekigahara</button>
+        </div>
+      </div>
+
+      <div class="control-bar" style="justify-content:space-between;">
+        <div style="font-size:9.5px; color:var(--silver-main);">
+          <strong>Counter Triangle:</strong> 🎋Yari/Fort &gt; 🐎Cavalry/Shogun &gt; 🔫Teppo/Samurai &gt; 🎋Yari/Fort (+40% DMG)
+        </div>
+        <div style="display:flex; gap:4px;">
+          <button class="btn btn-green" onclick="startNewTabletopBattle()">🎲 Auto-Draft & New Battle</button>
+          <button class="btn btn-purple" onclick="autoPlayBattleTurn()">⚡ Auto-Roll Turn</button>
+        </div>
+      </div>
+
+      <div class="battle-board">
+        <!-- Enemy Clan Lineup -->
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span id="enemy-clan-title" style="font-size:10.5px; font-weight:900; color:var(--status-red); text-transform:uppercase;">RIVAL CLAN: TAKEDA RED DEVILS</span>
+          <span style="font-size:9px; color:var(--silver-dim);">Tap an Enemy Miniature to Target</span>
+        </div>
+        <div id="battle-enemy-grid" class="army-lineup"></div>
+
+        <!-- Center Tabletop Dice Tray & Tactical Orders -->
+        <div class="dice-tray">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-size:9px; font-weight:bold; color:var(--silver-dim);">2D6 ROLL:</span>
+            <div id="die-1" class="die-box">6</div>
+            <div id="die-2" class="die-box">6</div>
+            <span id="dice-verdict" style="font-size:10px; font-weight:900; color:var(--status-amber); font-family:monospace; margin-left:4px;">READY FOR ORDERS</span>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:4px;">
+            <button class="btn btn-danger" onclick="executeTabletopOrder('charge')">🗡️ Banzai Charge</button>
+            <button class="btn btn-amber" onclick="executeTabletopOrder('volley')">🔫 Teppo/Yumi Volley</button>
+            <button class="btn btn-green" onclick="executeTabletopOrder('wall')">🎋 Yari Spear-Wall</button>
+            <button class="btn btn-purple" onclick="executeTabletopOrder('rally')">🚩 Rally Sashimono</button>
+          </div>
+        </div>
+
+        <!-- Player Samurai Lineup -->
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:10.5px; font-weight:900; color:var(--status-green); text-transform:uppercase;">YOUR SHOGUNATE VANGUARD</span>
+          <span id="battle-turn-indicator" style="font-size:9.5px; font-family:monospace; color:var(--status-amber);">Select an Order for Highlighted Unit</span>
+        </div>
+        <div id="battle-player-grid" class="army-lineup"></div>
+
+        <!-- Combat Log -->
+        <div id="battle-log" class="battle-log"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- TAB: SHRINE VAULT GALLERY -->
+  <div id="tab-gallery" class="view-tab">
+    <div class="panel">
+      <div class="panel-header"><span>Nikko Toshogu Shrine Vault ⛩️</span></div>
+      <p style="font-size:10px; color:var(--silver-dim);">Lock your finest 256³ Ultra-Scale Samurai Divisions, Cavalry, Generals & Castles forever. Tap any miniature to rotate in 3D.</p>
+      <div id="gallery-grid" class="fleet-grid"></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: ARTISANS -->
+  <div id="tab-pilots" class="view-tab">
+    <div class="panel">
+      <div class="panel-header"><span>Urushi Master & Strategist Roster</span></div>
+      
+      <div class="control-bar">
+        <div class="control-group">
+          <span class="control-label">Sort:</span>
+          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortPilots('val')">VAL</button>
+          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortPilots('tier')">TIER</button>
+        </div>
+        <div class="control-group">
+          <span class="control-label">Tier:</span>
+          <select id="pilot-tier-filter" onchange="filterPilotTier(this.value)" style="padding:3px; font-size:9px; width:auto;">
+            <option value="ALL">All Tiers</option>
+            <option value="0">T1</option><option value="1">T2</option><option value="2">T3</option><option value="3">T4</option><option value="4">T5</option>
+            <option value="5">T6</option><option value="6">T7</option><option value="7">T8</option><option value="8">T9</option><option value="9">T10</option>
+          </select>
+        </div>
+        <button class="btn btn-green" style="padding:4px 6px; font-size:8px;" onclick="importCourier()">Import Base36</button>
+      </div>
+
+      <div class="fraction-row">
+        <button class="btn btn-danger" onclick="quickSellPilots(0)">Dismiss T1</button>
+        <button class="btn btn-danger" onclick="quickSellPilots(1)">Dismiss T2&lt;</button>
+        <button class="btn btn-danger" onclick="quickSellPilots(2)">Dismiss T3&lt;</button>
+        <button class="btn btn-danger" onclick="quickSellPilots(3)">Dismiss T4&lt;</button>
+      </div>
+
+      <div id="pilots-grid" class="fleet-grid"></div>
+    </div>
+  </div>
+
+  <!-- TAB 6: PROVINCIAL CAMPAIGNS -->
+  <div id="tab-routes" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">
+        <span>Sengoku Provincial Campaigns & Sieges (400)</span>
+        <select id="route-cat-filter" onchange="filterRouteCategory(this.value)" style="padding:3px; font-size:9px; width:auto;">
+          <option value="ALL">All Provinces</option>
+          <option value="YARI_SPEARMEN">Yari Phalanx Front</option>
+          <option value="SAMURAI_UNIT">Samurai Retainer Front</option>
+          <option value="CAVALRY_CHARGE">Cavalry Plains Front</option>
+          <option value="SHOGUN_GENERAL">Daimyo Honjin Front</option>
+          <option value="TEPPO_YUMI">Nagashino Volley Front</option>
+          <option value="GARRISON_FORT">Castle Siege Front</option>
+        </select>
+      </div>
+      <div id="routes-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+  </div>
+
+  <!-- TAB 7: WAR AUCTIONS (UNTOUCHED CRAZY BIDDING WAR MECHANICS!) -->
+  <div id="tab-auction" class="view-tab">
+    <div class="panel">
+      <div class="panel-header"><span>Daimyo Collector Auction House</span><span style="color:var(--status-amber);"><span id="auction-count">0</span>/10 LANES</span></div>
+      <p style="font-size:10px; color:var(--silver-dim);">10 live collector & museum bidding lanes with overtime sniping and massive 2x–20x bidding war spikes.</p>
+      
+      <div style="display:flex; gap:6px;">
+        <button class="btn btn-green" style="flex:1; padding:8px;" onclick="fillAuctions('planes')">Auto-Fill 10 Cheapest Units</button>
+        <button class="btn btn-green" style="flex:1; padding:8px;" onclick="fillAuctions('pilots')">Auto-Fill 10 Novice Artisans</button>
+      </div>
+
+      <div id="auction-idle" style="text-align:center; padding:16px; color:var(--silver-dim); font-size:11px;">Lanes empty. Consign painted samurai units to the auction block.</div>
+      <div id="auction-board" class="fleet-grid"></div>
+    </div>
+  </div>
+
+  <!-- TAB 8: SHOGUNATE COMMISSIONS & AUTOMATIONS -->
+  <div id="tab-checklist" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">War Council Automations</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <div class="check-item">
+          <div><strong>Auto-Campaign March:</strong> Automatically re-deploys armies to provincial campaigns upon return.</div>
+          <button id="chk-autoloop" class="btn" onclick="toggleAutoLoop()">ENABLE</button>
+        </div>
+        <div class="check-item">
+          <div><strong>Auto Urushi Re-Lacquering:</strong> Automatically restores armor silk & lacquer if condition drops below 45%.</div>
+          <button id="chk-automro" class="btn" onclick="toggleAutoMRO()">ENABLE</button>
+        </div>
+        <div class="check-item">
+          <div><strong>Auto Armory Restock:</strong> Buys 2,500 Pots of lacquer when supply drops below 500.</div>
+          <button id="chk-autorefuel" class="btn" onclick="toggleAutoRefuel()">ENABLE</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span>Imperial Edicts & Clan Commissions</span>
+        <button class="btn btn-green" style="padding:2px 6px; font-size:8px;" onclick="refreshSideMissions()">New Edicts</button>
+      </div>
+      <p style="font-size:10px; color:var(--silver-dim); margin-bottom:4px;">March requested samurai divisions to target provinces to claim Koku bounties and bonus regiments.</p>
+      <div id="side-missions-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">Shogunate Milestones</div>
+      <div id="milestone-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+  </div>
+
+  <!-- TAB 9: ARMORY TECH UPGRADES -->
+  <div id="tab-upgrades" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">Forge & War-Room Upgrades</div>
+      <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px; background:#000;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px;">
+          <span style="font-weight:bold; color:var(--status-green);">Kinpaku Gold-Leaf & Silk Odoshi Lacing</span>
+          <span style="color:var(--silver-dim);">Lvl <span id="upg-mkt-lvl">0</span> (+<span id="upg-mkt-pct">0</span>%)</span>
+        </div>
+        <div style="font-size:9.5px; color:var(--silver-dim); margin-bottom:6px;">Permanently boosts campaign Koku tributes & battle payouts by +5% per level.</div>
+        <button class="btn btn-green" style="width:100%;" onclick="buyUpgrade('mkt')">Upgrade ($<span id="upg-mkt-cost">250</span>)</button>
+      </div>
+      <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px; background:#000;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px;">
+          <span style="color:var(--status-blue); font-weight:bold;">Kiri-Wood Paulownia Storage Chests</span>
+          <span style="color:var(--silver-dim);">Lvl <span id="upg-eng-lvl">0</span> (-<span id="upg-eng-pct">0</span>%)</span>
+        </div>
+        <div style="font-size:9.5px; color:var(--silver-dim); margin-bottom:6px;">Permanently reduces Lacquer maintenance consumption by 2% per level (Max 70%).</div>
+        <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue); width:100%;" onclick="buyUpgrade('eng')">Upgrade ($<span id="upg-eng-cost">400</span>)</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- 60 FPS 3D VOXEL SAMURAI MINIATURE INSPECTOR MODAL -->
+<div id="voxel-modal" onclick="if(event.target.id==='voxel-modal') closeInspectModal()">
+  <div class="modal-box">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span id="modal-title" style="font-size:12px; font-weight:900; color:var(--status-amber);">256³ Samurai Miniature Inspector</span>
+      <div style="display:flex; gap:4px;">
+        <button class="btn btn-green" onclick="downloadInspectPNG()">💾 512 PNG</button>
+        <button class="btn btn-danger" onclick="closeInspectModal()">CLOSE ✕</button>
+      </div>
+    </div>
+    <canvas id="inspect-canvas" width="512" height="512"></canvas>
+    <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--silver-dim); font-family:monospace;">
+      <span id="modal-sub">Division: SAMURAI_UNIT</span>
+      <span>🖱️ Drag to Rotate 3D (60 FPS)</span>
+    </div>
+  </div>
+</div>
+
+<div id="toast-rack"></div>
+
+<script>
+  /* ================= 9,600 SAMURAI MINIATURE COMBINATIONS ================= */
+  // 10 Traditional Urushi Lacquer & Armor Finishes (10)
+  const TREE_PREFIXES = [
+    "Shu-Urushi-Red",    // 0: Vermilion Takeda red lacquer & gold lacing
+    "Kinpaku-Gold",      // 1: Toyotomi gilded gold-leaf armor & crimson silk
+    "Kuro-Urushi-Black", // 2: Date jet-black lacquer & crescent-moon gold trim
+    "Ai-Indigo-Laced",   // 3: Deep samurai indigo silk *odoshi* lacing & iron
+    "Byakudan-Bronze",   // 4: Weathered bronze-patina *tosei-gusoku* plates
+    "Shiro-White-Silk",  // 5: Uesugi pure white & cobalt monastic lacing
+    "aka-Oni-Crimson",   // 6: Ii Naomasa "Red Demon" scarlet armor & horns
+    "Tamahagane-Steel",  // 7: Polished folded steel & silver *kuwagata* crests
+    "Sakura-Damask",     // 8: Ceremonial plum-blossom purple & gold brocade
+    "Tenka-Holotype"     // 9: Shogunate museum masterpiece finish
+  ]; // 10
+
+  // 8 Great Sengoku Clans & Provincial Hosts (8) -> 10 x 8 x 20 x 6 = 9,600 Combinations!
+  const TREE_ORIGINS = [
+    "Takeda-Kai",        // 0: Kai Province Cavalry & Red Devils
+    "Oda-Owari",         // 1: Owari Province Teppo & Pike Innovators
+    "Tokugawa-Mikawa",   // 2: Mikawa Province Iron Hatamoto Guard
+    "Uesugi-Echigo",     // 3: Echigo Province War-God Vanguard
+    "Shimazu-Satsuma",   // 4: Satsuma Province Ambush Sword-Masters
+    "Date-Oshu",         // 5: Oshu Province Crescent-Moon Dragoons
+    "Hojo-Sagami",       // 6: Odawara Castle Garrison Defenders
+    "Sanada-Shinano"     // 7: Six-Coin Crimson Braves
+  ]; // 8
+
+  // 20 Strictly Feudal Samurai Sculpts across Spearmen, Samurai, Cavalry, Generals, Teppo/Yumi & Garrisons
+  const TREE_SPECIES = [
+    // YARI_SPEARMEN (0..3): Ashigaru & Samurai Pike Phalanxes
+    "Nagayari Ashigaru Pike Phalanx (16-Man)",
+    "Provincial Yari Spearmen Company (9-Man)",
+    "Oda Long-Pike Nagayari Battalion (16-Man)",
+    "Satsuma Yari-Gumi Garrison Unit (9-Man)",
+    // SAMURAI_UNIT (4..7): Heavy Armored Samurai Retainers
+    "Hatamoto Heavy Katana Samurai (5-Man)",
+    "Naginata Polearm Samurai Retainers (5-Man)",
+    "Nodachi Great-Sword Shock Samurai (5-Man)",
+    "Sohei Warrior-Monk Naginata Squad (5-Man)",
+    // CAVALRY_CHARGE (8..10): Mounted Kiba-Musha Cavalry
+    "Takeda Kiba-Musha Cavalry Lance (3-Mount)",
+    "Horo-Cloaked Tsukai-Ban Messengers (3-Mount)",
+    "Shogunate Heavy Barded Yari-Cavalry (3-Mount)",
+    // SHOGUN_GENERAL (11..13): Daimyo & Shogun Command Dioramas
+    "Taisho Daimyo Honjin Command Tent",
+    "Shogun Mounted War-Horse Standard",
+    "Gunbai Strategist & Taiko War-Drum",
+    // TEPPO_YUMI (14..16): Matchlock Arquebus & Yumi Bow Brigades
+    "Tanegashima Teppo Matchlock Battery (6-Man)",
+    "Tate-Shielded Yumi Longbowmen (6-Man)",
+    "Nagashino Palisade Arquebus Line (6-Man)",
+    // GARRISON_FORT (17..19): Feudal Samurai Castles & Fortifications
+    "Tenshu White-Plastered Castle Keep",
+    "Yagura Watchtower & Ishigaki Wall",
+    "Otemon Fortified Castle Gatehouse"
+  ]; // 20
+
+  // 6 Tactical Battlefield Divisions
+  const TREE_STYLES = ["YARI_SPEARMEN", "SAMURAI_UNIT", "CAVALRY_CHARGE", "SHOGUN_GENERAL", "TEPPO_YUMI", "GARRISON_FORT"]; // 6
+
+  const P_FIRST = ["Myochin", "Masamune", "Muramasa", "Nobuie", "Saotome", "Iwai", "Haruta", "Unkei", "Kano", "Eitoku", "Tosa", "Hon'ami", "Koetsu", "Sen", "Rikyu", "Musashi", "Yagyu", "Hattori", "Honda", "Sakakibara"];
+  const P_LAST = ["Munechika", "Yoshimichi", "Kunihiro", "Tadayoshi", "Kotetsu", "Sukehiro", "Tadakuni", "Yasutsugu", "Nobunaga", "Shingen", "Kenshin", "Ieyasu", "Hideyoshi", "Masamune", "Yukimura", "Tadakatsu", "Naomasa", "Kiyomasa", "Motonari", "Yoshihiro"];
+  const P_CALL = ["'Urushi-Master'", "'Kabuto-Smith'", "'Silk-Lacer'", "'Gold-Leaf'", "'Sashimono'", "'Gunbai-Eye'", "'Two-Swords'", "'Teppo-Smith'"];
+  const B_TYPES = ["LACQUER","MARCH","SILK","ARMOR"]; 
+
+  /* REALISTIC MINIATURE COLLECTOR PRICE POINTS ($15 Ashigaru Blister -> $250,000 Museum Shogun Host) */
+  const TIERS = [
+    { tier: 1, name: "Tier I: Ashigaru Levy", color: "var(--t0-col)", baseVal: 15 },
+    { tier: 2, name: "Tier II: Provincial Squad", color: "var(--t1-col)", baseVal: 45 },
+    { tier: 3, name: "Tier III: Clan Retainers", color: "var(--t2-col)", baseVal: 120 },
+    { tier: 4, name: "Tier IV: Banner Company", color: "var(--t3-col)", baseVal: 350 },
+    { tier: 5, name: "Tier V: Hatamoto Guard", color: "var(--t4-col)", baseVal: 950 },
+    { tier: 6, name: "Tier VI: Kiba-Musha Lance", color: "var(--t5-col)", baseVal: 2800 },
+    { tier: 7, name: "Tier VII: Daimyo Vanguard", color: "var(--t6-col)", baseVal: 8500 },
+    { tier: 8, name: "Tier VIII: National Division", color: "var(--t7-col)", baseVal: 25000 },
+    { tier: 9, name: "Tier IX: Shogunate Host", color: "var(--t8-col)", baseVal: 75000 },
+    { tier: 10, name: "Tier X: Tenka-Fubu Legend", color: "var(--t9-col)", baseVal: 250000 }
+  ];
+
+  const ZONE_CAT = {
+    YARI_SPEARMEN: ["Sekigahara Valley","Kawanakajima Plains","Shizugatake Ridge","Mikatagahara Field"],
+    SAMURAI_UNIT: ["Kyoto Imperial Approach","Osaka Castle Outer Moat","Okehazama Gorge","yama-zaki Crossroads"],
+    CAVALRY_CHARGE: ["Kai Takeda Staging Grounds","Shinano Steppe","Musashi Open Plains","Azuchi Parade Grounds"],
+    SHOGUN_GENERAL: ["Edo Castle Audience Hall","Gifu Mountain Citadel","Odawara Siege HQ","Fushimi War Council"],
+    TEPPO_YUMI: ["Nagashino Palisade Line","Tanegashima Port","Ishiyama Hongan-ji","Nagashima River Fort"],
+    GARRISON_FORT: ["Himeji White-Heron Keep","Kumamoto Stone Bastion","Matsumoto Crow Castle","Inuyama Cliff Keep"]
+  };
+
+  const MILESTONES = [
+    { id: "m1", title: "First March", desc: "Send a samurai unit on a provincial campaign.", reward: 200, req: s => s.fleet.some(p => p.status === 'IN_FLIGHT' || p.expRev > 0) },
+    { id: "m2", title: "First Victory", desc: "Win a 3v3 or 5v5 Tabletop Battle.", reward: 500, req: s => (s.statBattlesWon || 0) >= 1 },
+    { id: "m3", title: "Provincial Banner", desc: "Muster 5 or more samurai units in your racks.", reward: 500, req: s => s.fleet.length >= 5 },
+    { id: "m4", title: "Artisan Guild", desc: "Hire 5 or more armorers & strategists.", reward: 400, req: s => s.pilots.length >= 5 },
+    { id: "m5", title: "Takeda Charge", desc: "Acquire a CAVALRY_CHARGE or SHOGUN_GENERAL unit.", reward: 1200, req: s => s.fleet.some(p => p.role === 'CAVALRY_CHARGE' || p.role === 'SHOGUN_GENERAL') },
+    { id: "m6", title: "Hatamoto Status", desc: "Acquire a Tier V or higher samurai unit.", reward: 3000, req: s => s.fleet.some(p => p.tierIndex >= 4) },
+    { id: "m7", title: "Warlord of 5 Battles", desc: "Win 5 Tabletop 3v3 or 5v5 Battles.", reward: 2500, req: s => (s.statBattlesWon || 0) >= 5 },
+    { id: "m8", title: "Urushi Vault", desc: "Stock over 25,000 Pots of Lacquer.", reward: 1500, req: s => s.fuelReserve >= 25000 },
+    { id: "m9", title: "100,000 Koku Daimyo", desc: "Amass over $100,000 in Koku funds.", reward: 25000, req: s => s.funds >= 100000 },
+    { id: "m10", title: "Grand Sekigahara Host", desc: "Expand to 10 active units in your cabinets.", reward: 3500, req: s => s.fleet.length >= 10 },
+    { id: "m11", title: "Collector's Gavel", desc: "Sell a unit at the War Auctions.", reward: 1000, req: s => s.statAuctionsSold > 0 },
+    { id: "m12", title: "Ransomed Armor", desc: "Disband/trade a unit locally.", reward: 500, req: s => s.statPlanesScrapped > 0 },
+    { id: "m13", title: "Unifier of Japan", desc: "Unlock a campaign > 6,500 Miles.", reward: 5000, req: s => s.routes.some(r => r.unlocked && r.dist >= 6500) },
+    { id: "m14", title: "Council of Elders", desc: "Employ 3 or more Tier VII+ Tacticians.", reward: 12000, req: s => s.pilots.filter(p => p.tierIndex >= 6).length >= 3 },
+    { id: "m15", title: "Seii Taishogun", desc: "Acquire a Tier X Tenka-Fubu Legend.", reward: 50000, req: s => s.fleet.some(p => p.tierIndex === 9) }
+  ];
+
+  const $ = id => document.getElementById(id);
+
+  /* ============================================================================
+     256x256x256 ULTRA-SCALE HOLLOW-SHELL 3D SAMURAI MINIATURE ENGINE
+     - Full 256^3 Resolution with 3-Voxel Watertight Shells (~7ms generation)
+     - Builds 6 Authentic Feudal Japanese Tabletop Archetypes on Scenic Bases:
+       1. YARI_SPEARMEN: Ranked 9-man or 16-man Ashigaru Pike Phalanx + Sashimono Banners
+       2. SAMURAI_UNIT: 5-Man Heavy Katana/Naginata Samurai + Horned Kabuto + Clan Nobori
+       3. CAVALRY_CHARGE: 3-Model Mounted Takeda Cavalry + Couched Lances + Horo Cloaks
+       4. SHOGUN_GENERAL: Daimyo Command Diorama + Jinmaku Curtains + Uma-Jirushi + Taiko Drum
+       5. TEPPO_YUMI: 6-Man Matchlock Arquebus & Yumi Bow Line behind Wooden Tate Shields
+       6. GARRISON_FORT: Samurai Shiro Keep / Yagura Gatehouse on Sloped Ishigaki Stone Walls
+     ============================================================================ */
+  class VoxelSamuraiEngine {
+    constructor(canvas) {
+      this.width = 512;
+      this.height = 512;
+      this.canvas = canvas || document.createElement('canvas');
+      this.canvas.width = 512;
+      this.canvas.height = 512;
+      this.ctx = this.canvas.getContext('2d');
+
+      this.DIM = 256;
+      this.grid = new Uint8Array(256 * 256 * 256);
+      this.stampGrid = new Uint16Array(256 * 256 * 256);
+      this.currentStamp = 1;
+
+      this.occupiedList = new Int32Array(700000);
+      this.occupiedCount = 0;
+
+      const MAX_SURF = 380000;
+      this.surfX = new Int16Array(MAX_SURF);
+      this.surfY = new Int16Array(MAX_SURF);
+      this.surfZ = new Int16Array(MAX_SURF);
+      this.surfColTop = new Uint32Array(MAX_SURF);
+      this.surfColLeft = new Uint32Array(MAX_SURF);
+      this.surfColRight = new Uint32Array(MAX_SURF);
+      this.surfCount = 0;
+
+      this.zBuf = new Float32Array(512 * 512);
+      this.imgData = this.ctx.createImageData(512, 512);
+      this.pixels = new Uint32Array(this.imgData.data.buffer);
+
+      this.paletteRGB = new Uint32Array(256);
+      this.materialPriority = new Uint32Array(256);
+      this.isEmissive = new Uint8Array(256);
+
+      this.yaw = 0.50;
+      this.pitch = 0.32;
+      this.scale = 1.96;
+      this.seed = 1600;
+    }
+
+    initRNG(seed) {
+      this.seed = (seed >>> 0) || 1600;
+      let a = this.seed;
+      this.rand = () => {
+        let t = (a += 0x6D2B79F5);
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    registerColor(idx, hex, priority, emissive = 0) {
+      this.paletteRGB[idx] = parseInt(hex.slice(1), 16);
+      this.materialPriority[idx] = priority;
+      this.isEmissive[idx] = emissive;
+    }
+
+    setupSamuraiPalette(sp, role, tierIdx, prefixIdx = 0, originIdx = 0) {
+      this.prefixIdx = prefixIdx;
+      this.originIdx = originIdx;
+      this.isEmissive.fill(0);
+
+      // 10..15: Primary Do-Maru / O-Yoroi Armor Lacquer
+      // 20..25: Secondary Odoshi Silk Lacing / Sashimono Banners / Kuwagata Crests
+      // 30..35: Folded Steel / Yari Shafts / Castle Stone / Warhorse Barding
+      let armor  = ['#4a0b0e', '#731217', '#9e1b22', '#c92830', '#eb424b', '#ff757d']; // Vermilion Takeda Red
+      let lacing = ['#4d3808', '#78580e', '#a67b16', '#d49f22', '#f5c438', '#ffe678']; // Kinpaku Gold Trim
+      let steel  = ['#1c2026', '#2c323b', '#404854', '#576273', '#738196', '#99abbd']; // Tamahagane Steel
+
+      if (prefixIdx === 1) {
+        // KINPAKU GOLD LEAF & CRIMSON SILK
+        armor  = ['#4d3808', '#78580e', '#a67b16', '#d49f22', '#f5c438', '#ffe678'];
+        lacing = ['#4a0b0e', '#731217', '#9e1b22', '#c92830', '#eb424b', '#ff757d'];
+      } else if (prefixIdx === 2 || originIdx === 2 || originIdx === 5) {
+        // KURO-URUSHI BLACK LACQUER & GOLD CRESCENT
+        armor  = ['#0d0f14', '#181c24', '#252b38', '#353e4f', '#485369', '#606e87'];
+        lacing = ['#543d08', '#825f0e', '#b28416', '#e0a922', '#ffd03b', '#fff08c'];
+      } else if (prefixIdx === 3 || originIdx === 1) {
+        // AI-INDIGO SILK LACING & IRON
+        armor  = ['#0a1933', '#122c57', '#1d4482', '#2b5fb0', '#4280db', '#6ea8ff'];
+        lacing = ['#4d3808', '#78580e', '#a67b16', '#d49f22', '#f5c438', '#ffe678'];
+      } else if (prefixIdx === 4) {
+        // BYAKUDAN WEATHERED BRONZE & JADE
+        armor  = ['#2e2212', '#4a371d', '#694e2a', '#8c6938', '#b0864a', '#d6a862'];
+        lacing = ['#0d3326', '#165741', '#228060', '#32ab82', '#4bd4a6', '#80ffcf'];
+      } else if (prefixIdx === 5 || originIdx === 3) {
+        // SHIRO WHITE MONASTIC SILK & COBALT
+        armor  = ['#787c82', '#969bA1', '#b4bac2', '#d0d6de', '#e8edf2', '#ffffff'];
+        lacing = ['#0c224a', '#163b7a', '#2258ad', '#3478db', '#5499f5', '#8cc0ff'];
+      } else if (prefixIdx === 6 || originIdx === 7) {
+        // AKA-ONI SCARLET DEMON ARMOR
+        armor  = ['#590707', '#870d0d', '#b81616', '#e62424', '#ff4747', '#ff8080'];
+        lacing = ['#141619', '#22262b', '#333840', '#474e59', '#5e6775', '#7a8596'];
+      } else if (prefixIdx === 8) {
+        // SAKURA DAMASK ROYAL VIOLET & GOLD
+        armor  = ['#290a38', '#45125e', '#661c8a', '#8c29ba', '#b547e8', '#df85ff'];
+        lacing = ['#4d3808', '#78580e', '#a67b16', '#d49f22', '#f5c438', '#ffe678'];
+      }
+
+      // 1..9: Scenic Wargaming Base (Black Beveled Rim, Earth, Slate Rock, Bamboo, Sakura Petals & Brass Plaque)
+      this.registerColor(1, '#0c0e12', 7, 0);
+      this.registerColor(2, '#181c24', 7, 0);
+      this.registerColor(3, '#332419', 7, 0); // Battlefield earth
+      this.registerColor(4, '#4d3726', 7, 0); // Drybrushed soil
+      this.registerColor(5, '#424952', 7, 0); // Ishigaki stone shadow
+      this.registerColor(6, '#6e7885', 7, 0); // Ishigaki stone highlight
+      this.registerColor(7, '#2d591e', 7, 0); // Bamboo / grass green
+      this.registerColor(8, '#ff9ebb', 7, 0); // Fallen Sakura blossom petals on base!
+      this.registerColor(9, '#d4a838', 7, 0); // Brass clan nameplate
+
+      // 10..15: Primary Samurai Armor / Shiro Plaster (Priority 5)
+      armor.forEach((c, i) => this.registerColor(10 + i, c, 5, 0));
+      // 20..25: Secondary Silk Lacing / Sashimono Banners / Gold Horns (Priority 5)
+      lacing.forEach((c, i) => this.registerColor(20 + i, c, 5, 0));
+      // 30..35: Folded Steel Blades / Yari Shafts / Tiled Roofs (Priority 5)
+      steel.forEach((c, i) => this.registerColor(30 + i, c, 5, 0));
+
+      // 40..47: White Banner Cloth, katana Hamon Edge, Matchlock Fire & Paper Lanterns (Priority 6)
+      this.registerColor(40, '#f5efe2', 6, 0); // Unbleached Sashimono banner cloth / Castle plaster
+      this.registerColor(41, '#ffffff', 6, 1); // Gleaming Katana edge / Muzzle flash core
+      this.registerColor(42, '#ff6619', 6, 1); // Teppo matchlock muzzle flame / Torchlight
+      this.registerColor(43, '#dc2626', 6, 0); // Red sun-disc / Clan Mon emblem on banners
+      this.registerColor(44, '#5c3a21', 6, 0); // Polished Yari hardwood shaft / Warhorse coat
+      this.registerColor(45, '#d4bc94', 6, 0); // Ashigaru straw sandals / Taiko drumhead
+      this.registerColor(46, '#9ca3af', 6, 0); // Gunpowder smoke puff
+      this.registerColor(47, '#111317', 6, 0); // Black Mempo war-mask
+    }
+
+    setVoxel(x, y, z, colorIdx) {
+      const ix = x | 0, iy = y | 0, iz = z | 0;
+      if (ix < 2 || ix >= 254 || iy < 2 || iy >= 254 || iz < 2 || iz >= 254) return;
+      const idx = ix + (iz << 8) + (iy << 16);
+      if (this.stampGrid[idx] === this.currentStamp) {
+        const existing = this.grid[idx];
+        if (this.materialPriority[existing] > this.materialPriority[colorIdx]) return;
+        this.grid[idx] = colorIdx;
+      } else {
+        this.stampGrid[idx] = this.currentStamp;
+        this.grid[idx] = colorIdx;
+        if (this.occupiedCount < this.occupiedList.length) {
+          this.occupiedList[this.occupiedCount++] = idx;
+        }
+      }
+    }
+
+    fillShellBox(x0, y0, z0, x1, y1, z1, baseCol, span = 6) {
+      const ax0 = Math.max(2, Math.floor(Math.min(x0, x1)));
+      const ax1 = Math.min(253, Math.ceil(Math.max(x0, x1)));
+      const ay0 = Math.max(2, Math.floor(Math.min(y0, y1)));
+      const ay1 = Math.min(253, Math.ceil(Math.max(y0, y1)));
+      const az0 = Math.max(2, Math.floor(Math.min(z0, z1)));
+      const az1 = Math.min(253, Math.ceil(Math.max(z0, z1)));
+
+      for (let y = ay0; y <= ay1; y++) {
+        const ny = (y - ay0) / Math.max(1, ay1 - ay0);
+        const onY = (y <= ay0 + 2 || y >= ay1 - 2);
+        for (let z = az0; z <= az1; z++) {
+          const onZ = (z <= az0 + 2 || z >= az1 - 2);
+          for (let x = ax0; x <= ax1; x++) {
+            if (!onY && !onZ && x > ax0 + 2 && x < ax1 - 2) {
+              x = ax1 - 3;
+              continue;
+            }
+            const lacing = ((y & 3) === 0) ? 1 : 0;
+            const shade = span > 1 ? Math.max(0, Math.min(span - 1, Math.floor(ny * (span - 1)) + lacing)) : 0;
+            this.setVoxel(x, y, z, baseCol + shade);
+          }
+        }
+      }
+    }
+
+    fillShellCylinder(cx, y0, cz, r, h, baseCol, span = 6) {
+      const rInt = Math.ceil(r);
+      const rSq = r * r;
+      const innerR = Math.max(0, r - 3.0);
+      const innerSq = innerR * innerR;
+
+      for (let dy = 0; dy <= h; dy++) {
+        const ny = dy / Math.max(1, h);
+        const isCap = (dy <= 2 || dy >= h - 2);
+        for (let dz = -rInt; dz <= rInt; dz++) {
+          for (let dx = -rInt; dx <= rInt; dx++) {
+            const d2 = dx * dx + dz * dz;
+            if (d2 > rSq || (!isCap && d2 < innerSq)) continue;
+            const shade = span > 1 ? Math.min(span - 1, Math.floor((ny * 0.65 + (1 - d2 / rSq) * 0.35) * span)) : 0;
+            this.setVoxel(cx + dx, y0 + dy, cz + dz, baseCol + shade);
+          }
+        }
+      }
+    }
+
+    drawRod(x1, y1, z1, x2, y2, z2, r, colIdx) {
+      const steps = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1, z2 - z1)));
+      const rInt = Math.ceil(r);
+      const rSq = r * r;
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const cx = x1 + (x2 - x1) * t;
+        const cy = y1 + (y2 - y1) * t;
+        const cz = z1 + (z2 - z1) * t;
+        for (let dy = -rInt; dy <= rInt; dy++) {
+          for (let dz = -rInt; dz <= rInt; dz++) {
+            for (let dx = -rInt; dx <= rInt; dx++) {
+              if (dx * dx + dy * dy + dz * dz <= rSq) {
+                this.setVoxel(cx + dx, cy + dy, cz + dz, colIdx);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    /**
+     * Builds the 256^3 Scenic Sengoku Tabletop Base (with Bamboo stalks, Stone Flagstones & fallen Sakura Petals)
+     */
+    buildSengokuBase(isRegimentTray = false) {
+      const cx = 128, cz = 128;
+      const baseTopY = 28;
+      const rx = isRegimentTray ? 98 : 94;
+      const rz = isRegimentTray ? 88 : 94;
+
+      this.fillShellBox(cx - rx, 14, cz - rz, cx + rx, baseTopY - 2, cz + rz, 1, 2);
+
+      for (let z = cz - rz; z <= cz + rz; z++) {
+        for (let x = cx - rx; x <= cx + rx; x++) {
+          const dx = Math.abs(x - cx) / rx, dz = Math.abs(z - cz) / rz;
+          const d = isRegimentTray ? Math.max(dx, dz) : Math.hypot(dx, dz);
+          if (d > 1.0) continue;
+
+          if (d > 0.93) {
+            const isPlaque = (z > cz + rz * 0.85 && Math.abs(x - cx) < 30);
+            this.setVoxel(x, baseTopY - 1, z, isPlaque ? 9 : 2);
+            this.setVoxel(x, baseTopY, z, isPlaque ? 9 : 2);
+          } else {
+            // Battlefield Earth + Stone Flagstone Path + Fallen Pink Sakura Blossoms!
+            const isPath = Math.abs(x - cx) < 22;
+            const isSakura = ((x * 37 + z * 19 + this.seed) % 97 === 0);
+            const col = isSakura ? 8 : (isPath ? (5 + ((x ^ z) & 1)) : (3 + ((x + z) & 1)));
+            this.setVoxel(x, baseTopY - 1, z, 3);
+            this.setVoxel(x, baseTopY, z, col);
+          }
+        }
+      }
+
+      // 4 Green Bamboo Stalks & Grass Tufts on the Rear Corners of the Base
+      for (const bx of [cx - rx + 16, cx + rx - 16]) {
+        for (const bz of [cz - rz + 18, cz - rz + 28]) {
+          this.fillShellCylinder(bx, baseTopY + 1, bz, 2.2, 34, 7, 1);
+        }
+      }
+
+      return baseTopY;
+    }
+
+    /**
+     * Sculpts a 256^3 Detailed Samurai or Ashigaru Miniature at (sx, sy, sz) with Scale `sc`
+     * Includes Suneate Greaves, Kusazuri Tassets, Do Cuirass, Sode Shoulder Shields,
+     * Kabuto Helmet with Kuwagata Horns (or Jingasa War-Hat), Sashimono Back-Banner, and Weapon!
+     */
+    sculptBushi(sx, sy, sz, sc, isAshigaru = false, weapon = 'katana', hasSashimono = true) {
+      const legH = Math.round(16 * sc);
+      const torsoH = Math.round(18 * sc);
+      const legSpread = Math.max(3, Math.round(6.0 * sc));
+      const limbR = Math.max(2.2, 3.8 * sc);
+
+      // 1. Suneate Armored Shin Greaves & Straw Waraji Sandals
+      this.fillShellCylinder(sx - legSpread, sy, sz, limbR, legH, 10, 6);
+      this.fillShellCylinder(sx + legSpread, sy, sz, limbR, legH, 10, 6);
+
+      // 2. Kusazuri Laced Tasset Skirt & Do Cuirass
+      const hipY = sy + legH;
+      const w = Math.max(5, Math.round(9.5 * sc));
+      const d = Math.max(4, Math.round(6.5 * sc));
+      this.fillShellBox(sx - w - 1, hipY - 4, sz - d - 1, sx + w + 1, hipY + 4, sz + d + 1, 20, 6);
+      this.fillShellBox(sx - w, hipY + 4, sz - d, sx + w, hipY + torsoH, sz + d, 10, 6);
+
+      // 3. Sode Rectangular Laced Shoulder Armor Plates (Samurai)
+      const shY = hipY + torsoH - Math.round(4 * sc);
+      if (!isAshigaru) {
+        this.fillShellBox(sx - w - 5, shY - 6, sz - d, sx - w - 1, shY + 4, sz + d, 20, 6);
+        this.fillShellBox(sx + w + 1, shY - 6, sz - d, sx + w + 5, shY + 4, sz + d, 20, 6);
+      }
+
+      // 4. Head, Mempo War-Mask & Either Conical Jingasa (Ashigaru) or Horned Kabuto Helmet (Samurai)!
+      const headY = hipY + torsoH + Math.round(4 * sc);
+      const headR = Math.max(3.0, 5.5 * sc);
+      this.fillShellCylinder(sx, hipY + torsoH, sz, headR * 0.85, Math.round(6 * sc), 47, 1);
+
+      if (isAshigaru) {
+        // Conical Lacquered Jingasa War-Hat with Clan Stripe
+        for (let r = 0; r <= Math.round(7 * sc); r++) {
+          const rad = (headR * 1.85) * (1 - r / Math.max(1, 7 * sc));
+          this.fillShellCylinder(sx, headY + 2 + r, sz, rad, 1, r < 2 ? 20 : 10, 6);
+        }
+      } else {
+        // Samurai Kabuto Bowl + Shikoro Neck Guard + Sweeping Gold Kuwagata Antler Crests!
+        this.fillShellCylinder(sx, headY, sz, headR * 1.15, Math.round(6 * sc), 10, 6);
+        // Sweeping Golden Kuwagata Horns on Forehead
+        const hornH = Math.round(14 * sc);
+        this.drawRod(sx - 2, headY + 4, sz + headR, sx - Math.round(9 * sc), headY + hornH, sz + headR + 2, 1.5 * sc, 24);
+        this.drawRod(sx + 2, headY + 4, sz + headR, sx + Math.round(9 * sc), headY + hornH, sz + headR + 2, 1.5 * sc, 24);
+      }
+
+      // 5. Iconic Sashimono Back-Banner Flag on Bamboo Pole!
+      if (hasSashimono) {
+        const poleTopY = headY + Math.round(28 * sc);
+        this.drawRod(sx, hipY + 6, sz - d - 2, sx, poleTopY, sz - d - 2, 1.2, 44);
+        const flagH = Math.round(20 * sc), flagW = Math.round(11 * sc);
+        for (let fy = poleTopY - flagH; fy <= poleTopY; fy++) {
+          for (let fx = 0; fx <= flagW; fx++) {
+            const dxMon = fx - flagW * 0.5, dyMon = fy - (poleTopY - flagH * 0.5);
+            const inClanMon = (dxMon * dxMon + dyMon * dyMon) <= (flagW * 0.32) * (flagW * 0.32);
+            this.setVoxel(sx + fx, fy, sz - d - 2, inClanMon ? 43 : 40);
+          }
+        }
+      }
+
+      // 6. Weapons (Long Yari Pike, Curved Katana/Nodachi, or Tanegashima Matchlock)
+      if (weapon === 'yari') {
+        // Long Angled Yari Spear Pike
+        this.drawRod(sx + w + 2, sy + 6, sz - 6, sx + w + 2, sy + Math.round(52 * sc), sz + Math.round(38 * sc), 1.5, 44);
+        this.drawRod(sx + w + 2, sy + Math.round(52 * sc), sz + Math.round(38 * sc), sx + w + 2, sy + Math.round(62 * sc), sz + Math.round(45 * sc), 2.0, 41);
+      } else if (weapon === 'teppo') {
+        // Tanegashima Matchlock Arquebus + Muzzle Flame & Smoke!
+        this.drawRod(sx + w, shY - 2, sz + 2, sx + w - 2, shY - 1, sz + Math.round(24 * sc), 2.0 * sc, 32);
+        this.drawRod(sx + w - 2, shY - 1, sz + Math.round(24 * sc), sx + w - 2, shY - 1, sz + Math.round(30 * sc), 3.2 * sc, 42);
+      } else {
+        // Curved Folded-Steel Katana / Naginata Raised Overhead
+        for (let b = 0; b <= Math.round(28 * sc); b++) {
+          const curveZ = sz + 8 + b * 0.45;
+          const curveY = shY + b + (b * b) * 0.015;
+          this.setVoxel(sx + w + 3, curveY, curveZ, 34);
+          this.setVoxel(sx + w + 3, curveY, curveZ + 1, 41); // Gleaming Hamon edge
+        }
+      }
+    }
+
+    /**
+     * 1. YARI_SPEARMEN (9-Man Provincial Company OR 16-Man Nagayari Pike Phalanx!)
+     */
+    buildYariPhalanx(sp) {
+      const baseTopY = this.buildSengokuBase(true);
+      const is16Man = sp.includes("16-Man");
+      const gridN = is16Man ? 4 : 3;
+      const spacingX = is16Man ? 42 : 54;
+      const spacingZ = is16Man ? 36 : 46;
+      const sc = is16Man ? 0.82 : 1.02;
+
+      for (let row = 0; row < gridN; row++) {
+        for (let col = 0; col < gridN; col++) {
+          const sx = 128 + (col - (gridN - 1) * 0.5) * spacingX;
+          const sz = 128 + (row - (gridN - 1) * 0.5) * spacingZ;
+          const isFrontCommander = (row === gridN - 1 && col === 1);
+          this.sculptBushi(sx, baseTopY + 1, sz, sc, !isFrontCommander, 'yari', true);
+        }
+      }
+    }
+
+    /**
+     * 2. SAMURAI_UNIT (5-Man Heroic Hatamoto / Naginata / Nodachi Heavy Samurai Squad)
+     */
+    buildSamuraiRetainers(sp) {
+      const baseTopY = this.buildSengokuBase(false);
+      // Center Tactical Ishigaki Stone Outcrop for the Samurai Commander
+      this.fillShellBox(100, baseTopY + 1, 102, 156, baseTopY + 18, 150, 5, 2);
+
+      const positions = [
+        { x: 128, y: baseTopY + 18, z: 126, sc: 1.48 },
+        { x: 74,  y: baseTopY + 1,  z: 148, sc: 1.25 },
+        { x: 182, y: baseTopY + 1,  z: 148, sc: 1.25 },
+        { x: 82,  y: baseTopY + 1,  z: 84,  sc: 1.25 },
+        { x: 174, y: baseTopY + 1,  z: 84,  sc: 1.25 }
+      ];
+      for (const p of positions) {
+        this.sculptBushi(p.x, p.y, p.z, p.sc, false, 'katana', true);
+      }
+    }
+
+    /**
+     * 3. CAVALRY_CHARGE (3-Model Mounted Takeda Kiba-Musha Cavalry Wedge with Horo Cloaks & Lances)
+     */
+    buildCavalryLance(sp) {
+      const baseTopY = this.buildSengokuBase(true);
+      const hasHoro = sp.includes("Horo");
+
+      const mounts = [
+        { x: 128, z: 152 },
+        { x: 68,  z: 96 },
+        { x: 188, z: 96 }
+      ];
+
+      for (const m of mounts) {
+        // Warhorse Barrel, Barding Armor & 4 Galloping Legs
+        this.fillShellBox(m.x - 12, baseTopY + 20, m.z - 24, m.x + 12, baseTopY + 42, m.z + 24, 20, 6);
+        this.fillShellCylinder(m.x - 8, baseTopY + 1, m.z + 18, 3.5, 20, 44, 1);
+        this.fillShellCylinder(m.x + 8, baseTopY + 1, m.z + 18, 3.5, 20, 44, 1);
+        this.fillShellCylinder(m.x - 8, baseTopY + 1, m.z - 18, 3.5, 20, 44, 1);
+        this.fillShellCylinder(m.x + 8, baseTopY + 1, m.z - 18, 3.5, 20, 44, 1);
+
+        // Armored Warhorse Neck & Shaffron Horned Head
+        this.drawRod(m.x, baseTopY + 36, m.z + 20, m.x, baseTopY + 60, m.z + 36, 8.5, 12);
+        this.drawRod(m.x, baseTopY + 60, m.z + 36, m.x, baseTopY + 54, m.z + 48, 6.5, 24);
+
+        // Mounted Samurai Rider in the Saddle
+        this.sculptBushi(m.x, baseTopY + 30, m.z - 4, 1.05, false, 'yari', !hasHoro);
+
+        // Billowing Balloon-Like Horo Arrow-Catcher Cloak on Back!
+        if (hasHoro) {
+          this.fillShellCylinder(m.x, baseTopY + 52, m.z - 22, 15.0, 24, 20, 6);
+        }
+      }
+    }
+
+    /**
+     * 4. SHOGUN_GENERAL (Daimyo Honjin Command Tent Diorama with Jinmaku Curtains, Uma-Jirushi Standard & Taiko Drum)
+     */
+    buildShogunCommand(sp) {
+      const baseTopY = this.buildSengokuBase(false);
+      const cx = 128, cz = 128;
+
+      // 1. Stepped Stone Honjin Command Dais
+      this.fillShellBox(cx - 56, baseTopY + 1, cz - 48, cx + 56, baseTopY + 18, cz + 44, 5, 2);
+      // Red Tatami Command Mat on top of Dais
+      this.fillShellBox(cx - 42, baseTopY + 18, cz - 34, cx + 42, baseTopY + 21, cz + 32, 43, 1);
+
+      // 2. Striped Jinmaku War-Camp Enclosure Curtains around the Rear & Sides!
+      for (let x = cx - 68; x <= cx + 68; x++) {
+        const isPost = (Math.abs(x - cx) % 34 === 0);
+        const stripe = (Math.floor((x + 100) / 12) & 1) ? 40 : 11;
+        for (let y = baseTopY + 1; y <= baseTopY + (isPost ? 62 : 54); y++) {
+          this.setVoxel(x, y, cz - 56, isPost ? 44 : stripe);
+          this.setVoxel(x, y, cz - 55, isPost ? 44 : stripe);
+        }
+      }
+
+      // 3. Towering Golden Uma-Jirushi Personal Daimyo Battle Standard & Taiko War-Drum!
+      this.drawRod(cx - 44, baseTopY + 18, cz - 20, cx - 44, baseTopY + 178, cz - 20, 3.0, 24);
+      // Giant Golden Fan / Sun-Burst Uma-Jirushi Crest at Top of Pole
+      this.fillShellCylinder(cx - 44, baseTopY + 152, cz - 20, 18.0, 6, 24, 2);
+
+      // Taiko War-Drum on Wooden Stand (Right flank)
+      this.fillShellCylinder(cx + 44, baseTopY + 26, cz - 10, 14.0, 18, 45, 1);
+      this.fillShellBox(cx + 34, baseTopY + 18, cz - 20, cx + 54, baseTopY + 28, cz, 44, 1);
+
+      // 4. Heroic Scale Shogun / Daimyo in Full O-Yoroi Armor Center Stage + 2 Bodyguards!
+      this.sculptBushi(cx, baseTopY + 21, cz + 4, 1.85, false, 'katana', false);
+      this.sculptBushi(cx - 32, baseTopY + 21, cz + 18, 1.15, false, 'yari', true);
+      this.sculptBushi(cx + 32, baseTopY + 21, cz + 18, 1.15, false, 'yari', true);
+    }
+
+    /**
+     * 5. TEPPO_YUMI (6-Man Tanegashima Matchlock & Yumi Bow Line behind Wooden Tate Shields & Bamboo Palisades)
+     */
+    buildTeppoBattery(sp) {
+      const baseTopY = this.buildSengokuBase(true);
+
+      // Front Line of 4 Wooden Tate Pavise Shields & Crossed Bamboo Sakamogi Stakes!
+      for (let i = 0; i < 4; i++) {
+        const tx = 68 + i * 40;
+        const tz = 166;
+        // Sloped Wooden Tate Shield with Clan Mon
+        for (let h = 0; h <= 34; h++) {
+          this.fillShellBox(tx - 11, baseTopY + 1 + h, tz - Math.floor(h * 0.2), tx + 11, baseTopY + 2 + h, tz + 2 - Math.floor(h * 0.2), (h > 12 && h < 22) ? 43 : 44, 1);
+        }
+        // Angled Anti-Cavalry Bamboo Stakes in front
+        this.drawRod(tx - 8, baseTopY + 1, tz + 6, tx - 8, baseTopY + 24, tz + 22, 1.6, 45);
+        this.drawRod(tx + 8, baseTopY + 1, tz + 6, tx + 8, baseTopY + 24, tz + 22, 1.6, 45);
+      }
+
+      // 6 Teppo / Yumi Gunners in 2 Ranks firing over the shields!
+      for (let row = 0; row < 2; row++) {
+        for (let col = 0; col < 3; col++) {
+          const sx = 76 + col * 52;
+          const sz = 136 - row * 48;
+          this.sculptBushi(sx, baseTopY + 1, sz, 1.08, row === 0, 'teppo', true);
+        }
+      }
+    }
+
+    /**
+     * 6. GARRISON_FORT (Samurai Shiro Keep, Sloped Ishigaki Stone Walls & Upturned Irimoya Tiled Roofs)
+     */
+    buildShiroGarrison(sp) {
+      const baseTopY = this.buildSengokuBase(true);
+      const cx = 128, cz = 128;
+
+      // 1. Sloped Batter-Walled Ishigaki Stone Fortress Base (Y = baseTopY..baseTopY + 54)
+      for (let y = 0; y <= 52; y += 2) {
+        const t = y / 52;
+        const w = Math.round(76 - Math.pow(t, 1.35) * 22);
+        this.fillShellBox(cx - w, baseTopY + 1 + y, cz - w, cx + w, baseTopY + 3 + y, cz + w, 5, 2);
+      }
+      // Fortified Otemon Gate Portal carved into front Ishigaki stone wall
+      this.fillShellBox(cx - 22, baseTopY + 1, cz + 54, cx + 22, baseTopY + 38, cz + 78, 44, 1);
+      this.fillShellBox(cx - 14, baseTopY + 1, cz + 60, cx + 14, baseTopY + 28, cz + 79, 47, 1);
+
+      // 2. 4-Story White-Plastered Tenshu Keep with Sweeping Upturned Tiled Eaves!
+      let curY = baseTopY + 53;
+      for (let tier = 0; tier < 4; tier++) {
+        const t = tier / 3;
+        const wallW = Math.round(48 * (1 - t * 0.45));
+        const storyH = 24;
+
+        // White Shikkui Plaster Walls + Dark Timber Lattice Windows
+        this.fillShellBox(cx - wallW, curY, cz - wallW, cx + wallW, curY + storyH, cz + wallW, 40, 1);
+        this.fillShellBox(cx - wallW - 2, curY, cz - wallW - 2, cx + wallW + 2, curY + 4, cz + wallW + 2, 30, 6);
+
+        // Sweeping Upturned Irimoya Tiled Roofs
+        const eaveW = wallW + 18;
+        const roofBaseY = curY + storyH;
+        for (let dz = -eaveW; dz <= eaveW; dz++) {
+          for (let dx = -eaveW; dx <= eaveW; dx++) {
+            const maxD = Math.max(Math.abs(dx), Math.abs(dz));
+            if (maxD > eaveW || maxD < wallW - 3) continue;
+            const cornerDist = Math.hypot(dx, dz) / (eaveW * 1.414);
+            const slopeY = Math.max(0, (eaveW - maxD) * 0.55);
+            const cornerLift = cornerDist > 0.70 ? Math.pow((cornerDist - 0.70) / 0.30, 2) * 10.5 : 0;
+            const ry = Math.round(roofBaseY + slopeY + cornerLift);
+
+            this.setVoxel(cx + dx, ry, cz + dz, maxD >= eaveW - 2 ? 24 : 32);
+            this.setVoxel(cx + dx, ry + 1, cz + dz, 34);
+          }
+        }
+        curY += storyH + 8;
+      }
+
+      // Golden Shachihoko Roof-Carp Finials crowning the top ridge!
+      this.fillShellBox(cx - 16, curY + 4, cz - 3, cx - 10, curY + 16, cz + 3, 24, 2);
+      this.fillShellBox(cx + 10, curY + 4, cz - 3, cx + 16, curY + 16, cz + 3, 24, 2);
+    }
+
+    generate(seedInt, role, tierIdx, sp, prefixIdx = 0, originIdx = 0) {
+      this.initRNG(seedInt);
+
+      this.currentStamp++;
+      if (this.currentStamp >= 65530) {
+        this.stampGrid.fill(0);
+        this.currentStamp = 1;
+      }
+      this.occupiedCount = 0;
+
+      this.setupSamuraiPalette(sp, role, tierIdx, prefixIdx, originIdx);
+
+      if (role === 'SAMURAI_UNIT') this.buildSamuraiRetainers(sp);
+      else if (role === 'CAVALRY_CHARGE') this.buildCavalryLance(sp);
+      else if (role === 'SHOGUN_GENERAL') this.buildShogunCommand(sp);
+      else if (role === 'TEPPO_YUMI') this.buildTeppoBattery(sp);
+      else if (role === 'GARRISON_FORT') this.buildShiroGarrison(sp);
+      else this.buildYariPhalanx(sp);
+
+      this.bakeSurfaceVoxels();
+      this.render();
+      return this.canvas.toDataURL('image/png');
+    }
+
+    bakeSurfaceVoxels() {
+      const grid = this.grid;
+      const stampGrid = this.stampGrid;
+      const stamp = this.currentStamp;
+      const count = this.occupiedCount;
+      const list = this.occupiedList;
+      const sunX = -0.45, sunY = 0.78, sunZ = 0.42;
+
+      let sIdx = 0;
+      const maxSurf = this.surfX.length;
+
+      for (let i = 0; i < count; i++) {
+        const idx = list[i];
+        const mat = grid[idx];
+        const x = idx & 255;
+        const z = (idx >> 8) & 255;
+        const y = (idx >> 16) & 255;
+        if (x < 3 || x > 252 || y < 3 || y > 252 || z < 3 || z > 252) continue;
+
+        const expTop   = stampGrid[idx + 65536] !== stamp;
+        const expBot   = stampGrid[idx - 65536] !== stamp;
+        const expLeft  = stampGrid[idx - 1] !== stamp;
+        const expRight = stampGrid[idx + 1] !== stamp;
+        const expFront = stampGrid[idx + 256] !== stamp;
+        const expBack  = stampGrid[idx - 256] !== stamp;
+
+        if (!expTop && !expBot && !expLeft && !expRight && !expFront && !expBack) continue;
+        if (sIdx >= maxSurf) break;
+
+        let occ = 0;
+        if (!expTop) occ += 2;
+        if (!expBot) occ += 2;
+        if (!expLeft) occ += 2;
+        if (!expRight) occ += 2;
+        if (!expFront) occ += 2;
+        if (!expBack) occ += 2;
+        const ao = 1.12 - (occ / 12) * 0.46;
+
+        let inShadow = false;
+        let srx = x + sunX * 2.5, sry = y + sunY * 2.5, srz = z + sunZ * 2.5;
+        for (let step = 0; step < 16; step++) {
+          const ix = srx | 0, iy = sry | 0, iz = srz | 0;
+          if (ix <= 1 || ix >= 254 || iy >= 254 || iz <= 1 || iz >= 254) break;
+          if (stampGrid[ix + (iz << 8) + (iy << 16)] === stamp) {
+            inShadow = true;
+            break;
+          }
+          srx += sunX * 2.6; sry += sunY * 2.6; srz += sunZ * 2.6;
+        }
+
+        let dirLight = 0.88;
+        if (expTop) dirLight += 0.25;
+        if (expLeft) dirLight += 0.09;
+        if (expRight) dirLight -= 0.10;
+
+        const totalLight = this.isEmissive[mat]
+          ? 1.32
+          : Math.max(0.28, Math.min(1.34, ao * dirLight * (inShadow ? 0.65 : 1.08)));
+
+        const baseRGB = this.paletteRGB[mat];
+        const r = (baseRGB >> 16) & 255;
+        const g = (baseRGB >> 8) & 255;
+        const b = baseRGB & 255;
+
+        const mTop = totalLight * 1.08;
+        const mLeft = totalLight * 0.92;
+        const mRight = totalLight * 0.76;
+
+        this.surfX[sIdx] = x - 128;
+        this.surfY[sIdx] = y - 102;
+        this.surfZ[sIdx] = z - 128;
+        this.surfColTop[sIdx]   = (255 << 24) | (Math.min(255, (b * mTop) | 0) << 16)   | (Math.min(255, (g * mTop) | 0) << 8)   | Math.min(255, (r * mTop) | 0);
+        this.surfColLeft[sIdx]  = (255 << 24) | (Math.min(255, (b * mLeft) | 0) << 16)  | (Math.min(255, (g * mLeft) | 0) << 8)  | Math.min(255, (r * mLeft) | 0);
+        this.surfColRight[sIdx] = (255 << 24) | (Math.min(255, (b * mRight) | 0) << 16) | (Math.min(255, (g * mRight) | 0) << 8) | Math.min(255, (r * mRight) | 0);
+        sIdx++;
+      }
+      this.surfCount = sIdx;
+    }
+
+    render(targetCanvas = null) {
+      const W = 512, H = 512;
+      const zBuf = this.zBuf;
+      const pixels = this.pixels;
+
+      zBuf.fill(1e9);
+
+      for (let py = 0; py < H; py++) {
+        const rowOff = py * W;
+        const dy = py - 245;
+        for (let px = 0; px < W; px++) {
+          const dx = px - 256;
+          const d = Math.min(1, Math.hypot(dx, dy) / 340);
+          const v = (24 * (1 - d) + 5 * d) | 0;
+          pixels[rowOff + px] = (255 << 24) | (v << 16) | ((v + 1) << 8) | (v + 4);
+        }
+      }
+
+      const cosY = Math.cos(this.yaw), sinY = Math.sin(this.yaw);
+      const cosP = Math.cos(this.pitch), sinP = Math.sin(this.pitch);
+      const scale = this.scale;
+
+      const count = this.surfCount;
+      const sxArr = this.surfX, syArr = this.surfY, szArr = this.surfZ;
+      const cTop = this.surfColTop, cLeft = this.surfColLeft, cRight = this.surfColRight;
+
+      for (let i = 0; i < count; i++) {
+        const vx = sxArr[i], vy = syArr[i], vz = szArr[i];
+
+        const rx = vx * cosY - vz * sinY;
+        const rz1 = vx * sinY + vz * cosY;
+        const ry = vy * cosP - rz1 * sinP;
+        const depth = vy * sinP + rz1 * cosP;
+
+        const sx = (256 + rx * scale) | 0;
+        const sy = (284 - ry * scale) | 0;
+        if (sx < 2 || sx >= 509 || sy < 2 || sy >= 509) continue;
+
+        const zVal = -depth;
+        const topC = cTop[i], leftC = cLeft[i], rightC = cRight[i];
+
+        for (let dy = -1; dy <= 1; dy++) {
+          const rowIdx = (sy + dy) * W;
+          for (let dx = -1; dx <= 1; dx++) {
+            const pIdx = rowIdx + sx + dx;
+            if (zVal < zBuf[pIdx]) {
+              zBuf[pIdx] = zVal;
+              pixels[pIdx] = dy < 0 ? topC : (dx <= 0 ? leftC : rightC);
+            }
+          }
+        }
+      }
+
+      const ctx = targetCanvas ? targetCanvas.getContext('2d') : this.ctx;
+      ctx.putImageData(this.imgData, 0, 0);
+    }
+  }
+
+  const _sharedSamuraiEngine = new VoxelSamuraiEngine();
+  const _samuraiDataURLCache = new Map();
+
+  function generateBonsaiImage(seedInt, role, tierIdx, sp, prefixIdx = 0, originIdx = 0) {
+    const key = `${seedInt}_${role}_${tierIdx}_${sp}_${prefixIdx}_${originIdx}`;
+    let cached = _samuraiDataURLCache.get(key);
+    if (cached) return cached;
+
+    _sharedSamuraiEngine.yaw = 0.50;
+    _sharedSamuraiEngine.pitch = 0.32;
+    const dataUrl = _sharedSamuraiEngine.generate(seedInt, role, tierIdx, sp, prefixIdx, originIdx);
+    if (_samuraiDataURLCache.size > 160) {
+      const oldest = _samuraiDataURLCache.keys().next().value;
+      _samuraiDataURLCache.delete(oldest);
+    }
+    _samuraiDataURLCache.set(key, dataUrl);
+    return dataUrl;
+  }
+
+  function ensureTreeImage(p) {
+    if (!p.imgData) {
+      const sp = TREE_SPECIES[p.mIdx] || "Hatamoto Heavy Katana Samurai (5-Man)";
+      p.imgData = generateBonsaiImage(
+        p.seedInt,
+        p.role,
+        p.tierIndex ?? p.tierIdx ?? 0,
+        sp,
+        p.pIdx ?? 0,
+        p.bIdx ?? 0
+      );
+    }
+    return p.imgData;
+  }
+
+  /* ================= 60 FPS 3D SAMURAI INSPECTOR MODAL ================= */
+  const inspectCanvas = $('inspect-canvas');
+  let inspectDragging = false, inspLastX = 0, inspLastY = 0, currentInspectSeed = 1600;
+
+  function openInspectModal(seedInt, role, tierIdx, mIdx, pIdx, bIdx, name) {
+    currentInspectSeed = seedInt;
+    const sp = TREE_SPECIES[mIdx] || "Hatamoto Heavy Katana Samurai (5-Man)";
+    const lacquerName = TREE_PREFIXES[pIdx ?? 0] || "Shu-Urushi-Red";
+    const clanName = TREE_ORIGINS[bIdx ?? 0] || "Takeda-Kai";
+    $('modal-title').innerText = name;
+    $('modal-sub').innerText = `${lacquerName} • ${clanName} // Division: ${role}`;
+    $('voxel-modal').classList.add('open');
+
+    _sharedSamuraiEngine.yaw = 0.50;
+    _sharedSamuraiEngine.pitch = 0.32;
+    _sharedSamuraiEngine.generate(seedInt, role, tierIdx, sp, pIdx ?? 0, bIdx ?? 0);
+    _sharedSamuraiEngine.render(inspectCanvas);
+  }
+
+  function closeInspectModal() {
+    $('voxel-modal').classList.remove('open');
+  }
+
+  function downloadInspectPNG() {
+    const a = document.createElement('a');
+    a.download = `samurai-256-${currentInspectSeed}.png`;
+    a.href = inspectCanvas.toDataURL('image/png');
+    a.click();
+  }
+
+  inspectCanvas.addEventListener('pointerdown', (e) => {
+    inspectDragging = true; inspLastX = e.clientX; inspLastY = e.clientY;
+    inspectCanvas.setPointerCapture(e.pointerId);
+  });
+  inspectCanvas.addEventListener('pointermove', (e) => {
+    if (!inspectDragging) return;
+    _sharedSamuraiEngine.yaw = ((_sharedSamuraiEngine.yaw + (e.clientX - inspLastX) * 0.012 + Math.PI) % (Math.PI * 2)) - Math.PI;
+    _sharedSamuraiEngine.pitch = Math.max(-0.10, Math.min(0.80, _sharedSamuraiEngine.pitch + (e.clientY - inspLastY) * 0.008));
+    inspLastX = e.clientX; inspLastY = e.clientY;
+    _sharedSamuraiEngine.render(inspectCanvas);
+  });
+  inspectCanvas.addEventListener('pointerup', () => { inspectDragging = false; });
+
+  /* ================= STATE ================= */
+  let State = {
+    funds: 500,          // Realistic $500 starting Koku budget
+    fuelReserve: 1000,   // Urushi Lacquer Pots
+    fuelSpotPrice: 0.25, // $0.25 per pot
+    buyMode: 1, 
+    sortHangarMode: 'val',
+    filterHangarRole: 'ALL',
+    filterHangarTier: 'ALL',
+    sortPilotsMode: 'val',
+    filterPilotTier: 'ALL',
+    filterRouteCat: 'ALL',
+    fleet: [], pilots: [], routes: [], auctions: [], marketCars: [],
+    gallery: [], 
+    marketTimer: 10.0,
+    upgrades: { mkt: 0, eng: 0 },
+    automation: { autoDispatch: false, autoMRO: false, autoRefuel: false },
+    claimedMilestones: [],
+    sideMissions: [],
+    statAuctionsSold: 0,
+    statPlanesScrapped: 0,
+    statBattlesWon: 0
+  };
+  let globalInterval = null;
+  let needsFleetRender = false;
+
+  /* ================= 3v3 & 5v5 TABLETOP BATTLE ENGINE ================= */
+  const RIVAL_CLANS = [
+    "Takeda Kai Red Devils",
+    "Oda Nobunaga Tenka-Fubu Host",
+    "Uesugi Echigo War-God Vanguard",
+    "Shimazu Satsuma Sword-Clan",
+    "Date Masamune One-Eyed Dragon Host",
+    "Tokugawa Mikawa Shogunate Guard",
+    "Hojo Odawara Fortress Garrison",
+    "Sanada Crimson Six-Coin Division"
+  ];
+
+  let BattleState = {
+    size: 3, // 3 for 3v3 Skirmish, 5 for 5v5 Sekigahara
+    active: false,
+    clanName: "Takeda Kai Red Devils",
+    playerUnits: [],
+    enemyUnits: [],
+    turnIdx: 0,
+    targetIdx: 0,
+    logs: []
+  };
+
+  function setBattleSize(sz) {
+    BattleState.size = sz;
+    $('btn-mode-3').classList.toggle('active', sz === 3);
+    $('btn-mode-5').classList.toggle('active', sz === 5);
+    startNewTabletopBattle();
+  }
+
+  function makeCombatUnit(src, isEnemy = false) {
+    ensureTreeImage(src);
+    const t = src.tierIndex ?? 0;
+    const maxHp = Math.floor(120 + t * 95 + (src.role === 'GARRISON_FORT' ? 80 : 0));
+    const atk = Math.floor(28 + t * 22 + (src.role === 'CAVALRY_CHARGE' || src.role === 'TEPPO_YUMI' ? 12 : 0));
+    const saveRoll = Math.max(2, 6 - Math.floor(t / 3)); // 6+ down to 3+ armor save on D6
+    return {
+      uid: src.uid,
+      name: src.name,
+      role: src.role,
+      tierIndex: t,
+      tierColor: src.tierColor,
+      imgData: src.imgData,
+      seedInt: src.seedInt,
+      mIdx: src.mIdx,
+      pIdx: src.pIdx,
+      bIdx: src.bIdx,
+      value: src.value,
+      hp: maxHp,
+      maxHp: maxHp,
+      atk: atk,
+      saveRoll: saveRoll,
+      stance: 'normal',
+      isEnemy
+    };
+  }
+
+  function startNewTabletopBattle() {
+    const n = BattleState.size;
+    BattleState.clanName = RIVAL_CLANS[Math.floor(Math.random() * RIVAL_CLANS.length)];
+    $('enemy-clan-title').innerText = `RIVAL CLAN: ${BattleState.clanName}`;
+
+    // Draft best N units from Player's fleet (or loan Provincial Ashigaru if player has fewer than N units!)
+    let sortedFleet = [...State.fleet].sort((a, b) => b.value - a.value);
+    BattleState.playerUnits = [];
+    for (let i = 0; i < n; i++) {
+      if (sortedFleet[i]) {
+        BattleState.playerUnits.push(makeCombatUnit(sortedFleet[i], false));
+      } else {
+        const loaner = harvestStrain(0, false);
+        loaner.name = `Loaned Provincial ${TREE_SPECIES[loaner.mIdx]}`;
+        BattleState.playerUnits.push(makeCombatUnit(loaner, false));
+      }
+    }
+
+    // Generate Rival Clan Army matched around player's average tier
+    const avgTier = Math.max(0, Math.min(9, Math.round(
+      BattleState.playerUnits.reduce((acc, u) => acc + u.tierIndex, 0) / n
+    )));
+
+    BattleState.enemyUnits = [];
+    for (let i = 0; i < n; i++) {
+      const eTier = Math.max(0, Math.min(9, avgTier + (Math.floor(Math.random() * 3) - 1)));
+      const eRaw = harvestStrain(eTier, false);
+      BattleState.enemyUnits.push(makeCombatUnit(eRaw, true));
+    }
+
+    BattleState.turnIdx = 0;
+    BattleState.targetIdx = 0;
+    BattleState.active = true;
+    BattleState.logs = [`🎌 Horns sound across the battlefield! ${n}v${n} clash against ${BattleState.clanName} begins!`];
+    renderBattlefield();
+  }
+
+  function getTacticalBonus(attackerRole, defenderRole) {
+    const groupA = (r) => (r === 'YARI_SPEARMEN' || r === 'GARRISON_FORT');
+    const groupB = (r) => (r === 'CAVALRY_CHARGE' || r === 'SHOGUN_GENERAL');
+    const groupC = (r) => (r === 'TEPPO_YUMI' || r === 'SAMURAI_UNIT');
+
+    if (groupA(attackerRole) && groupB(defenderRole)) return { mult: 1.45, tag: "[ANTI-CAVALRY PIKE BONUS!]" };
+    if (groupB(attackerRole) && groupC(defenderRole)) return { mult: 1.45, tag: "[FLANKING SHOCK CHARGE!]" };
+    if (groupC(attackerRole) && groupA(defenderRole)) return { mult: 1.45, tag: "[ARMOR-PIERCING BREACH!]" };
+    return { mult: 1.0, tag: "" };
+  }
+
+  function selectEnemyTarget(idx) {
+    if (!BattleState.enemyUnits[idx] || BattleState.enemyUnits[idx].hp <= 0) return;
+    BattleState.targetIdx = idx;
+    renderBattlefield();
+  }
+
+  function executeTabletopOrder(orderType) {
+    if (!BattleState.active) { startNewTabletopBattle(); return; }
+
+    // Find current active player unit
+    let pUnit = BattleState.playerUnits[BattleState.turnIdx];
+    if (!pUnit || pUnit.hp <= 0) {
+      BattleState.turnIdx = BattleState.playerUnits.findIndex(u => u.hp > 0);
+      pUnit = BattleState.playerUnits[BattleState.turnIdx];
+    }
+    if (!pUnit) return;
+
+    // Ensure valid living target
+    let eUnit = BattleState.enemyUnits[BattleState.targetIdx];
+    if (!eUnit || eUnit.hp <= 0) {
+      BattleState.targetIdx = BattleState.enemyUnits.findIndex(u => u.hp > 0);
+      eUnit = BattleState.enemyUnits[BattleState.targetIdx];
+    }
+    if (!eUnit) return;
+
+    // Roll 2D6 Tabletop Dice!
+    const d1 = 1 + Math.floor(Math.random() * 6);
+    const d2 = 1 + Math.floor(Math.random() * 6);
+    const rollSum = d1 + d2;
+    $('die-1').innerText = d1;
+    $('die-2').innerText = d2;
+
+    pUnit.stance = 'normal';
+
+    if (orderType === 'rally') {
+      const heal = Math.floor(pUnit.maxHp * 0.32 + rollSum * 4);
+      pUnit.hp = Math.min(pUnit.maxHp, pUnit.hp + heal);
+      pUnit.stance = 'wall';
+      $('dice-verdict').innerText = `RALLY ${d1}+${d2}=${rollSum} (+${heal} HP)`;
+      BattleState.logs.unshift(`<span style="color:var(--status-green);">🚩 [RALLY] ${pUnit.name} blows the Hora conch (Roll ${rollSum}) and restores +${heal} HP!</span>`);
+    } else {
+      const tac = getTacticalBonus(pUnit.role, eUnit.role);
+      let dmgMult = (rollSum / 7) * tac.mult;
+      if (orderType === 'charge') dmgMult *= 1.30;
+      if (orderType === 'wall') { dmgMult *= 0.85; pUnit.stance = 'wall'; }
+
+      // Enemy rolls Armor Save unless order is Teppo Volley!
+      const saveDie = 1 + Math.floor(Math.random() * 6);
+      const saved = (orderType !== 'volley') && (saveDie >= eUnit.saveRoll + (eUnit.stance === 'wall' ? -1 : 0));
+      if (saved) dmgMult *= 0.55;
+
+      const dmg = Math.max(12, Math.floor(pUnit.atk * dmgMult));
+      eUnit.hp = Math.max(0, eUnit.hp - dmg);
+
+      $('dice-verdict').innerText = `HIT ${d1}+${d2}=${rollSum} (${dmg} DMG!)`;
+      BattleState.logs.unshift(
+        `<span style="color:var(--status-amber);">⚔️ [${orderType.toUpperCase()}] ${pUnit.name} rolls ${rollSum} vs ${eUnit.name} for <strong>${dmg} DMG</strong> ${tac.tag} ${saved ? `(Saved ${saveDie}+)` : ''}!</span>`
+      );
+
+      if (eUnit.hp <= 0) {
+        BattleState.logs.unshift(`<span style="color:var(--status-green);">💥 ${eUnit.name} has been ROUTED from the tabletop!</span>`);
+      }
+    }
+
+    // Check if all enemies are routed!
+    if (BattleState.enemyUnits.every(u => u.hp <= 0)) {
+      handleBattleVictory();
+      return;
+    }
+
+    // Enemy Counter-Attack Phase!
+    const livingEnemies = BattleState.enemyUnits.filter(u => u.hp > 0);
+    const livingPlayers = BattleState.playerUnits.filter(u => u.hp > 0);
+    if (livingEnemies.length > 0 && livingPlayers.length > 0) {
+      const eAttacker = livingEnemies[Math.floor(Math.random() * livingEnemies.length)];
+      const pTarget = livingPlayers[Math.floor(Math.random() * livingPlayers.length)];
+      const ed1 = 1 + Math.floor(Math.random() * 6);
+      const ed2 = 1 + Math.floor(Math.random() * 6);
+      const etac = getTacticalBonus(eAttacker.role, pTarget.role);
+      let edmg = Math.max(10, Math.floor(eAttacker.atk * ((ed1 + ed2) / 7.5) * etac.mult));
+      if (pTarget.stance === 'wall') edmg = Math.floor(edmg * 0.55);
+
+      pTarget.hp = Math.max(0, pTarget.hp - edmg);
+      BattleState.logs.unshift(
+        `<span style="color:var(--status-red);">🔥 [ENEMY TURN] ${eAttacker.name} rolls ${ed1 + ed2} and strikes ${pTarget.name} for ${edmg} DMG ${pTarget.stance === 'wall' ? '(Spear-Wall Mitigated!)' : ''}!</span>`
+      );
+    }
+
+    // Check if player army is routed
+    if (BattleState.playerUnits.every(u => u.hp <= 0)) {
+      BattleState.active = false;
+      const consolation = 45 * BattleState.size;
+      State.funds += consolation;
+      BattleState.logs.unshift(`<span style="color:var(--status-red);">🏳️ Your vanguard retreated! Consolation Koku +$${fmt(consolation)}. Click 'New Battle' to remuster!</span>`);
+      updateHUD();
+      renderBattlefield();
+      return;
+    }
+
+    // Advance turn to next living player unit
+    for (let step = 1; step <= BattleState.size; step++) {
+      const nextIdx = (BattleState.turnIdx + step) % BattleState.size;
+      if (BattleState.playerUnits[nextIdx] && BattleState.playerUnits[nextIdx].hp > 0) {
+        BattleState.turnIdx = nextIdx;
+        break;
+      }
+    }
+    if (!BattleState.enemyUnits[BattleState.targetIdx] || BattleState.enemyUnits[BattleState.targetIdx].hp <= 0) {
+      BattleState.targetIdx = BattleState.enemyUnits.findIndex(u => u.hp > 0);
+    }
+
+    renderBattlefield();
+  }
+
+  function autoPlayBattleTurn() {
+    if (!BattleState.active) { startNewTabletopBattle(); return; }
+    const pUnit = BattleState.playerUnits[BattleState.turnIdx];
+    if (pUnit && pUnit.hp < pUnit.maxHp * 0.35) {
+      executeTabletopOrder('rally');
+    } else if (pUnit && pUnit.role === 'TEPPO_YUMI') {
+      executeTabletopOrder('volley');
+    } else {
+      executeTabletopOrder('charge');
+    }
+  }
+
+  function handleBattleVictory() {
+    BattleState.active = false;
+    State.statBattlesWon = (State.statBattlesWon || 0) + 1;
+
+    const totalEnemyVal = BattleState.enemyUnits.reduce((acc, u) => acc + u.value, 0);
+    const yieldMult = 1.0 + State.upgrades.mkt * 0.05;
+    const kokuPrize = Math.max(150, Math.floor(totalEnemyVal * 0.55 * yieldMult));
+    State.funds += kokuPrize;
+
+    // 45% Chance to Capture a Prized Enemy Samurai Miniature into your Army Racks!
+    let captureMsg = "";
+    if (Math.random() < 0.45) {
+      const prizeEnemy = BattleState.enemyUnits[Math.floor(Math.random() * BattleState.enemyUnits.length)];
+      const capturedUnit = harvestStrain(prizeEnemy.tierIndex, false);
+      State.fleet.push(capturedUnit);
+      captureMsg = ` & CAPTURED ${capturedUnit.name}!`;
+    }
+
+    toast(`🏆 VICTORY! +$${fmt(kokuPrize)} Koku${captureMsg}`);
+    BattleState.logs.unshift(`<span style="color:var(--status-green); font-weight:bold;">🏆 VICTORY OVER ${BattleState.clanName}! Spoils: +$${fmt(kokuPrize)}${captureMsg}</span>`);
+    updateHUD();
+    renderBattlefield();
+  }
+
+  function renderBattlefield() {
+    const eGrid = $('battle-enemy-grid');
+    const pGrid = $('battle-player-grid');
+    const logEl = $('battle-log');
+    if (!eGrid || !pGrid) return;
+
+    eGrid.innerHTML = '';
+    BattleState.enemyUnits.forEach((u, idx) => {
+      const hpPct = Math.max(0, Math.round((u.hp / u.maxHp) * 100));
+      const isTarget = (idx === BattleState.targetIdx && u.hp > 0);
+      const safeName = u.name.replace(/'/g, "\\'");
+      eGrid.innerHTML += `
+        <div class="unit-token ${isTarget ? 'targeted' : ''} ${u.hp <= 0 ? 'routed' : ''}" onclick="selectEnemyTarget(${idx})">
+          <span class="badge" style="font-size:7.5px;">${u.role}</span>
+          <img class="token-img" src="${u.imgData}" onclick="event.stopPropagation(); openInspectModal(${u.seedInt}, '${u.role}', ${u.tierIndex}, ${u.mIdx}, ${u.pIdx}, ${u.bIdx}, '${safeName}')">
+          <div style="font-size:9px; font-weight:900; text-align:center; color:#fff; line-height:1.1;">${u.name}</div>
+          <div class="hp-bar-bg"><div class="hp-bar-fill" style="width:${hpPct}%; background:var(--status-red);"></div></div>
+          <div style="font-size:8px; font-family:monospace; color:var(--silver-dim);">HP: ${u.hp}/${u.maxHp} | Save ${u.saveRoll}+</div>
+        </div>
+      `;
+    });
+
+    pGrid.innerHTML = '';
+    BattleState.playerUnits.forEach((u, idx) => {
+      const hpPct = Math.max(0, Math.round((u.hp / u.maxHp) * 100));
+      const isTurn = (idx === BattleState.turnIdx && u.hp > 0 && BattleState.active);
+      const safeName = u.name.replace(/'/g, "\\'");
+      pGrid.innerHTML += `
+        <div class="unit-token ${isTurn ? 'active-turn' : ''} ${u.hp <= 0 ? 'routed' : ''}" onclick="BattleState.turnIdx=${idx}; renderBattlefield();">
+          <span class="badge" style="font-size:7.5px;">${u.role} ${u.stance === 'wall' ? '🛡️' : ''}</span>
+          <img class="token-img" src="${u.imgData}" onclick="event.stopPropagation(); openInspectModal(${u.seedInt}, '${u.role}', ${u.tierIndex}, ${u.mIdx}, ${u.pIdx}, ${u.bIdx}, '${safeName}')">
+          <div style="font-size:9px; font-weight:900; text-align:center; color:#fff; line-height:1.1;">${u.name}</div>
+          <div class="hp-bar-bg"><div class="hp-bar-fill" style="width:${hpPct}%;"></div></div>
+          <div style="font-size:8px; font-family:monospace; color:var(--silver-dim);">HP: ${u.hp}/${u.maxHp} | ATK ${u.atk}</div>
+        </div>
+      `;
+    });
+
+    if (logEl) {
+      logEl.innerHTML = BattleState.logs.slice(0, 14).map(l => `<div>${l}</div>`).join('');
+    }
+  }
+
+  /* ================= UTILITY & BASE36 (9,600 COMBINATIONS) ================= */
+  function fmt(n) {
+    if (n >= 1e12) return (n / 1e12).toFixed(2) + "T";
+    if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
+    if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
+    if (n >= 1e4) return (n / 1e3).toFixed(1) + "K";
+    return Math.floor(n).toLocaleString();
+  }
+  function toast(msg) {
+    const r = $('toast-rack'); const e = document.createElement('div');
+    e.className = 'toast'; e.innerHTML = msg; r.appendChild(e);
+    setTimeout(() => e.remove(), 2800);
+  }
+  function updateHUD() {
+    if($('hud-funds')) $('hud-funds').innerText = `$${fmt(State.funds)}`;
+    if($('hud-fleet-count')) $('hud-fleet-count').innerText = State.fleet.length;
+    if($('hud-pilot-count')) $('hud-pilot-count').innerText = State.pilots.length;
+    if($('hud-fuel')) $('hud-fuel').innerText = fmt(State.fuelReserve);
+    if($('hud-wins')) $('hud-wins').innerText = `${State.statBattlesWon || 0}W`;
+  }
+  
+  function saveGame() { 
+    let s = JSON.parse(JSON.stringify(State));
+    s.fleet.forEach(p => delete p.imgData);
+    s.marketCars.forEach(p => delete p.imgData);
+    s.gallery.forEach(g => delete g.imgData);
+    s.auctions.forEach(a => { if(a.item.imgData) delete a.item.imgData; });
+    localStorage.setItem('sengokuWarforgeV1', JSON.stringify(s)); 
+    toast("Shogunate Saved."); 
+  }
+  
+  function loadGame() {
+    let s = localStorage.getItem('sengokuWarforgeV1');
+    if (s) {
+      State = JSON.parse(s);
+      if(!State.gallery) State.gallery = [];
+      if(!State.routes || State.routes.length < 400) State.routes = generateRoutes();
+      State.fleet.forEach(p => { p.status = 'READY'; p.flightEnd = 0; p.flightStart = 0; });
+      updateHUD(); setTab('market');
+      toast("Shogunate Restored.");
+    } else {
+      toast("No saved war-chest found.");
+    }
+  }
+
+  function setBuyMode(val) {
+      State.buyMode = val;
+      ['buy-1','buy-0.25','buy-0.5','buy-1.0'].forEach(id => { if($(id)) $(id).classList.remove('active'); });
+      let sel = val===1?'buy-1':val===0.25?'buy-0.25':val===0.5?'buy-0.5':'buy-1.0';
+      if($(sel)) $(sel).classList.add('active');
+  }
+
+  /* BASE36 FOR ARTISANS */
+  function exportCourier(uid) {
+    let p = State.pilots.find(x => x.uid===uid); if(!p) return;
+    let codeInt = p.fIdx * 160 + p.lIdx * 8 + p.cIdx;
+    prompt("Copy Artisan Trade Code:", "SEN-" + codeInt.toString(36).toUpperCase());
+  }
+  function importCourier() {
+    let str = prompt("Enter Artisan Trade Code (SEN-XXX):"); if(!str) return;
+    str = str.replace('SEN-', '').trim();
+    let codeInt = parseInt(str, 36); if(isNaN(codeInt) || codeInt < 0) { toast("Invalid code."); return; }
+    let cIdx = codeInt % 8; codeInt = Math.floor(codeInt / 8);
+    let lIdx = codeInt % 20; codeInt = Math.floor(codeInt / 20);
+    let fIdx = codeInt % 20;
+    let tIdx = Math.floor(Math.random() * 10);
+    let bIdx = Math.floor(Math.random() * 4);
+    State.pilots.push(hireCourier(fIdx, lIdx, cIdx, tIdx, bIdx)); 
+    updateHUD(); renderPilots(); toast("Artisan hired via Trade Code!");
+  }
+
+  /* BASE36 FOR 9,600 SAMURAI UNITS */
+  function exportStrain(uid) {
+    let p = State.fleet.find(x => x.uid===uid); if(!p) return;
+    let codeInt = p.pIdx * 960 + p.bIdx * 120 + p.mIdx * 6 + p.rIdx;
+    prompt("Copy Samurai Unit Scroll Code (1 of 9,600):", "SW-" + codeInt.toString(36).toUpperCase());
+  }
+  function importStrain() {
+    let str = prompt("Enter Samurai Unit Scroll Code (SW-XXX):"); if(!str) return;
+    str = str.replace('SW-', '').trim();
+    let codeInt = parseInt(str, 36); if(isNaN(codeInt) || codeInt < 0) { toast("Invalid code."); return; }
+    let rIdx = codeInt % 6; codeInt = Math.floor(codeInt / 6);
+    let mIdx = codeInt % 20; codeInt = Math.floor(codeInt / 20);
+    let bIdx = codeInt % 8; codeInt = Math.floor(codeInt / 8);
+    let pIdx = codeInt % 10;
+    let tIdx = Math.floor(Math.random() * 10);
+    
+    let tD = TIERS[tIdx];
+    let val = Math.floor(tD.baseVal * 1.0); 
+    let cost = Math.max(10, Math.floor(val * 0.8)); 
+    let cap = Math.floor(50 + (tIdx * 150)); // Koku Stipend
+    let rnge = Math.floor(1000 + (tIdx * 900));
+    let burn = Math.floor(4 + (tIdx * 3));
+    let seedInt = (pIdx * 960 + bIdx * 120 + mIdx * 6 + rIdx) * 31 + tIdx;
+    let sp = TREE_SPECIES[mIdx];
+    let role = TREE_STYLES[rIdx % TREE_STYLES.length];
+
+    let importedSamurai = {
+      uid: 'S' + Math.floor(100+Math.random()*899) + 'SW',
+      pIdx, bIdx, mIdx, rIdx, tierIndex: tIdx,
+      seedInt: seedInt,
+      imgData: generateBonsaiImage(seedInt, role, tIdx, sp, pIdx, bIdx),
+      name: `${TREE_PREFIXES[pIdx]} ${TREE_ORIGINS[bIdx]} ${sp}`,
+      role: role, tierName: tD.name, tierColor: tD.color,
+      value: val, cost: cost, capacity: cap, range: rnge, fuelBurn: burn,
+      condition: 100, status: 'READY', assignedRoute: null, assignedPilot: null
+    };
+    
+    State.fleet.push(importedSamurai);
+    updateHUD(); renderFleet(); toast("Samurai Unit recruited via Scroll Code!");
+  }
+
+  function generateRoutes() {
+    let rts = [];
+    let roles = TREE_STYLES;
+    let used = new Set();
+    let idCounter = 0;
+
+    roles.forEach(role => {
+      let pool = ZONE_CAT[role] || ZONE_CAT["YARI_SPEARMEN"];
+      let count = role === "YARI_SPEARMEN" || role === "SAMURAI_UNIT" ? 80 : 60; // 400 total
+      for(let i=0; i<count; i++) {
+        let a1, a2, pair;
+        let attempts = 0;
+        do {
+          a1 = pool[Math.floor(Math.random() * pool.length)];
+          a2 = pool[Math.floor(Math.random() * pool.length)];
+          pair = `${a1}-${a2}-${role}`;
+          attempts++;
+        } while((a1 === a2 || used.has(pair)) && attempts < 50);
+        
+        used.add(pair);
+        let dist = role === 'SHOGUN_GENERAL' ? Math.floor(1200 + Math.random() * 7500) : Math.floor(350 + Math.random() * 8500);
+        
+        rts.push({
+          id: "rt_" + (idCounter++),
+          name: `${a1} ↔ ${a2}`, role: role, dist: dist,
+          cost: Math.ceil((35 + (Math.pow(dist, 1.15) * 0.42)) / 5) * 5,
+          unlocked: idCounter === 1,
+          minTier: dist > 6500 ? "Shogunate Grand War" : dist > 4000 ? "National Campaign" : dist > 1500 ? "Provincial Siege" : "Border Skirmish"
+        });
+      }
+    });
+
+    rts.sort((a,b) => a.dist - b.dist);
+    rts[0].unlocked = true;
+    return rts;
+  }
+
+  function getDivisionForSpecies(mIdx) {
+    if (mIdx <= 3) return 0;  // YARI_SPEARMEN
+    if (mIdx <= 7) return 1;  // SAMURAI_UNIT
+    if (mIdx <= 10) return 2; // CAVALRY_CHARGE
+    if (mIdx <= 13) return 3; // SHOGUN_GENERAL
+    if (mIdx <= 16) return 4; // TEPPO_YUMI
+    return 5;                 // GARRISON_FORT
+  }
+
+  function harvestStrain(tIdx, skipImage = false) {
+    let pIdx = Math.floor(Math.random() * TREE_PREFIXES.length);
+    let bIdx = Math.floor(Math.random() * TREE_ORIGINS.length);
+    let mIdx = Math.floor(Math.random() * TREE_SPECIES.length);
+    let rIdx = getDivisionForSpecies(mIdx);
+    let tD = TIERS[tIdx];
+    let sp = TREE_SPECIES[mIdx];
+    let role = TREE_STYLES[rIdx];
+
+    let fluct = 1.0 + (Math.random() * 0.4 - 0.2); 
+    let val = Math.max(8, Math.floor(tD.baseVal * fluct));
+    let seedInt = Math.floor(Math.random() * 9999999);
+
+    return {
+      uid: 'S' + Math.floor(100+Math.random()*899) + 'SW',
+      pIdx, bIdx, mIdx, rIdx, tierIndex: tIdx, seedInt: seedInt,
+      imgData: skipImage ? null : generateBonsaiImage(seedInt, role, tIdx, sp, pIdx, bIdx),
+      name: `${TREE_PREFIXES[pIdx]} ${TREE_ORIGINS[bIdx]} ${sp}`,
+      role: role, tierName: tD.name, tierColor: tD.color,
+      value: val, cost: Math.max(6, Math.floor(val * 0.78)), 
+      capacity: Math.floor(50 + (tIdx * 150) * fluct), // Koku Rating
+      range: Math.floor(1000 + (tIdx * 900) * fluct), 
+      fuelBurn: Math.floor(3 + (tIdx * 2)), // Lacquer Pots
+      condition: 100, status: 'READY', assignedRoute: null, assignedPilot: null
+    };
+  }
+
+  function hireCourier(fIdx, lIdx, cIdx, tIdx, bIdx) {
+    let rawPow = [6,25,100,300,1000,2500,6000,15000,35000,66666][tIdx];
+    return {
+      uid: Date.now()+Math.random().toString(36).substring(2,8), fIdx, lIdx, cIdx, tIdx, bIdx,
+      name: `${P_FIRST[fIdx]} ${P_CALL[cIdx]} ${P_LAST[lIdx]}`,
+      tierIndex: tIdx, tierName: TIERS[tIdx].name, tierColor: TIERS[tIdx].color,
+      bType: B_TYPES[bIdx], bonus: rawPow, value: Math.max(15, Math.floor(TIERS[tIdx].baseVal * 0.4)),
+      locked: false, assignedTo: null
+    };
+  }
+
+  /* ================= KOKU MARKET (NO MARKET IMAGES!) ================= */
+  function refreshMarket() {
+    State.marketCars = [];
+    for(let i=0; i<5; i++) {
+      let r = Math.random()*100; let tI = r>99.9?9 : r>99?8 : r>95?7 : r>85?6 : r>70?5 : r>50?4 : r>30?3 : r>15?2 : r>5?1 : 0;
+      State.marketCars.push(harvestStrain(tI, true));
+    }
+    renderMarket();
+  }
+
+  function renderMarket() {
+    const grid = $('market-grid'); if(!grid) return; grid.innerHTML = '';
+    State.marketCars.forEach((c, idx) => {
+      let rCol = c.role === 'YARI_SPEARMEN' ? '#38bdf8' : c.role === 'SAMURAI_UNIT' ? '#ef4444' : c.role === 'CAVALRY_CHARGE' ? '#f59e0b' : c.role === 'SHOGUN_GENERAL' ? '#a855f7' : c.role === 'TEPPO_YUMI' ? '#22c55e' : '#fbbf24';
+      const clanTag = `${TREE_PREFIXES[c.pIdx ?? 0]} • ${TREE_ORIGINS[c.bIdx ?? 0]}`;
+      grid.innerHTML += `
+        <div class="strain-card" style="border-color:${c.tierColor};">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:${c.tierColor}; font-weight:bold; font-size:10px;">[${c.tierName}]</span>
+            <span class="badge" style="color:${rCol}; border-color:${rCol};">${c.role}</span>
+          </div>
+          <div class="bud-art-container" style="padding:8px 10px;">
+            <div style="flex:1;">
+              <div style="font-size:12px; font-weight:900; color:#fff;">${c.name}</div>
+              <div style="font-size:9px; color:var(--status-amber); margin-top:2px;">Clan: ${clanTag} // Scroll #${c.seedInt}</div>
+            </div>
+          </div>
+          <div class="spec-grid">
+            <div><span>STIPEND:</span> ${c.capacity} KOKU</div>
+            <div><span>MARCH:</span> ${c.range.toLocaleString()} MI</div>
+            <div><span>LACQUER:</span> ${c.fuelBurn} p/cp</div>
+            <div><span>VAL:</span> $${fmt(c.value)}</div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+            <div>
+              <div style="font-size:9px; color:var(--silver-dim);">Appraised Val: $${fmt(c.value)}</div>
+              <div style="font-size:12px; color:var(--status-green); font-weight:bold; font-family:monospace;">Recruit Ask: $${fmt(c.cost)}</div>
+            </div>
+            <button class="btn btn-green" onclick="buyMarketStrain(${idx})">RECRUIT</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  function buyMarketStrain(idx) {
+    let c = State.marketCars[idx]; if(!c) return;
+    if(State.funds < c.cost) { toast("Insufficient Koku."); return; }
+    State.funds -= c.cost;
+    ensureTreeImage(c);
+    State.fleet.push(c);
+    State.marketCars.splice(idx, 1);
+    toast(`Mustered: ${c.name}`); updateHUD(); renderMarket();
+  }
+
+  function buySeeds(bIdx, count) {
+    let costs = [20, 200, 2000, 15000];
+    let c = State.buyMode === 1 ? count : Math.max(1, Math.floor(Math.floor(State.funds/costs[bIdx]) * State.buyMode));
+    let cost = costs[bIdx] * c;
+    if(State.funds < cost) { toast("Insufficient Koku."); return; }
+    State.funds -= cost;
+    let tArr = bIdx===0?[0,1,2,3]:bIdx===1?[2,3,4,5]:bIdx===2?[4,5,6,7]:[6,7,8,9];
+    for(let i=0; i<c; i++) {
+      let r = Math.random()*100; let tI = r>95?tArr[3]:r>80?tArr[2]:r>50?tArr[1]:tArr[0];
+      State.fleet.push(harvestStrain(tI, c > 10));
+    }
+    updateHUD(); toast(`Mustered ${c}x Samurai Units.`);
+  }
+
+  function buyResumes(bIdx, count) {
+    let costs = [25, 150, 800, 4000];
+    let c = State.buyMode === 1 ? count : Math.max(1, Math.floor(Math.floor(State.funds/costs[bIdx]) * State.buyMode));
+    let cost = costs[bIdx] * c;
+    if(State.funds < cost) { toast("Insufficient Koku."); return; }
+    State.funds -= cost;
+    let tArr = bIdx===0?[0,1,2,3]:bIdx===1?[2,3,4,5]:bIdx===2?[4,5,6,7]:[6,7,8,9];
+    for(let i=0; i<c; i++) {
+      let r = Math.random()*100; let tI = r>95?tArr[3]:r>80?tArr[2]:r>50?tArr[1]:tArr[0];
+      State.pilots.push(hireCourier(Math.floor(Math.random()*20), Math.floor(Math.random()*20), Math.floor(Math.random()*8), tI, Math.floor(Math.random()*4)));
+    }
+    updateHUD(); toast(`Hired ${c}x Artisans.`);
+  }
+
+  function buyFuelFixed(amount) {
+    let unit = State.fuelSpotPrice;
+    let gal = amount === 'MAX' ? Math.floor(State.funds / unit) : amount;
+    if(gal <= 0) { toast("Insufficient Koku."); return; }
+    let cost = gal * unit;
+    if(State.funds < cost) { toast("Insufficient Koku."); return; }
+    State.funds -= cost; State.fuelReserve += gal;
+    toast(`Stocked ${fmt(gal)} Pots of Urushi Lacquer.`); updateHUD();
+  }
+
+  /* ================= SAMURAI RACKS (INVENTORY) ================= */
+  function sortHangar(mode) { State.sortHangarMode = mode; renderFleet(); }
+  function filterHangarRole(val) { State.filterHangarRole = val; renderFleet(); }
+  function filterHangarTier(val) { State.filterHangarTier = val; renderFleet(); }
+  
+  function assignRoute(pUid, rId) { const p = State.fleet.find(x=>x.uid===pUid); if(p) p.assignedRoute = rId; }
+  function assignPilot(pUid, piUid) {
+    const p = State.fleet.find(x=>x.uid===pUid); if(!p) return;
+    if(p.assignedPilot) { let o = State.pilots.find(x=>x.uid===p.assignedPilot); if(o) o.assignedTo = null; }
+    if(piUid==="") p.assignedPilot = null; 
+    else { p.assignedPilot=piUid; let n=State.pilots.find(x=>x.uid===piUid); if(n) n.assignedTo=pUid; }
+    renderFleet();
+  }
+
+  function autoAssignPilots() {
+    let unassigned = State.fleet.filter(p => !p.assignedPilot && p.status === 'READY');
+    let freeCouriers = State.pilots.filter(p => !p.assignedTo && !p.locked).sort((a,b) => b.bonus - a.bonus);
+    if(unassigned.length === 0 || freeCouriers.length === 0) {
+      toast("No unassigned units or available artisans."); return;
+    }
+    let paired = 0;
+    unassigned.forEach(p => {
+      if(freeCouriers.length > 0) {
+        let pilot = freeCouriers.shift();
+        p.assignedPilot = pilot.uid;
+        pilot.assignedTo = p.uid;
+        paired++;
+      }
+    });
+    toast(`Assigned sensei to ${paired} units.`); renderFleet(); renderPilots();
+  }
+
+  function autoAssignRoutes() {
+    let unrouted = State.fleet.filter(p => !p.assignedRoute && p.status === 'READY');
+    let uRts = State.routes.filter(r => r.unlocked);
+    if(unrouted.length === 0 || uRts.length === 0) {
+      toast("No idle units or unlocked campaigns."); return;
+    }
+    let routedCnt = 0;
+    unrouted.forEach(p => {
+      let valid = uRts.filter(r => (r.role === p.role || r.role === 'YARI_SPEARMEN') && r.dist <= p.range);
+      if(valid.length > 0) {
+        valid.sort((a,b) => b.dist - a.dist);
+        p.assignedRoute = valid[0].id;
+        routedCnt++;
+      }
+    });
+    toast(`Auto-Marched ${routedCnt} units to furthest provinces.`);
+    renderFleet();
+  }
+
+  function renderFleet() {
+    const list = $('fleet-list'); if(!list) return; list.innerHTML = '';
+    let filtered = [...State.fleet];
+    if(State.filterHangarRole !== 'ALL') filtered = filtered.filter(p => p.role === State.filterHangarRole);
+    if(State.filterHangarTier !== 'ALL') filtered = filtered.filter(p => p.tierIndex === parseInt(State.filterHangarTier));
+    
+    if(filtered.length===0) { list.innerHTML=`<div style="text-align:center; padding:20px; color:var(--silver-dim); font-size:11px;">No samurai units match current filters.</div>`; return; }
+
+    if(State.sortHangarMode==='val') filtered.sort((a,b)=>b.value-a.value);
+    if(State.sortHangarMode==='tier') filtered.sort((a,b)=>b.tierIndex-a.tierIndex);
+    if(State.sortHangarMode==='range') filtered.sort((a,b)=>b.range-a.range);
+
+    const uRts = State.routes.filter(r => r.unlocked);
+    
+    let routeOptionsCache = {};
+    TREE_STYLES.forEach(role => {
+        let opts = `<option value="">-- Assign Campaign (${role}) --</option>`;
+        uRts.filter(r => r.role === role || r.role === 'YARI_SPEARMEN').forEach(r => {
+            opts += `<option value="${r.id}">${r.name} [${r.role}] (${r.dist} MI)</option>`;
+        });
+        routeOptionsCache[role] = opts;
+    });
+
+    let pilotOpts = `<option value="">-- Assign Sensei/Tactician --</option>`;
+    State.pilots.forEach(pl => { 
+        if(!pl.assignedTo) pilotOpts += `<option value="${pl.uid}">${pl.name} [${pl.bType}: +${fmt(pl.bonus)}%]</option>`; 
+    });
+
+    filtered.forEach(p => {
+      ensureTreeImage(p);
+      let rCol = p.role === 'YARI_SPEARMEN' ? '#38bdf8' : p.role === 'SAMURAI_UNIT' ? '#ef4444' : p.role === 'CAVALRY_CHARGE' ? '#f59e0b' : p.role === 'SHOGUN_GENERAL' ? '#a855f7' : p.role === 'TEPPO_YUMI' ? '#22c55e' : '#fbbf24';
+      
+      let pOpts = routeOptionsCache[p.role];
+      if(p.assignedRoute) pOpts = pOpts.replace(`value="${p.assignedRoute}"`, `value="${p.assignedRoute}" selected`);
+      let rtSel = `<select ${p.status==='IN_FLIGHT'?'disabled':''} onchange="assignRoute('${p.uid}', this.value)">${pOpts}</select>`;
+
+      let pPilotOpts = pilotOpts;
+      if(p.assignedPilot) {
+          let pl = State.pilots.find(x=>x.uid === p.assignedPilot);
+          if(pl) pPilotOpts += `<option value="${pl.uid}" selected>${pl.name}</option>`;
+      }
+      let piSel = `<select ${p.status==='IN_FLIGHT'?'disabled':''} onchange="assignPilot('${p.uid}', this.value)">${pPilotOpts}</select>`;
+      const safeName = p.name.replace(/'/g, "\\'");
+      const clanTag = `${TREE_PREFIXES[p.pIdx ?? 0]} • ${TREE_ORIGINS[p.bIdx ?? 0]}`;
+
+      list.innerHTML += `
+        <div class="strain-card ${p.status==='IN_FLIGHT'?'in-flight':p.condition<50?'damaged':''}" style="border-color:${p.tierColor};">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="color:${p.tierColor}; font-weight:bold; font-size:10px;">[${p.tierName}]</span>
+              <span style="font-size:12px; font-weight:900; color:#fff; margin-left:3px;">${p.name}</span>
+            </div>
+            <span class="badge" style="color:${rCol}; border-color:${rCol};">${p.role}</span>
+          </div>
+          
+          <div class="bud-art-container">
+            <img class="bud-pixel-canvas" src="${p.imgData}" title="Tap to Rotate 256³ Samurai" onclick="openInspectModal(${p.seedInt}, '${p.role}', ${p.tierIndex}, ${p.mIdx}, ${p.pIdx ?? 0}, ${p.bIdx ?? 0}, '${safeName}')">
+            <div style="flex:1;">
+              <div style="font-size:10px; font-weight:bold; color:var(--status-amber);">${clanTag}</div>
+              <div style="font-size:9px; color:var(--silver-bright);">Stipend: ${p.capacity} Koku // Val: $${fmt(p.value)}</div>
+              <div style="font-size:8.5px; color:var(--silver-dim);">Tap mini for 256³ 3D View</div>
+            </div>
+            <button class="btn btn-purple" style="padding:4px 6px; font-size:9px;" onclick="snapGalleryPic('${p.uid}')">📸 Shrine</button>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; font-size:8.5px; font-family:monospace; color:var(--silver-dim);">
+            <span>ARMOR LACQUER: ${p.condition.toFixed(0)}%</span>
+            <span id="st-${p.uid}">STATUS: <strong style="color:#fff;">${p.status}</strong></span>
+          </div>
+          
+          <div style="display:flex; flex-direction:column; gap:3px;">${rtSel}${piSel}</div>
+          ${p.status==='IN_FLIGHT'?`<div class="flight-bar-bg"><div id="bar-${p.uid}" class="flight-bar-fill"></div></div>`:''}
+          
+          <div style="display:flex; justify-content:space-between; margin-top:3px;">
+            <div style="display:flex; gap:3px;">
+              <button class="btn" style="padding:3px 5px; font-size:8px;" onclick="exportStrain('${p.uid}')">Scroll</button>
+              <button class="btn btn-purple" style="padding:3px 5px; font-size:8px;" ${p.status==='IN_FLIGHT'?'disabled':''} onclick="initAuction('${p.uid}', 'plane')">Auction</button>
+              <button class="btn btn-danger" style="padding:3px 5px; font-size:8px;" ${p.status==='IN_FLIGHT'?'disabled':''} onclick="consumeStrain('${p.uid}')">Disband</button>
+            </div>
+            <div style="display:flex; gap:3px;">
+              <button class="btn" style="padding:3px 6px; font-size:8px;" ${p.status==='IN_FLIGHT'?'disabled':''} onclick="maintainAirframe('${p.uid}')">Lacquer</button>
+              <button class="btn btn-green" style="padding:4px 8px; font-size:8.5px;" ${p.status==='IN_FLIGHT'||!p.assignedRoute||!p.assignedPilot?'disabled':''} onclick="dispatchFlight('${p.uid}')">March</button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  function consumeStrain(uid) {
+    let i = State.fleet.findIndex(x=>x.uid===uid); if(i===-1) return;
+    let val = Math.max(5, Math.floor(State.fleet[i].value * 0.5)); State.funds+=val;
+    if(State.fleet[i].assignedPilot) { let p=State.pilots.find(x=>x.uid===State.fleet[i].assignedPilot); if(p) p.assignedTo=null; }
+    State.fleet.splice(i,1); State.statPlanesScrapped++;
+    toast(`Disbanded unit locally. Yielded $${fmt(val)}.`); updateHUD(); renderFleet();
+  }
+
+  function quickSellStrains(maxT) {
+    let t = State.fleet.filter(s=>s.tierIndex<=maxT && s.status==='READY');
+    if(t.length===0){toast("No eligible units in tier bracket.");return;}
+    let tot=0; t.forEach(s=>{
+      tot+=Math.max(5, Math.floor(s.value*0.5));
+      if(s.assignedPilot) { let p=State.pilots.find(x=>x.uid===s.assignedPilot); if(p) p.assignedTo=null; }
+      State.statPlanesScrapped++;
+    });
+    State.fleet = State.fleet.filter(s=>s.tierIndex>maxT || s.status!=='READY');
+    State.funds+=tot; toast(`Disbanded ${t.length} units locally for $${fmt(tot)}.`); updateHUD(); renderFleet(); renderPilots();
+  }
+
+  /* ================= SHRINE VAULT GALLERY ================= */
+  function snapGalleryPic(uid) {
+    let p = State.fleet.find(x => x.uid === uid);
+    if(!p) return;
+    ensureTreeImage(p);
+    
+    State.gallery.push({
+      gid: "gal_" + Date.now() + Math.floor(Math.random()*1000),
+      seedInt: p.seedInt, mIdx: p.mIdx, pIdx: p.pIdx ?? 0, bIdx: p.bIdx ?? 0,
+      role: p.role, tierIdx: p.tierIndex,
+      name: p.name, tierName: p.tierName, tierColor: p.tierColor,
+      locked: true, imgData: p.imgData
+    });
+    
+    toast(`📸 Samurai enshrined in Shrine Vault!`);
+    if($('tab-gallery').classList.contains('active')) renderGallery();
+  }
+
+  function toggleGalleryLock(gid) {
+    let g = State.gallery.find(x => x.gid === gid);
+    if(g) { g.locked = !g.locked; renderGallery(); }
+  }
+
+  function deleteGalleryPic(gid) {
+    let idx = State.gallery.findIndex(x => x.gid === gid);
+    if(idx > -1) {
+       State.gallery.splice(idx, 1);
+       toast(`Samurai removed from Shrine Vault.`);
+       renderGallery();
+    }
+  }
+
+  function renderGallery() {
+    const list = $('gallery-grid'); if(!list) return; list.innerHTML = '';
+    
+    if(State.gallery.length === 0) { 
+        list.innerHTML=`<div style="text-align:center; padding:20px; color:var(--silver-dim); font-size:11px;">Your Shrine Vault is empty. Enshrine prized samurai units from your Racks!</div>`; 
+        return; 
+    }
+
+    State.gallery.forEach(g => {
+      ensureTreeImage(g);
+      let rCol = g.role === 'YARI_SPEARMEN' ? '#38bdf8' : g.role === 'SAMURAI_UNIT' ? '#ef4444' : g.role === 'CAVALRY_CHARGE' ? '#f59e0b' : g.role === 'SHOGUN_GENERAL' ? '#a855f7' : g.role === 'TEPPO_YUMI' ? '#22c55e' : '#fbbf24';
+      const safeName = g.name.replace(/'/g, "\\'");
+      
+      list.innerHTML += `
+        <div class="strain-card" style="border-color:${g.locked ? 'var(--status-amber)' : g.tierColor};">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:${g.tierColor}; font-weight:bold; font-size:10px;">[${g.tierName}]</span>
+            <span class="badge" style="color:${rCol}; border-color:${rCol};">${g.role}</span>
+          </div>
+          <div style="display:flex; justify-content:center; padding:10px 0;">
+             <img src="${g.imgData}" onclick="openInspectModal(${g.seedInt}, '${g.role}', ${g.tierIdx}, ${g.mIdx}, ${g.pIdx ?? 0}, ${g.bIdx ?? 0}, '${safeName}')" style="width:160px; height:160px; image-rendering:pixelated; background:#000; border:1px solid #2e1d1d; border-radius:4px; cursor:zoom-in;" />
+          </div>
+          <div style="text-align:center; font-size:14px; font-weight:900; color:#fff;">${g.name}</div>
+          <div style="text-align:center; font-size:9px; color:var(--silver-dim); margin-bottom: 8px;">Tap Image for 256³ 3D Voxel Inspection</div>
+          <div style="display:flex; justify-content:space-between; gap: 4px;">
+            <button class="btn" style="flex:1;" onclick="toggleGalleryLock('${g.gid}')">${g.locked ? 'UNLOCK 🔓' : 'LOCK 🔒'}</button>
+            <button class="btn btn-danger" style="flex:1;" ${g.locked ? 'disabled' : ''} onclick="deleteGalleryPic('${g.gid}')">REMOVE</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  /* ================= ARTISANS ROSTER ================= */
+  function sortPilots(mode) { State.sortPilotsMode = mode; renderPilots(); }
+  function filterPilotTier(val) { State.filterPilotTier = val; renderPilots(); }
+
+  function renderPilots() {
+    const grid = $('pilots-grid'); if(!grid) return; grid.innerHTML = '';
+    
+    let filtered = [...State.pilots];
+    if(State.filterPilotTier !== 'ALL') filtered = filtered.filter(p => p.tierIndex === parseInt(State.filterPilotTier));
+    if(filtered.length===0) { grid.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--silver-dim); font-size:11px;">No artisans match filter criteria.</div>`; return; }
+
+    if(State.sortPilotsMode==='val') filtered.sort((a,b)=>b.value-a.value);
+    if(State.sortPilotsMode==='tier') filtered.sort((a,b)=>b.tierIndex-a.tierIndex);
+    
+    filtered.forEach(p => {
+      grid.innerHTML += `
+        <div class="strain-card" style="border-color:${p.tierColor};">
+          <div class="stat-block" style="display:flex; justify-content:space-between;">
+            <span style="color:${p.tierColor}; font-weight:bold; font-size:9.5px;">${p.tierName}</span>
+            <span style="color:var(--status-green); font-size:9.5px;">[${p.bType}] +${fmt(p.bonus)}%</span>
+          </div>
+          <div style="font-size:12px; font-weight:900; color:#fff;">${p.name} ${p.locked?'[🔒]':''}</div>
+          <div style="font-size:9px; color:var(--silver-dim);">${p.assignedTo ? `Attached to: ${p.assignedTo}` : 'Standby / Unassigned'}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+            <span class="stat-block" style="font-size:10px; color:var(--silver-bright); font-weight:bold;">STIPEND: $${fmt(p.value)}</span>
+            <div style="display:flex; flex-wrap:wrap; gap:3px; justify-content:flex-end;">
+              <button class="btn" style="padding:3px 5px; font-size:8px;" onclick="exportCourier('${p.uid}')">Scroll</button>
+              <button class="btn" style="padding:3px 5px; font-size:8px;" onclick="togglePilotLock('${p.uid}')">${p.locked?'Unlock':'Lock'}</button>
+              ${!p.assignedTo&&!p.locked?`<button class="btn btn-purple" style="padding:3px 5px; font-size:8px;" onclick="initAuction('${p.uid}', 'pilot')">Auction</button><button class="btn btn-danger" style="padding:3px 5px; font-size:8px;" onclick="sellPilot('${p.uid}')">Dismiss</button>`:''}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+  function togglePilotLock(uid) { let p=State.pilots.find(x=>x.uid===uid); if(p){p.locked=!p.locked; renderPilots();} }
+  function sellPilot(uid) {
+    let idx = State.pilots.findIndex(s=>s.uid===uid);
+    if(idx>-1) { let v=Math.max(5, Math.floor(State.pilots[idx].value*0.5)); State.funds+=v; State.pilots.splice(idx,1); toast(`Dismissed. Stipend recovered $${fmt(v)}.`); updateHUD(); renderPilots(); renderFleet(); }
+  }
+  function quickSellPilots(maxT) {
+    let ts = State.pilots.filter(s=>s.tierIndex<=maxT && !s.assignedTo && !s.locked);
+    if(ts.length===0){toast("No eligible artisans.");return;}
+    let tot=0; ts.forEach(s=>tot+=Math.max(5, Math.floor(s.value*0.5)));
+    State.pilots = State.pilots.filter(s=>s.tierIndex>maxT || s.assignedTo || s.locked);
+    State.funds+=tot; toast(`Dismissed ${ts.length} staff. Recovered $${fmt(tot)}.`); updateHUD(); renderPilots();
+  }
+
+  /* ================= PROVINCIAL CAMPAIGNS (ROUTES) ================= */
+  function filterRouteCategory(val) { State.filterRouteCat = val; renderRoutes(); }
+
+  function renderRoutes() {
+    const list = $('routes-list'); if(!list) return; list.innerHTML = '';
+    let filtered = State.filterRouteCat === 'ALL' ? State.routes : State.routes.filter(r => r.role === State.filterRouteCat);
+
+    filtered.forEach(r => {
+      let rCol = r.role === 'YARI_SPEARMEN' ? '#38bdf8' : r.role === 'SAMURAI_UNIT' ? '#ef4444' : r.role === 'CAVALRY_CHARGE' ? '#f59e0b' : r.role === 'SHOGUN_GENERAL' ? '#a855f7' : r.role === 'TEPPO_YUMI' ? '#22c55e' : '#fbbf24';
+      let yieldM = 1.0 + (State.upgrades.mkt*0.05);
+      let baseYield = Math.floor(r.dist * 0.16 * yieldM);
+      let fuelCost = ((r.dist * 0.025) * (1 - Math.min(0.7, State.upgrades.eng*0.02))) * State.fuelSpotPrice;
+      let netProfit = Math.max(15, Math.floor(baseYield - fuelCost));
+
+      list.innerHTML += `
+        <div class="route-row">
+          <div style="flex:1;">
+            <div style="font-weight:900; color:#fff;">${r.name} <span class="badge" style="margin-left:4px; color:${rCol}; border-color:${rCol};">${r.role}</span></div>
+            <div style="font-size:9px; color:var(--silver-dim); font-family:monospace; margin-top:2px;">
+              ${r.dist.toLocaleString()} MILES // Theater: ${r.minTier}
+            </div>
+            <div style="font-size:9px; color:var(--silver-dim); font-family:monospace; margin-top:2px;">
+              Koku Tribute: $${fmt(baseYield)} | Upkeep: -$${fmt(fuelCost)}
+            </div>
+            <div style="font-size:10px; color:var(--status-green); font-weight:bold; font-family:monospace; margin-top:2px;">
+              Est. Net Koku: ~$${fmt(netProfit)}
+            </div>
+          </div>
+          <div>
+            ${r.unlocked?`<span style="color:var(--status-amber); font-weight:bold; font-family:monospace;">PACIFIED ✓</span>`:`<button class="btn btn-green" onclick="unlockRoute('${r.id}')">March ($${fmt(r.cost)})</button>`}
+          </div>
+        </div>
+      `;
+    });
+  }
+  function unlockRoute(rId) { const r=State.routes.find(x=>x.id===rId); if(!r)return; if(State.funds<r.cost){toast("Insufficient Koku.");return;} State.funds-=r.cost; r.unlocked=true; updateHUD(); renderRoutes(); renderFleet(); }
+
+  /* ================= AUTOMATIONS & COMMISSIONS ================= */
+  function toggleAutoLoop() {
+    State.automation.autoDispatch = !State.automation.autoDispatch;
+    toast(`Auto-Campaign March: ${State.automation.autoDispatch ? 'ON' : 'OFF'}`);
+    updateAutomationUI();
+  }
+  function toggleAutoMRO() {
+    State.automation.autoMRO = !State.automation.autoMRO;
+    toast(`Auto Urushi Re-Lacquering: ${State.automation.autoMRO ? 'ON' : 'OFF'}`);
+    updateAutomationUI();
+  }
+  function toggleAutoRefuel() {
+    State.automation.autoRefuel = !State.automation.autoRefuel;
+    toast(`Auto Armory Restock: ${State.automation.autoRefuel ? 'ON' : 'OFF'}`);
+    updateAutomationUI();
+  }
+  function updateAutomationUI() {
+    if($('chk-autoloop'))$('chk-autoloop').innerText = State.automation.autoDispatch ? 'ACTIVE' : 'ENABLE';
+    if($('chk-automro'))$('chk-automro').innerText = State.automation.autoMRO ? 'ACTIVE' : 'ENABLE';
+    if($('chk-autorefuel'))$('chk-autorefuel').innerText = State.automation.autoRefuel ? 'ACTIVE' : 'ENABLE';
+    renderMilestones();
+    renderSideMissions();
+  }
+
+  function generateSideMissions() {
+    let unlocked = State.routes.filter(r => r.unlocked);
+    if(unlocked.length === 0) unlocked = State.routes; 
+    
+    State.sideMissions = [];
+    for(let i=0; i<3; i++) {
+        let rt = unlocked[Math.floor(Math.random() * unlocked.length)];
+        State.sideMissions.push({
+            id: "sm_" + Date.now() + i,
+            title: `Shogunate Edict: ${rt.name}`,
+            desc: `War Council orders a ${rt.role} division deployed to ${rt.name}.`,
+            reqRoute: rt.id, reqRole: rt.role, readyToClaim: false,
+            rewardCash: Math.floor(rt.dist * 0.45) + 150,
+            rewardTier: Math.min(9, Math.floor(rt.dist / 1000))
+        });
+    }
+  }
+
+  function refreshSideMissions() {
+    generateSideMissions();
+    renderSideMissions();
+    toast("Imperial edicts refreshed.");
+  }
+
+  function renderSideMissions() {
+    const list = $('side-missions-list'); if(!list) return; list.innerHTML = '';
+    State.sideMissions.forEach((m, idx) => {
+      let isReady = m.readyToClaim;
+      let rText = `+$${fmt(m.rewardCash)} & Free T${m.rewardTier+1} Unit`;
+      list.innerHTML += `
+        <div class="check-item ${isReady ? 'done' : ''}">
+          <div>
+            <div style="font-weight:bold; color:#fff;">${m.title}</div>
+            <div style="font-size:9.5px; color:var(--silver-dim);">${m.desc}</div>
+            <div style="font-size:9.5px; color:var(--status-green); font-weight:bold; margin-top:2px;">Bounty: ${rText}</div>
+          </div>
+          <div>
+            <button class="btn btn-green" ${isReady ? '' : 'disabled'} onclick="claimSideMission(${idx})">COLLECT</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  function claimSideMission(idx) {
+    let m = State.sideMissions[idx];
+    if(!m || !m.readyToClaim) return;
+    
+    State.funds += m.rewardCash;
+    let bonusStrain = harvestStrain(m.rewardTier); 
+    State.fleet.push(bonusStrain);
+    toast(`Edict Fulfilled! +$${fmt(m.rewardCash)} & ${bonusStrain.name} mustered!`);
+
+    State.sideMissions.splice(idx, 1);
+    
+    let unlocked = State.routes.filter(r => r.unlocked);
+    if(unlocked.length === 0) unlocked = State.routes;
+    let rt = unlocked[Math.floor(Math.random() * unlocked.length)];
+    State.sideMissions.push({
+        id: "sm_" + Date.now(),
+        title: `Shogunate Edict: ${rt.name}`,
+        desc: `War Council orders a ${rt.role} division deployed to ${rt.name}.`,
+        reqRoute: rt.id, reqRole: rt.role, readyToClaim: false,
+        rewardCash: Math.floor(rt.dist * 0.45) + 150,
+        rewardTier: Math.min(9, Math.floor(rt.dist / 1000))
+    });
+
+    updateHUD(); renderSideMissions();
+  }
+
+  function renderMilestones() {
+    const list = $('milestone-list'); if(!list) return; list.innerHTML = '';
+    MILESTONES.forEach(m => {
+      let isClaimed = State.claimedMilestones.includes(m.id);
+      let canClaim = !isClaimed && m.req(State);
+      list.innerHTML += `
+        <div class="check-item ${isClaimed ? 'done' : ''}">
+          <div>
+            <div style="font-weight:bold; color:${isClaimed ? 'var(--status-green)' : '#fff'};">${isClaimed ? '✓ ' : ''}${m.title}</div>
+            <div style="font-size:9.5px; color:var(--silver-dim);">${m.desc}</div>
+            <div style="font-size:9.5px; color:var(--status-amber); font-weight:bold; margin-top:1px;">Koku: +$${fmt(m.reward)}</div>
+          </div>
+          <div>
+            ${isClaimed 
+              ? `<span style="color:var(--status-green); font-weight:bold; font-size:9px;">CLAIMED</span>` 
+              : `<button class="btn btn-green" ${canClaim ? '' : 'disabled'} onclick="claimMilestone('${m.id}')">CLAIM</button>`
+            }
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  function claimMilestone(mId) {
+    let m = MILESTONES.find(x => x.id === mId);
+    if(!m || State.claimedMilestones.includes(mId) || !m.req(State)) return;
+    State.claimedMilestones.push(mId);
+    State.funds += m.reward;
+    toast(`Milestone Achieved: +$${fmt(m.reward)}`);
+    updateHUD(); renderMilestones();
+  }
+
+  /* ================= UPGRADES ================= */
+  function getUpgCost(type, lvl) { return type==='mkt' ? Math.floor(250*Math.pow(1.5,lvl)) : Math.floor(400*Math.pow(1.6,lvl)); }
+  function renderUpgrades() {
+    let mC = getUpgCost('mkt', State.upgrades.mkt); let eC = getUpgCost('eng', State.upgrades.eng);
+    if($('upg-mkt-lvl'))$('upg-mkt-lvl').innerText=State.upgrades.mkt; 
+    if($('upg-mkt-pct'))$('upg-mkt-pct').innerText=State.upgrades.mkt*5; 
+    if($('upg-mkt-cost'))$('upg-mkt-cost').innerText=fmt(mC);
+    
+    if($('upg-eng-lvl'))$('upg-eng-lvl').innerText=State.upgrades.eng; 
+    if($('upg-eng-pct'))$('upg-eng-pct').innerText=Math.min(70, State.upgrades.eng*2); 
+    if($('upg-eng-cost'))$('upg-eng-cost').innerText=fmt(eC);
+  }
+  function buyUpgrade(type) {
+    let cost = getUpgCost(type, State.upgrades[type]);
+    if(State.funds < cost) { toast("Insufficient Koku."); return; }
+    State.funds -= cost; State.upgrades[type]++;
+    updateHUD(); renderUpgrades(); toast("Armory upgraded.");
+  }
+
+  /* ================= CAMPAIGN DISPATCH ================= */
+  function dispatchFlight(pUid) {
+    const p = State.fleet.find(x=>x.uid===pUid); if(!p||p.status==='IN_FLIGHT'||!p.assignedRoute||!p.assignedPilot)return;
+    const r = State.routes.find(x=>x.id===p.assignedRoute); const pl = State.pilots.find(x=>x.uid===p.assignedPilot); if(!r||!pl)return;
+    
+    if(p.condition < 45) {
+      if(State.automation.autoMRO && State.funds >= Math.ceil((100-p.condition)*0.5)) {
+        maintainAirframe(p.uid);
+      } else {
+        toast("[CHIPPED LACQUER] Integrity low. Must Re-Lacquer Armor."); return;
+      }
+    }
+
+    let yieldM = 1.0 + (State.upgrades.mkt*0.05); let speedD = 1.0; let fuelD = 1.0; let safeD = 1.0;
+    if(pl.bType==='LACQUER') yieldM *= (1 + pl.bonus/100);
+    if(pl.bType==='MARCH') speedD = 1 + pl.bonus/100; 
+    if(pl.bType==='SILK') fuelD = 1 + pl.bonus/100;
+    if(pl.bType==='ARMOR') safeD = 1 + pl.bonus/100;
+
+    let baseMs = Math.max(5000, Math.min(90000, (r.dist/8000)*90000));
+    let msTime = Math.max(1000, baseMs / speedD); 
+
+    let fBurn = Math.max(1, Math.floor((r.dist * 0.025) * (1 - Math.min(0.7, State.upgrades.eng*0.02)) / fuelD));
+    
+    if(State.fuelReserve < fBurn) {
+      if(State.automation.autoRefuel && State.funds >= 2500 * State.fuelSpotPrice) {
+        State.funds -= 2500 * State.fuelSpotPrice;
+        State.fuelReserve += 2500;
+      } else {
+        toast("Insufficient Urushi Lacquer."); return;
+      }
+    }
+    State.fuelReserve -= fBurn;
+
+    let bRev = Math.max(15, Math.floor(r.dist * 0.16 * yieldM));
+    
+    p.status='IN_FLIGHT'; p.flightStart=Date.now(); p.flightDuration=msTime; p.flightEnd=p.flightStart+msTime; p.expRev=bRev; p.wear=10/safeD;
+    
+    State.sideMissions.forEach(m => {
+        if(!m.readyToClaim && p.assignedRoute === m.reqRoute && p.role === m.reqRole) {
+            m.readyToClaim = true;
+            toast(`Province Pacified: ${m.title}`);
+            if($('tab-checklist').classList.contains('active')) renderSideMissions();
+        }
+    });
+
+    needsFleetRender = true; updateHUD();
+  }
+  function dispatchAll() { State.fleet.filter(p=>p.status==='READY'&&p.assignedRoute&&p.assignedPilot).forEach(p=>dispatchFlight(p.uid)); }
+  function maintainAirframe(pUid) { const p=State.fleet.find(x=>x.uid===pUid); if(!p||p.status==='IN_FLIGHT')return; let c=Math.ceil((100-p.condition)*0.5); if(State.funds<c)return; State.funds-=c; p.condition=100; updateHUD(); needsFleetRender = true; }
+  function maintainAll() { let c=0; State.fleet.filter(p=>p.condition<90&&p.status!=='IN_FLIGHT').forEach(p=>c+=Math.ceil((100-p.condition)*0.5)); if(c===0||State.funds<c)return; State.funds-=c; State.fleet.forEach(p=>p.condition=100); updateHUD(); renderFleet(); }
+
+  /* ================= 10-LANE WAR AUCTIONS (UNTOUCHED CRAZY BID SPIKES!) ================= */
+  function initAuction(uid, type) {
+    if(State.auctions.length>=10){toast("Auction house full.");return;}
+    let item;
+    if(type==='plane') { let i=State.fleet.findIndex(x=>x.uid===uid); if(i===-1)return; item=State.fleet[i]; if(item.assignedPilot){ let px=State.pilots.find(x=>x.uid===item.assignedPilot); if(px)px.assignedTo=null; } State.fleet.splice(i,1); }
+    if(type==='pilot') { let i=State.pilots.findIndex(x=>x.uid===uid); if(i===-1)return; item=State.pilots[i]; State.pilots.splice(i,1); }
+    
+    State.auctions.push({ item:item, type:type, baseVal:item.value, timer:20.0, currentBid:Math.max(1, Math.floor(item.value*0.9)), log:[] });
+    updateHUD(); renderAuctions(); renderFleet(); renderPilots(); toast("Consigned to War Auctions.");
+  }
+  
+  function fillAuctions(type) {
+    let a=10-State.auctions.length; if(a<=0) { toast("Auction house full."); return; }
+    
+    let c = type==='planes' 
+      ? State.fleet.filter(p=>p.status==='READY'&&!p.assignedPilot).sort((x,y)=>x.value-y.value) 
+      : State.pilots.filter(p=>!p.assignedTo&&!p.locked).sort((x,y)=>x.value-y.value);
+        
+    if(c.length===0){toast("No eligible units/artisans available.");return;}
+    
+    let loaded = 0;
+    c.slice(0,a).forEach(item=>{ 
+      if(type==='planes'){ let i=State.fleet.findIndex(x=>x.uid===item.uid); State.fleet.splice(i,1); }
+      if(type==='pilots'){ let i=State.pilots.findIndex(x=>x.uid===item.uid); State.pilots.splice(i,1); }
+      State.auctions.push({item:item, type:type === 'planes' ? 'plane' : 'pilot', baseVal:item.value, timer:20.0, currentBid:Math.max(1, Math.floor(item.value*0.9)), log:[]}); 
+      loaded++;
+    });
+    
+    updateHUD(); renderPilots(); renderFleet(); renderAuctions(); 
+    toast(`Consigned ${loaded} lots to War Auctions.`);
+  }
+
+  function renderAuctions() {
+    const b=$('auction-board'); if(!b)return; $('auction-count').innerText=State.auctions.length; b.innerHTML='';$('auction-idle').style.display = State.auctions.length===0 ? 'block' : 'none';
+    State.auctions.forEach((a) => {
+      if (a.type === 'plane' || a.type === 'planes') ensureTreeImage(a.item);
+      let hLog = a.log.map(l=>`<div>${l}</div>`).join('');
+      let col = a.item.tierColor || '#fff';
+      
+      b.innerHTML+=`
+        <div class="auction-slot">
+          <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+            <div style="display:flex; gap:8px; align-items:center;">
+              ${(a.type === 'plane' || a.type === 'planes') ? `<img src="${a.item.imgData}" style="width:40px; height:40px; image-rendering:pixelated; background:#000; border:1px solid #2e1d1d;" />` : ''}
+              <div>
+                <div style="font-size:12px;font-weight:bold;color:${col};">${a.item.name}</div>
+                <div class="stat-block" style="font-size:9px;">EST: $${fmt(a.baseVal)}</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div id="auc-timer-${a.item.uid}" style="font-size:8.5px;color:var(--silver-dim);font-weight:bold;">TIME [${a.timer.toFixed(1)}s]</div>
+              <div id="auc-bid-${a.item.uid}" style="font-size:14px;font-weight:bold;color:var(--status-green);font-family:monospace;">$${fmt(a.currentBid)}</div>
+            </div>
+          </div>
+          <div class="auction-timer-bg"><div id="auc-bar-${a.item.uid}" class="auction-timer-bar" style="width:${(a.timer/20)*100}%;"></div></div>
+          <div class="auction-log">${hLog}</div>
+        </div>
+      `;
+    });
+  }
+
+  /* ================= GAME LOOP ================= */
+  const FACTIONS = ["Kyoto Daimyo Patron","Tokyo National Museum","Edo Shogunate Collector","Osaka Castle Trust"];
+  function gameTick() {
+    let n = Date.now();
+    let auctionChanged = false;
+    
+    // Market Timer
+    State.marketTimer -= 0.1;
+    let mT = $('market-timer'); if(mT) mT.innerText = Math.max(0, State.marketTimer).toFixed(1);
+    if(State.marketTimer <= 0) { State.marketTimer = 10.0; refreshMarket(); }
+
+    // Campaigns
+    State.fleet.forEach(p => {
+      if(p.status==='IN_FLIGHT') {
+        let pct = ((n-p.flightStart)/p.flightDuration)*100;
+        if(pct>=100) { 
+          p.status='READY'; State.funds+=p.expRev; p.condition=Math.max(10, p.condition-p.wear); updateHUD(); 
+          let st=$(`st-${p.uid}`); if(st) st.innerHTML=`STATUS: <strong style="color:#fff;">READY</strong>`; 
+          let b=$(`bar-${p.uid}`); if(b){b.style.width='0%'; b.parentElement.style.display='none';} 
+          
+          if(State.automation.autoDispatch && p.assignedRoute && p.assignedPilot) {
+            setTimeout(() => dispatchFlight(p.uid), 200);
+          } else {
+            needsFleetRender = true; 
+          }
+        } 
+        else { let b=$(`bar-${p.uid}`); if(b) b.style.width=pct+'%'; }
+      }
+    });
+
+    if(needsFleetRender) {
+      if($('tab-fleet').classList.contains('active')) renderFleet();
+      needsFleetRender = false;
+    }
+
+    // Auctions (Exact Unchanged Bidding War & Overtime Logic!)
+    if(State.auctions.length>0) {
+      for(let i=State.auctions.length-1; i>=0; i--) {
+        let a=State.auctions[i]; a.timer-=0.1; 
+        
+        let uiT = $(`auc-timer-${a.item.uid}`);
+        let uiB = $(`auc-bar-${a.item.uid}`);
+        let uiBid = $(`auc-bid-${a.item.uid}`);
+
+        if(a.timer>0 && Math.random()<0.10) {
+          let f=FACTIONS[Math.floor(Math.random()*FACTIONS.length)]; let m=1.05+(Math.random()*0.10);
+          if(Math.random()<0.015) { m=2.0+(Math.random()*18.0); a.log.push(`<span style="color:var(--status-amber);">[BID WAR] Spike!</span>`); }
+          let nB=Math.floor(a.currentBid*m); if(nB<=a.currentBid) nB=a.currentBid+1; a.currentBid=nB;
+          a.log.push(`<span style="color:var(--silver-bright);">[${f}] bids $${fmt(a.currentBid)}</span>`);
+          if(a.log.length>3) a.log.shift();
+          if(a.timer<=1.0){ a.timer=3.0; a.log.push(`<span style="color:var(--status-red);">[OVERTIME] Reset to 3s!</span>`); }
+          if(uiBid) uiBid.innerText = "$" + fmt(a.currentBid);
+          auctionChanged = true;
+        } else {
+          if(uiT) uiT.innerText = `TIME [${Math.max(0, a.timer).toFixed(1)}s]`;
+          if(uiB) { uiB.style.width = ((a.timer/20)*100) + '%'; uiB.style.background = a.timer <= 3 ? 'var(--status-red)' : 'var(--status-green)'; }
+        }
+
+        if(a.timer<=0){ 
+          State.funds+=a.currentBid; State.statAuctionsSold++;
+          toast(`SOLD for $${fmt(a.currentBid)}!`); 
+          State.auctions.splice(i,1); updateHUD(); 
+          auctionChanged = true;
+        }
+      }
+      
+      if(auctionChanged && $('tab-auction').classList.contains('active')) renderAuctions();
+    }
+  }
+
+  /* ================= INIT & NAVIGATION ================= */
+  function setTab(tabId) {
+    document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('active'); if(b.getAttribute('onclick').includes(tabId)) b.classList.add('active'); });
+    document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+    const target = $('tab-'+tabId); if(target) target.classList.add('active');
+
+    if(tabId==='fleet') renderFleet();
+    if(tabId==='battle') {
+      if (BattleState.playerUnits.length === 0) startNewTabletopBattle();
+      else renderBattlefield();
+    }
+    if(tabId==='pilots') renderPilots();
+    if(tabId==='routes') renderRoutes();
+    if(tabId==='auction') renderAuctions();
+    if(tabId==='checklist') updateAutomationUI();
+    if(tabId==='upgrades') renderUpgrades();
+    if(tabId==='gallery') renderGallery();
+  }
+  function godMode() {
+    State.funds += 1000000; State.fuelReserve += 100000;
+    State.fleet.forEach(p => p.condition = 100);
+    toast("SHOGUNATE TREASURY: +$1M Koku, +100K Lacquer Pots, Armies Restored.");
+    updateHUD(); renderFleet();
+  }
+
+  function initUI() {
+    if(!State.gallery) State.gallery = [];
+    if(!State.routes || State.routes.length < 400) State.routes = generateRoutes();
+    if(!State.sideMissions || State.sideMissions.length === 0) generateSideMissions();
+    updateHUD(); refreshMarket();
+    if(globalInterval) clearInterval(globalInterval); globalInterval = setInterval(gameTick, 100);
+  }
+  initUI();
+</script>
+</body>
+</html>
